@@ -8,11 +8,9 @@
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Aexll/Aexll.github.io/issues"
-  },
-  "homepage":"https://aexll.github.io/backtest",
+  "homepage": "https://aexll.github.io/backtest",
   "dependencies": {
-    "gh-pages": "^4.0.0"
+    "gh-pages": "^4.0.0",
+    "lightweight-charts": "^3.8.0"
   }
 }
