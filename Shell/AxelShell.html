@@ -135,9 +135,16 @@ body {
 			<div id="status-notice" class="godot" style="display: none;"></div>
 		</div>
 
-		<script src="AxelShell.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"AxelShell","experimentalVK":false,"fileSizes":{"AxelShell.pck":449776,"AxelShell.wasm":35410474},"focusCanvas":true,"gdextensionLibs":[]};
+if (!window.SharedArrayBuffer) {
+	document.getElementById('status').style.display = 'none';
+	setTimeout(() => document.getElementById('status').style.display = '', 1500);
+}
+</script>
+<script src="coi-serviceworker.min.js"></script>
+<script src="AxelShell.js"></script>
+		<script>
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"AxelShell","experimentalVK":false,"fileSizes":{"AxelShell.pck":445248,"AxelShell.wasm":35410474},"focusCanvas":true,"gdextensionLibs":[]};
 const engine = new Engine(GODOT_CONFIG);
 
 (function () {
