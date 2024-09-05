@@ -1,0 +1,706 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Advanced Thermal Vision</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="257a189d-71ab-4a76-b04f-dd9b39dc7766" class="page sans"><header><img class="page-cover-image" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/ModularVisionBanner.png" style="object-position:center 50%"/><h1 class="page-title">Advanced Thermal Vision</h1><p class="page-description"></p></header><div class="page-body"><nav id="d367ebf7-2eca-49ba-9270-1b7663cfb63f" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#45d722a1-058d-4b84-ba29-c9eddf31a460">What is Advanced Thermal Vision?</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a91e4d61-0b34-400b-a7cb-f3a862325954">Content</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a93a4b5d-2f1b-4e7b-b3ce-b3a3184f1d4b">Infrared Vision</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#0005e18a-5a33-4b6a-ab4a-1d12bccce07c">Thermal Vision</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#69837c8c-5a05-47d9-bb35-b06393643415">Grayscaled Thermal Vision</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#81360c56-5a3f-4ad6-b1c1-fdf71874aacf">Glowing Vision</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#02f25f71-ccd4-4e9b-91b0-682af7931ac3">Scan Vision</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#23da8f26-c77f-4664-b147-6cfbf709a251">Requirments:</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3a51ee61-8714-4b4d-99d7-e4f37ba40c34"><strong>Custom Depth-Stencil Pass</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c2e5d17a-6e79-44a5-96a2-ba9911642383">How to use ?</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#7b675924-ee4d-4f77-a11e-566845815308">Using a <a href="https://docs.unrealengine.com/5.0/en-US/post-process-effects-in-unreal-engine/">Post Process Volume</a></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#63f1fb0e-a44a-4df2-b084-95fa101392cb">Assigne the <a href="https://docs.unrealengine.com/5.0/en-US/post-process-materials-in-unreal-engine/">Post Process Material</a> to a Camera</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#4929a43d-6c7b-4ecc-9376-906e1112a4e6">How to Customize the Effects ?</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f2d21d0c-5139-4f4c-85a4-6d1cf7bd36c0">What are the differents Effects ?</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#399bcde4-f40b-4ed9-bbb5-08810f850d7e">Bodycam</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#bed771d8-ce24-427c-8572-bfe2f483e06f">Noise</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c74954a6-d9d1-4a75-ba4f-4d6ba3fc6773">NoiseUV</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#0c76bab6-bb31-4309-9b00-0c49c6a6e344">OutsideLights</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#651bb35e-6ca1-4c31-b09f-fc9794278cda">Pixelated</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#775dc22b-e096-442c-8c1f-e6ab605fb1f8">RadialNoise</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#efa2d52c-a005-4eca-a9e9-dc94022b1ec9">Sharp</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#26d63d44-134d-4730-9ac9-ad83bde72a5c">How to change temperature of an object in Thermal visions ?</a></div></nav><p id="768aba7c-321a-4b46-902f-6a16761a7be2" class="">
+</p><p id="b601aaa6-d330-4c32-85b4-cfa04a44b5ba" class="">
+</p><h3 id="45d722a1-058d-4b84-ba29-c9eddf31a460" class="">What is Advanced Thermal Vision?</h3><p id="db5ea1e4-8a0c-45c6-853e-6ecbcfb1e480" class="">Modular Night Vision is a collection of post-processing materials that simulate various visual modes, including infrared night vision, thermal vision, thermal grayscale vision (similar to drone footage), glowing vision, and scan vision.</p><p id="3af0f976-1591-40d9-9eeb-8dcd39fdf587" class="">
+</p><p id="6a2c75fa-2855-41af-9081-4e43d87f5322" class="">
+</p><p id="d2400f9a-5ee2-45ab-8da6-0b61bd16b362" class="">
+</p><h1 id="a91e4d61-0b34-400b-a7cb-f3a862325954" class="">Content</h1><p id="4315c8de-793e-4d49-9841-f1fab23cc50c" class="">The Pack contains 5 main <a href="https://docs.unrealengine.com/5.0/en-US/post-process-materials-in-unreal-engine/">post process materials</a>, and 11 material instances<br/>it also contains some usefull material functions to work with.<br/></p><p id="ba95d1ec-690b-4e67-bcf4-ac430ab6d8ce" class="">The 5 bases materials are the following:</p><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Infrared Vision</summary><div class="indented"><figure id="2f3faa66-7587-4dfc-9056-e9a8b5b7999f" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled.png"><img style="width:1132px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled.png"/></a></figure></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Thermal Vision</summary><div class="indented"><p id="439fcf86-0ce1-4bd8-a667-8b909d8133da" class="">Any object on the map can have its visible temperature changed</p><figure id="dc17f76a-480a-4865-9938-5344baf7f3e8" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%201.png"><img style="width:1129px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%201.png"/></a></figure></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Grayscaled Thermal Vision</summary><div class="indented"><p id="e1cf953a-126d-4293-bf40-ba2baae93b84" class="">(drone view, temperature adjustable)</p><figure id="9889d718-3000-4106-8638-a081e3662d69" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%202.png"><img style="width:1128px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%202.png"/></a></figure></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Glowing Vision</summary><div class="indented"><p id="a39c9db3-cd4b-4671-9d61-1847491eb83e" class="">See only chosen objects, visible through walls </p><figure id="e9fce7a8-3615-47b2-9487-398dd154750d" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%203.png"><img style="width:1127px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%203.png"/></a></figure></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Scan Vision</summary><div class="indented"><figure id="39082c55-ed64-4ebe-b5e0-de5c60119bb0" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%204.png"><img style="width:1127px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%204.png"/></a></figure></div></details><p id="6af95819-05ea-4507-b294-27d9273e9503" class="">
+</p><p id="90de4041-beb8-4e88-8f0f-6975d4ec3abd" class="">There is also 11 instances of these materials</p><h1 id="23da8f26-c77f-4664-b147-6cfbf709a251" class="">Requirments:</h1><h3 id="3a51ee61-8714-4b4d-99d7-e4f37ba40c34" class=""><strong>Custom Depth-Stencil Pass</strong></h3><p id="2b20c77c-50c4-4e69-a911-3f0f256eeece" class="">in the project settings, you need to have <strong>Custom Depth-Stencil Pass</strong> <strong>Enabled with Stencil </strong>in order for the post-process materials to work fine</p><figure id="a944b4b6-f672-4ce1-a440-ca90077ac80a" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%205.png"><img style="width:780px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%205.png"/></a></figure><p id="b38ada34-ab0d-47b5-b75d-c7cd713d1436" class="">
+</p><p id="3426a4d4-a952-478c-8913-c16e11dd1dd0" class="">
+</p><h1 id="c2e5d17a-6e79-44a5-96a2-ba9911642383" class="">How to use ?</h1><p id="3e213da7-8258-4b0f-91c6-ef39e45b4d1d" class="">
+</p><p id="b02e0ab0-cdff-4644-89b1-f33978318e07" class="">You have 2 Choices:</p><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Using a <a href="https://docs.unrealengine.com/5.0/en-US/post-process-effects-in-unreal-engine/">Post Process Volume</a></summary><div class="indented"><p id="6f9bcd68-bd26-466c-be55-06fb30548733" class="">You first need to place a post process volume in you level</p><figure id="b8f96d1e-8605-498a-bf14-68a33cc4d886" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%206.png"><img style="width:624px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%206.png"/></a></figure><p id="9602a17d-ed7a-4bce-8313-8cb51e859bea" class="">
+</p><p id="9812f383-b89e-40da-8747-6c35917546ba" class="">After Selecting the post process volume, search for the “Post Process Materials” Array</p><figure id="578ef604-7718-42dd-95c1-3167a3f16c8d" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%207.png"><img style="width:1328px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%207.png"/></a></figure><p id="b99066e8-41a5-4415-87bd-e04b04d83bc3" class="">
+</p><p id="7c421dcd-a23a-4251-ae20-2132f82c556c" class="">Now Add a new element to the Array by clicking the ‘+’, then click ‘Choose’ and select ‘Asset reference’</p><figure id="55f33069-6473-4e0a-a839-824129819ab1" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%208.png"><img style="width:387px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%208.png"/></a></figure><p id="6b493aa5-817c-46da-9d75-677e75d60f4a" class="">
+</p><p id="b8f9e1d0-b196-425a-8043-434af0bec040" class="">You can now select the post process material you want to use</p><figure id="b10dd2ea-8f73-4ad4-b06f-6813ddd02a9d" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%209.png"><img style="width:471px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%209.png"/></a></figure><p id="28546655-fb3e-4cad-a344-804ae8b6e258" class="">
+</p><p id="404aa940-1fba-479f-bcd8-43ce500cb1ee" class=""><strong>The post process volume will apply its effect only when the camera is inside the volume</strong></p><p id="d74da98b-1e0c-4de6-9e0b-5fd365db5245" class="">
+</p></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Assigne the <a href="https://docs.unrealengine.com/5.0/en-US/post-process-materials-in-unreal-engine/">Post Process Material</a> to a Camera</summary><div class="indented"><p id="f7fd5d9e-911a-4896-8488-2a20ac8d0cb8" class="">
+</p><p id="ae463fce-6087-4441-ab7a-20b6b655882e" class="">When selecting a camera, in its details window you can have access to the “PostProcessMaterials” Array</p><figure id="47091a06-9c25-4037-9048-8a209c020212" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2010.png"><img style="width:439px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2010.png"/></a></figure><p id="ef77b503-1528-4495-ab85-65e3537de5a6" class="">
+</p><p id="1c888b13-de19-4fa1-9856-37e5643efe8b" class="">You need to add a new element to the Array by clicking the ‘+’, then click ‘Choose’ and select ‘Asset reference’</p><figure id="c7147f62-6122-47b4-a6fd-357a19553647" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%208.png"><img style="width:387px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%208.png"/></a></figure><p id="fc3b87ab-0917-489b-bd0c-27a3b1427eae" class="">
+</p><p id="3d68e9c2-5a99-4b53-8632-8a3646321cda" class="">You can now select the Post Process Material you want to use for the camera</p><figure id="08ba1e29-7aee-4677-b02d-9950a32aef35" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2011.png"><img style="width:465px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2011.png"/></a></figure></div></details><p id="cb997017-d18f-4482-bab8-f592d7105984" class="">
+</p><p id="cb7fa536-c106-4443-bcd9-db6793154b6b" class="">Notes: it’s recomended to set the <strong><mark class="highlight-default">Exposure Metering Mode</mark></strong> to <strong>Manual </strong>and to disable the <strong>Global Illumination </strong>to have the best results</p><figure id="5411e31e-eec0-4df1-89b0-1262f3ce0497" class="image" style="text-align:left"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2012.png"><img style="width:308px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2012.png"/></a></figure><figure id="db1e7f4c-0b25-49ed-8cc4-46de34504c4b" class="image" style="text-align:left"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2013.png"><img style="width:307px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2013.png"/></a></figure><h1 id="4929a43d-6c7b-4ecc-9376-906e1112a4e6" class="">How to Customize the Effects ?</h1><p id="ca8cc52c-fcc9-4357-8a29-87f6ae3eea9d" class="">
+</p><p id="08cbd96c-c647-4259-9836-fda12ff7d36d" class="">The ‘materials instances’ are meant to be customized, you can find them in the MaterialInstances folder.</p><figure id="dba414c2-0f0c-4638-814a-04cbdf990b8b" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2014.png"><img style="width:384px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2014.png"/></a></figure><p id="914a023c-10c6-4a40-861e-642f1a72fe27" class="">
+</p><p id="9931e5fc-da58-43ca-b2e4-267ab0e5576f" class="">By opening a material instance, you will get this windows:</p><figure id="2deb8f90-587e-40fb-898b-579ae2bb2ac6" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2015.png"><img style="width:1731px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2015.png"/></a></figure><p id="40aad7cc-c633-45c0-b4e7-52d1f8fa47ed" class="">On the right are all the parameters you can play with to change the look of the post-process</p><p id="6a6ca9dc-1274-42a8-8b9f-90f104054df0" class="">
+</p><p id="1ba091cc-23cf-4f86-9832-0b421e81c33d" class="">
+</p><p id="a8f068f5-1c84-4a71-8ca8-b170171c011b" class="">
+</p><h1 id="f2d21d0c-5139-4f4c-85a4-6d1cf7bd36c0" class="">What are the differents Effects ?</h1><p id="0fcd3dd9-b056-4929-9e0d-1f0917716221" class="">
+</p><p id="0d0f72f4-2566-43f4-94d8-e9de7756a1b4" class="">
+</p><p id="b8dced9d-0c42-4f73-9a1e-80ddb4892c00" class="">There are many effects you can enable or disable, here is the list, and preview of their effects<br/>Note that each effects has parameters that can be change to match you need<br/></p><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Bodycam</summary><div class="indented"><figure id="474564dd-536c-45b1-b06d-22252ca031bb" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2016.png"><img style="width:384px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2016.png"/></a></figure><p id="c22431d1-4b79-4042-b59f-c66f82a4094c" class="">
+</p></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Noise</summary><div class="indented"><figure id="9309df89-e52a-4e0c-bbf3-9e467d2de447" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2017.png"><img style="width:384px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2017.png"/></a></figure></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">NoiseUV</summary><div class="indented"><p id="31366a94-6f74-4b31-bb79-148668623677" class="">(make the render a little blurry with noisy pixels displacements)</p><figure id="465bed94-e929-4f49-a955-d109ca392fa3" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2018.png"><img style="width:384px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2018.png"/></a></figure><figure id="b28ac8d2-1bfa-4ccd-864f-6acbba57f4ad" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2019.png"><img style="width:192px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2019.png"/></a></figure><p id="abf9e56a-5c6a-4d6f-9f56-cd60430d325a" class="">
+</p></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">OutsideLights</summary><div class="indented"><p id="7eb3dae6-cf06-45ac-86a0-babff071504c" class="">(make the outside lightning visible. Not avilable on Scan and Glow materials)</p><div id="d7573734-edce-4395-8fb1-3756737d2af6" class="column-list"><div id="b7371f48-8a9d-40f4-a2ff-3d3a275c01b4" style="width:43.75%" class="column"><figure id="634ace8e-c4a7-4ce5-b9c2-dd505a44ed1f" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2020.png"><img style="width:288px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2020.png"/></a></figure></div><div id="7e69c3d4-9112-4f45-8ab4-4a38104f80ab" style="width:56.25000000000002%" class="column"><figure id="e6b35348-39b8-48fc-95d2-29d37e732e3a" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2021.png"><img style="width:288px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2021.png"/></a></figure></div></div></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Pixelated</summary><div class="indented"><figure id="a5dbc917-5089-4aeb-bc6b-0fa8facbb40b" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2022.png"><img style="width:480px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2022.png"/></a></figure></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">RadialNoise</summary><div class="indented"><p id="39802f9b-6c7a-48b7-a3fe-d2c48bdb316c" class="">A second noise that intensify on the screen’s borders</p><figure id="b4ee5244-218c-4cf9-b10c-8d5b6e66f602" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2023.png"><img style="width:480px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2023.png"/></a></figure></div></details><details open=""><summary style="font-weight:600;font-size:1.25em;line-height:1.3;margin:0">Sharp</summary><div class="indented"><p id="92f88417-679a-4fdf-898b-b7ef4ec340bc" class="">Add a Sharp border effect, (like a badly compressed video would have)</p><figure id="4e16c8e0-9106-42cd-8c87-1379f38404c7" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2024.png"><img style="width:480px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2024.png"/></a></figure></div></details><p id="ea990ea0-4f47-4c17-9a3e-6e7201c9ac56" class="">
+</p><h1 id="26d63d44-134d-4730-9ac9-ad83bde72a5c" class="">How to change temperature of an object in Thermal visions ?</h1><p id="cb363dd2-3f1b-481d-95d9-f1439cccf0d3" class="">
+</p><p id="e161cb8c-8cd4-4c2b-a4e8-08355471afe0" class="">Every Static Mesh and Skeletal Mesh has an option in its details panel called &#x27;<strong>Render CustomDepth Pass</strong>.&#x27; If this option is checked, the object will be visible as if it is &#x27;heated.&#x27;</p><figure id="b1850ed3-2cbf-49a5-999e-33fc32ff6d38" class="image"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2025.png"><img style="width:1149px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2025.png"/></a></figure><figure id="c382b02f-54fd-4530-bff2-5548b63a0155" class="image" style="text-align:left"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2026.png"><img style="width:529px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2026.png"/></a></figure><p id="c9a37ada-ca5c-4143-abef-2d1bfb558990" class="">
+</p><p id="6089de50-f8bc-45d5-b140-2fc0e6ea8ad6" class="">By changing the Custom Stencil Value you can adjust the temperature of the mesh</p><figure id="0ff28626-0a92-4799-9aad-8ff0bfec3b59" class="image" style="text-align:left"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2027.png"><img style="width:300px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2027.png"/></a></figure><figure id="d0436c64-fe65-4a5f-a0c8-3b6fd89e27bc" class="image" style="text-align:left"><a href="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2028.png"><img style="width:533px" src="Advanced%20Thermal%20Vision%20257a189d71ab4a76b04fdd9b39dc7766/Untitled%2028.png"/></a></figure></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
