@@ -179,7 +179,7 @@
       My Projects
     </h1>
 
-    <div class="flex flex-row flex-wrap place-items-start justify-center p-16 h-fit size-auto m-2xl">
+    <div class="flex flex-row flex-wrap place-items-start justify-center pt-16 pl-32 pr-32 h-fit size-auto m-2xl">
     
     <!-- Exo -->
     <Project 
@@ -252,14 +252,22 @@
       <h1 class="flex justify-center font-bold text-8xl text-orange-500 title_orange">Generand</h1>
     <br>
       <p class="flex justify-center text-white">A random mod generator for minecraft</p>
-      <p class="flex justify-center text-white">Coded in python</p>
+      <p class="flex justify-center text-white">Coded in <b>python</b></p>
+      <p class="flex justify-center text-white">the program will generate some java files and then build them using gradle into a minecraft mod</p>
+      <p class="flex justify-center text-white">it will also run a instance of minecraft with the new mod installed</p>
       <a class="flex justify-center font-bold text-2xl text-blue-500 underline" href="https://github.com/Aexll/Generand?tab=readme-ov-file">Github</a>
       <img src="/img/generand_items.png" alt="img of randomized ores and items" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
       <img src="/img/generand_ores.png" alt="img of randomized craft and world gen" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
       <img src="/img/generand_tools.png" alt="img of the tools used" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
     
-      
-      
+      <p class="flex justify-center text-white">to modify how to mod is being created</p>
+      <p class="flex justify-center text-white">Generand is using a specific python syntax with their custom classes</p>
+      <p class="flex justify-center text-white">Using template files with custom parsing syntax, everything is detailed on the github</p>
+      <p class="flex justify-center text-white">Generand is highly extensible and can be used to generate new dimensions, mobs, custom gamerules</p>
+      <p class="flex justify-center text-white">It can also create new textures of blocks or items using the image generator</p>
+      <img src="/img/generand_mosaic.png" alt="img of the tools used" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
+      <img src="/img/generand_mosaicitem.png" alt="img of the tools used" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
+    
     </Project>
 
     <!-- Tower Defense -->
@@ -458,6 +466,54 @@
     </Project>
 
 
+    <!-- Suika -->
+    <Project
+    cardImg="img/suika.png"
+    cardTitle="Project 3"
+    shadowColor="#aa5500"
+    cardBackground="fixed inset-0 z-40 bg-black/50"
+    cardClass="absolute w-40 rounded-xl ring-2 ring-orange-300/30"
+    cardBody="bg-black/70 outline outline-1 outline-orange-300">
+    <h1 class="flex justify-center font-bold text-8xl text-orange-300 title_orange">Suika</h1>
+    <br>
+      <p class="flex justify-center text-white">a suika game made in a hours during lunch time</p>
+      <p class="flex justify-center text-white"></p>
+
+    <a class="flex justify-center underline" href="https://aexll.github.io/Suika/suika.html"> Play here </a>
+
+    </Project>
+    
+
+
+    <!-- Demo jump -->
+    <Project
+    cardImg="img/platformer.png"
+    cardTitle="Project 3"
+    shadowColor="#0055ff"
+    cardBackground="fixed inset-0 z-40 bg-black/50"
+    cardClass="absolute w-40 rounded-xl ring-2 ring-blue-400/30"
+    cardBody="bg-black/70 outline outline-1 outline-blue-400">
+    <h1 class="flex justify-center font-bold text-8xl text-blue-400 title_blue">Platformer template</h1>
+
+    <br>
+    <iframe 
+    title="Platformer"
+    class="flex mx-auto justify-center"
+    scrolling="no"
+    src="https://aexll.github.io/platformer/platformer.html"
+    allowfullscreen
+    width="1200" height="680"
+    style="border:none; overflow:hidden"></iframe>
+    <a class="flex justify-center underline" href="https://aexll.github.io/platformer/platformer.html"> Fullscreen </a>
+
+      <p class="flex justify-center text-white">a platformer with a lot of smooth features</p>
+      <p class="flex justify-center text-white"></p>
+
+
+    </Project>
+
+
+
     <!-- Soon -->
 
 
@@ -491,6 +547,11 @@
     will-change: filter;
     /* transition: filter 300ms; */
     filter: drop-shadow(0 0 0.1em #1aff007c);
+  }
+  .title_blue {
+    will-change: filter;
+    /* transition: filter 300ms; */
+    filter: drop-shadow(0 0 0.1em #00c3ff7c);
   }
   .title:hover {
     filter: drop-shadow(0 0 0.3em #ffffff7e);
