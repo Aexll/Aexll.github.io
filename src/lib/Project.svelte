@@ -31,7 +31,7 @@ $: cssVarStyles = `--shadow-color:${shadowColor};`;
 
 
 
-<div id="hover" class="static w-40 h-56 m-4" > 
+<div id="hover" class="static w-40 h-40 m-4" > 
   <button class="w-fit h-fit" on:click={(event)=>(modalopened=true)}>
     <img src={cardImg}
     alt="card"

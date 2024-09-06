@@ -32,9 +32,9 @@ let menu = [
 </div> -->
 
 
-<Navbar let:hidden let:toggle>
+<Navbar let:hidden let:toggle class="border-e border-gray-200">
   <NavBrand href="/">
-    <img src="/logo2.png" class="me-3 h-6 sm:h-9 logo" alt="Flowbite Logo" />
+    <img src="/logo2.png" class="me-3 h-6 sm:h-9 logo " alt="Flowbite Logo" />
     <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Axel Lavigne</span>
   </NavBrand>
   <NavHamburger on:click={toggle} />

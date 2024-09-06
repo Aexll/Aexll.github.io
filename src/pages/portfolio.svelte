@@ -252,7 +252,7 @@
       <h1 class="flex justify-center font-bold text-8xl text-orange-500 title_orange">Generand</h1>
     <br>
       <p class="flex justify-center text-white">A random mod generator for minecraft</p>
-      <p class="flex justify-center text-white">Coded in <b>python</b></p>
+      <p class="flex justify-center text-white">Coded in  <b> python</b></p>
       <p class="flex justify-center text-white">the program will generate some java files and then build them using gradle into a minecraft mod</p>
       <p class="flex justify-center text-white">it will also run a instance of minecraft with the new mod installed</p>
       <a class="flex justify-center font-bold text-2xl text-blue-500 underline" href="https://github.com/Aexll/Generand?tab=readme-ov-file">Github</a>
@@ -312,7 +312,7 @@
     
     <!-- Nano -->
     <Project
-    cardImg="img/Card_Nano.png"
+    cardImg="img/card_nano.png"
     cardTitle="Project 3"
     shadowColor="#550055"
     cardBackground="fixed inset-0 z-40 bg-black/50"
@@ -484,6 +484,22 @@
     </Project>
     
 
+    <!-- Suikasteroid -->
+    <Project
+    cardImg="img/suikasteroid.png"
+    cardTitle="Project asteroid"
+    shadowColor="#220088"
+    cardBackground="fixed inset-0 z-40 bg-black/50"
+    cardClass="absolute w-40 rounded-xl ring-2 ring-blue-900"
+    cardBody="bg-black/70 outline outline-1 outline-blue-900">
+    <h1 class="flex justify-center font-bold text-8xl text-blue-900 title_darkblue">Suikasteroid</h1>
+    <br>
+      <p class="flex justify-center text-white">a suika game made with the suika template</p>
+      <p class="flex justify-center text-white"></p>
+
+    <a class="flex justify-center underline" href="https://aexll.github.io/Suikasteroid/suikasteroid.html"> Play here </a>
+
+    </Project>
 
     <!-- Demo jump -->
     <Project
@@ -506,7 +522,14 @@
     style="border:none; overflow:hidden"></iframe>
     <a class="flex justify-center underline" href="https://aexll.github.io/platformer/platformer.html"> Fullscreen </a>
 
-      <p class="flex justify-center text-white">a platformer with a lot of smooth features</p>
+      <p class="flex justify-center text-white">a platformer demo on godot, with a lot of smooth features</p>
+      <p class="flex justify-center text-white">including:</p>
+      <li class="flex justify-center">Coyote jump time</li>
+      <li class="flex justify-center">Buffered jump inputs</li>
+      <li class="flex justify-center">Variable jump height</li>
+      <li class="flex justify-center">Jump apex gravity modifier</li>
+      <li class="flex justify-center">...</li>
+      <li class="flex justify-center"> and more !</li>
       <p class="flex justify-center text-white"></p>
 
 
@@ -552,6 +575,11 @@
     will-change: filter;
     /* transition: filter 300ms; */
     filter: drop-shadow(0 0 0.1em #00c3ff7c);
+  }
+  .title_darkblue {
+    will-change: filter;
+    /* transition: filter 300ms; */
+    filter: drop-shadow(0 0 0.1em #2200ff48);
   }
   .title:hover {
     filter: drop-shadow(0 0 0.3em #ffffff7e);
