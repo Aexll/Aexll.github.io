@@ -13,6 +13,8 @@ export default {
     fontFamily: {
       'ubuntu': "UbuntuMono-Regular, monospace", 
       'VCR': "VCR, monospace",
+      'Minecraft': "Minecraft, monospace",
+      'DoodleJump': "DoodleJump, monospace",
       'verdana': "Helvetica, monospace",
     }
   },

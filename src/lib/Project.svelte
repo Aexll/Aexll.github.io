@@ -44,9 +44,9 @@ $: cssVarStyles = `--shadow-color:${shadowColor};`;
 <!-- bodyClass="{cardBody}" -->
 
 <Modal bind:open={modalopened} autoclose outsideclose dismissable
-backdropClass="{cardBackground}"
-bodyClass = "{cardBody}"
-style="{cardBodyStyle}"
+backdropClass="{cardBackground} no-scrollbar"
+bodyClass = "{cardBody} no-scrollbar"
+style="{cardBodyStyle} no-scrollbar"
 size="xl"
 >
   <slot></slot>
@@ -65,6 +65,18 @@ size="xl"
   /* animation: float 0.1s ease-in-out infinite;  */
   /* box-shadow: 10px 10px 0px 0.1em #000000; */
   transform: translate(0px, -10px);
+}
+
+
+.container {
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    scrollbar-color: transparent transparent; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+.container::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
 }
 /* 
 .card_done {

@@ -73,7 +73,6 @@
     }
   ];
 
-
   export const imagestdtk = [
     {
       alt: 'Screenshot 1',
@@ -247,24 +246,33 @@
     <Project
     cardImg="img/Card_Generand.png"
     cardTitle="Project 3"
+    cardBodyStyle="background-image: url('/img/generand-bg.png');"
     cardBackground="fixed inset-0 z-40 bg-black/50"
-    cardBody="bg-black/70 outline outline-2 outline-orange-500">
-      <h1 class="flex justify-center font-bold text-8xl text-orange-500 title_orange">Generand</h1>
-    <br>
-      <p class="flex justify-center text-white">A random mod generator for minecraft</p>
-      <p class="flex justify-center text-white">Coded in  <b> python</b></p>
-      <p class="flex justify-center text-white">the program will generate some java files and then build them using gradle into a minecraft mod</p>
-      <p class="flex justify-center text-white">it will also run a instance of minecraft with the new mod installed</p>
-      <a class="flex justify-center font-bold text-2xl text-blue-500 underline" href="https://github.com/Aexll/Generand?tab=readme-ov-file">Github</a>
+    cardBody="bg-center outline outline-2 outline-orange-500">
+      <!-- <h1 class="flex justify-center font-bold text-8xl text-orange-500 title_orange">Generand</h1> -->
+    
+      <div class="flex justify-center items-center pt-12">
+        <img src="/img/generand-title.png" 
+        alt="Generand" 
+        class="object-cover m-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.5)]"/>
+      </div>
+    
+    
+      <br>
+      <p class="text font-Minecraft">A random mod generator for minecraft</p>
+      <p class="text font-Minecraft">Coded in python</p>
+      <p class="text font-Minecraft">the program will generate some java files and then build them using gradle into a minecraft mod</p>
+      <p class="text font-Minecraft">it will also run a instance of minecraft with the new mod installed</p>
+      <a class="flex justify-center font-bold text-2xl text-blue-500 underline font-Minecraft" href="https://github.com/Aexll/Generand?tab=readme-ov-file">Github</a>
       <img src="/img/generand_items.png" alt="img of randomized ores and items" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
       <img src="/img/generand_ores.png" alt="img of randomized craft and world gen" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
       <img src="/img/generand_tools.png" alt="img of the tools used" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
     
-      <p class="flex justify-center text-white">to modify how to mod is being created</p>
-      <p class="flex justify-center text-white">Generand is using a specific python syntax with their custom classes</p>
-      <p class="flex justify-center text-white">Using template files with custom parsing syntax, everything is detailed on the github</p>
-      <p class="flex justify-center text-white">Generand is highly extensible and can be used to generate new dimensions, mobs, custom gamerules</p>
-      <p class="flex justify-center text-white">It can also create new textures of blocks or items using the image generator</p>
+      <p class="text font-Minecraft">to modify how to mod is being created</p>
+      <p class="text font-Minecraft">Generand is using a specific python syntax with their custom classes</p>
+      <p class="text font-Minecraft">Using template files with custom parsing syntax, everything is detailed on the github</p>
+      <p class="text font-Minecraft">Generand is highly extensible and can be used to generate new dimensions, mobs, custom gamerules</p>
+      <p class="text font-Minecraft">It can also create new textures of blocks or items using the image generator</p>
       <img src="/img/generand_mosaic.png" alt="img of the tools used" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
       <img src="/img/generand_mosaicitem.png" alt="img of the tools used" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
     
@@ -300,8 +308,41 @@
     <img src="/img/tdtk_2.png" alt="img of randomized ores and items" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
     <img src="/img/tdtk_3.png" alt="img of randomized ores and items" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
     <img src="/img/tdtk_4.png" alt="img of randomized ores and items" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/> -->
-     
+    
+
     <div class="content-center max-w-2xl mx-auto">
+
+    <p class="flex justify-center text-white">
+
+      In this kit, the user should be able to change:
+
+
+
+    </p>
+    <br>
+    <p class="flex justify-center text-white">Tower</p>
+    <li class="flex justify-center">Range</li>
+    <li class="flex justify-center">Attack Speed</li>
+    <li class="flex justify-center">Priority focus</li>
+    <li class="flex justify-center">Price</li>
+    <li class="flex justify-center">Projectiles (if used)</li>
+    <li class="flex justify-center">Damages</li>
+    <li class="flex justify-center">Lifetime</li>
+    <li class="flex justify-center">Piercing (how many enemies a single projectile can hit)</li>
+    <li class="flex justify-center">Damage type (fire, cold, sharp)</li>
+    <li class="flex justify-center">Speed</li>
+    <li class="flex justify-center">Event upon death</li>
+    <br>
+    <p class="flex justify-center text-white">Enemies</p>
+    <li class="flex justify-center">Speed</li>
+    <li class="flex justify-center">Health</li>
+    <li class="flex justify-center">Immunity (fire, cold, …)</li>
+    <li class="flex justify-center">Event upon death</li>
+    <br>
+    <p class="flex justify-center text-white">Map</p>
+    <li class="flex justify-center">Number of waves</li>
+
+
       <!-- min-h-[800px] -->
 
     </div>
@@ -312,7 +353,7 @@
     
     <!-- Nano -->
     <Project
-    cardImg="img/card_nano.png"
+    cardImg="img/Card_Nano.png"
     cardTitle="Project 3"
     shadowColor="#550055"
     cardBackground="fixed inset-0 z-40 bg-black/50"
@@ -508,9 +549,9 @@
     shadowColor="#0055ff"
     cardBackground="fixed inset-0 z-40 bg-black/50"
     cardClass="absolute w-40 rounded-xl ring-2 ring-blue-400/30"
-    cardBody="bg-black/70 outline outline-1 outline-blue-400">
-    <h1 class="flex justify-center font-bold text-8xl text-blue-400 title_blue">Platformer template</h1>
-
+    cardBody="bg-[#4a97ff] rounded-xl outline outline-1 outline-blue-400">
+    <h1 class="flex justify-center font-bold text-8xl text-white title_white">Platformer template</h1>
+    
     <br>
     <iframe 
     title="Platformer"
@@ -518,7 +559,7 @@
     scrolling="no"
     src="https://aexll.github.io/platformer/platformer.html"
     allowfullscreen
-    width="1200" height="680"
+    width="1200" height="675"
     style="border:none; overflow:hidden"></iframe>
     <a class="flex justify-center underline" href="https://aexll.github.io/platformer/platformer.html"> Fullscreen </a>
 
@@ -536,6 +577,37 @@
     </Project>
 
 
+    <!-- Doodle Jump -->
+    <Project
+    cardImg="img/doodle.png"
+    cardTitle="Project 3"
+    shadowColor="#ffff66"
+    cardBodyStyle="background-image: url('/img/doodle_bg.png');"
+    cardBackground="fixed inset-0 z-40 bg-black/50"
+    cardClass="absolute w-40 rounded-xl ring-2 ring-yellow-400/30"
+    cardBody="bg-center outline outline-1 outline-gray">
+
+    <img src="/img/doodle_title.png" alt="Exo" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.5)]"/>
+    
+
+    <!-- <h1 class="flex justify-center font-bold text-8xl text-yellow-400 title_orange">Doodle Jump replica</h1> -->
+
+    <br>
+    <iframe 
+    title="Platformer"
+    class="flex mx-auto justify-center"
+    scrolling="no"
+    src="https://aexll.github.io/Doodle/index.html"
+    allowfullscreen
+    width="1200" height="680"
+    style="border:none; overflow:hidden"></iframe>
+      <p class="flex justify-center text-black font-DoodleJump text-xl">very quick project to replicate the game of doodle jump</p>
+      <p class="flex justify-center text-gray font-DoodleJump text-xl">I know its very buggy</p>
+
+
+    </Project>
+
+    
 
     <!-- Soon -->
 
@@ -551,6 +623,15 @@
 
 
 <style>
+
+  .text {
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem /* 20px */;
+    line-height: 1.75rem /* 28px */;
+  }
+
   .title {
     will-change: filter;
     /* transition: filter 300ms; */
@@ -581,10 +662,14 @@
     /* transition: filter 300ms; */
     filter: drop-shadow(0 0 0.1em #2200ff48);
   }
+  .title_white {
+    will-change: filter;
+    /* transition: filter 300ms; */
+    filter: drop-shadow(0 0 0.1em #ffffff48);
+  }
   .title:hover {
     filter: drop-shadow(0 0 0.3em #ffffff7e);
   }
-
 
 </style>
 
