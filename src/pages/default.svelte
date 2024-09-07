@@ -65,27 +65,28 @@
     </div>  
     
     <!-- code demo -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-20 sm:mt-24 lg:mt-32 lg:grid lg:gap-8 lg:grid-cols-12 lg:items-center">
+    <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 md:px-8 mt-20 sm:mt-24 lg:mt-32 lg:grid lg:gap-8 lg:grid-cols-12 lg:items-center">
     
-      <div class="relative row-start-1 col-start-6 xl:col-start-7 col-span-7 xl:col-span-6 h-full overflow-hidden rounded-lg ring-1 ring-white/15 bg-slate-800/10">
-      <Badge color="dark" class="absolute top-2 right-2">C++</Badge>
-    <Code lang={cpp} code={`int main(){
-    printf("Hello, World!");
-    
-    int a = 0;
-    scanf("%d", &a);
-    
-    if(a == 0 || a < 0){
-      exit(0);
-    }
-    
-    for(int i = 0; i < a; i++){
-      printf("%d", i);
-    }
-    
-    return 0;
-    }`}/>
-      </div>
+      <!-- <div class="relative row-start-1 col-start-6 xl:col-start-7 col-span-7 xl:col-span-6 h-full overflow-hidden rounded-lg ring-1 ring-white/15 bg-slate-800/10"> -->
+      <!-- <Badge color="dark" class="absolute top-2 right-2">C++</Badge> -->
+      <Code lang={cpp} code={`int main(){
+        printf("Hello, World!");
+        
+        int a = 0;
+        scanf("%d", &a);
+        
+        if(a == 0 || a < 0){
+          exit(0);
+        }
+        
+        for(int i = 0; i < a; i++){
+          printf("%d", i);
+        }
+        
+        return 0;
+        }`}/>
+
+      <!-- </div> -->
     
       <div class="relative row-start-1 col-start-1 col-span-5 xl:col-span-6 h-full text-left">
         <div class="relative center justify-center h-full">

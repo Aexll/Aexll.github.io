@@ -16,6 +16,7 @@ export default {
       'Minecraft': "Minecraft, monospace",
       'DoodleJump': "DoodleJump, monospace",
       'verdana': "Helvetica, monospace",
+      'LuckiestGuy': ["LuckiestGuy-Regular"]
     }
   },
   plugins: [],

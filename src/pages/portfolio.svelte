@@ -19,6 +19,12 @@
 
   import Topmenu from '../lib/Topmenu.svelte';
 
+  // Code
+  import Code from '../lib/Code.svelte'
+  import atomOneDark from "svelte-highlight/styles/atom-one-dark";
+  import cpp from "svelte-highlight/languages/cpp";
+  import { Badge } from 'flowbite-svelte';
+  import { python } from 'svelte-highlight/languages/python';
 
   export const images = [
     {
@@ -123,6 +129,24 @@
       title: 'tdtk_4'
     }
   ]
+  
+  export const imagesbomber = [
+    {
+      alt: 'Screenshot 1',
+      src: '/img/bomber_game.png',
+      title: 'tdtk_1'
+    },
+    {
+      alt: 'Screenshot 2',
+      src: '/img/bomber_game2.png',
+      title: 'tdtk_2'
+    },
+    {
+      alt: 'Screenshot 3',
+      src: '/img/bomber_game3.png',
+      title: 'tdtk_3'
+    }
+  ]
 
 </script>
 
@@ -208,6 +232,29 @@
       <h1 class="flex justify-center font-bold text-2xl">Reading and Parsing files</h1>
       <p class="flex justify-center">A gamebook is an interactive story with choices and branches</p>
       <p class="flex justify-center">each state of the story is represented with a file</p>
+      <p class="flex justify-center">the files uses a custom formating</p>
+
+      
+      <div class="flex justify-center">
+      <div class="flex justify-center" >
+        <!-- <div class="flex overflow-hidden rounded-lg ring-1 ring-white/15 bg-slate-800/10"> -->
+          <!-- <Badge color="dark" class="absolute top-2 right-2">C++</Badge> -->
+  <Code
+  lang={cpp} 
+  code={`!23191!Added $yAshes/$y to your inventory.
+
+#0# Continue
+
+||
+[i10<1]
+[0<23200]
+`}/>
+          <!-- </div> -->
+      </div>
+    </div>
+
+
+
     </Project>
 
     <!-- Bomber -->
@@ -218,12 +265,23 @@
     cardImg="img/Card_Bomber_2.png"
     cardTitle="Project 2"
     shadowColor="#00cc00"
+    cardBodyStyle="background-image: url('/img/bomber_bg.png');"
     cardBackground="fixed inset-0 z-40 bg-black/50"
-    cardBody="bg-green-950/70 bg-scroll outline outline-2 outline-lime-500 rounded-xl"
+    cardBody="bg-center bg-scroll outline outline-2 outline-lime-500 rounded-xl"
     cardClass="absolute w-40 rounded-xl ring-2 ring-lime-500/50"
     >
-    <h1 class="flex justify-center font-bold text-8xl title_black text-lime-500 title_green">Super Bomber</h1>
-    <br>
+    <!-- <h1 class="flex justify-center font-bold text-8xl title_black text-lime-500 title_green">Super Bomber</h1> -->
+    
+    <img src="/img/bomber_title.png" alt="SuperBomber" class="flex items-center pt-12  drop-shadow-[00px_00px_10px_rgba(0,0,0,0.5)]"/>
+    <div class="content-center max-w-2xl mx-auto  drop-shadow-[00px_00px_10px_rgba(0,0,0,0.5)]">
+      <!-- min-h-[800px] -->
+      <Carousel images={imagesbomber} let:Indicators let:Controls imgClass="object-contain h-full w-fit" class="flex h-full size-full">
+        <Controls />
+        <!-- <Indicators /> -->
+      </Carousel>
+    </div>
+
+
     <div class="bg-black/40 mx-auto p-4 rounded-md">
       <p class="flex justify-center text-white">Very quick sideproject</p>
       <p class="flex justify-center text-white">goal was to make a local multiplayer game</p>
@@ -240,7 +298,12 @@
     
     <br>
     <img src="/img/bombergif.gif" alt="Bomber" class="flex mx-auto rounded-xl drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)] outline outline-2 outline-white"/>
-    </Project>
+    
+  
+
+  
+  
+  </Project>
 
     <!-- Generand -->
     <Project
@@ -270,6 +333,19 @@
     
       <p class="text font-Minecraft">to modify how to mod is being created</p>
       <p class="text font-Minecraft">Generand is using a specific python syntax with their custom classes</p>
+      
+      <div class="flex justify-center">
+      <div class="relative justify-center" >
+        <Code
+        lang={python}
+        badgetxt="Python"
+        code={`DF("resources/pack.mcmeta") | "misc/pack_meta"
+DF("resources/META-INF/mods.toml") | "misc/mod_toml"
+DF("java/generand/item/"+self.dico["Id"]+"Item.java") | "java/item/"
+DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/super/"+self.dico["item_type"])`}/>
+      </div>
+      </div>
+      
       <p class="text font-Minecraft">Using template files with custom parsing syntax, everything is detailed on the github</p>
       <p class="text font-Minecraft">Generand is highly extensible and can be used to generate new dimensions, mobs, custom gamerules</p>
       <p class="text font-Minecraft">It can also create new textures of blocks or items using the image generator</p>
@@ -283,22 +359,31 @@
     cardImg="img/Card_TowerDefense.png"
     cardTitle="Project 3"
     shadowColor="#00aa00"
+    cardBodyStyle="background-image: url('/img/tdtk_bg.png');"
     cardBackground="fixed inset-0 z-40 bg-black/50"
-    cardBody="bg-black/70 outline outline-1 outline-lime-500"
+    cardBody="bg-[length:200px_100px] bg-center  outline outline-1 outline-white"
     cardClass="absolute w-40 rounded-xl ring-2 ring-green-500/50">
-    <h1 class="flex justify-center font-bold text-8xl text-lime-500 title_green">Tower defense devkit</h1>
-    <a class="flex justify-center font-bold text-2xl text-blue-500 underline" href="https://github.com/Aexll/TowerDefenseDevkit">Github</a>
+    <!-- <h1 class="flex justify-center text-8xl text-lime-500 title_green font-['VCR']">Tower defense devkit</h1> -->
     
     
-    <p class="flex justify-center text-white">A set of tools to make a tower defense on Unreal Engine</p>
+    <div class="flex justify-center items-center">
+      <img src="/img/tdtk_title.png" 
+      alt="Generand" 
+      class="object-cover m-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.5)]"/>
+    </div>
+    
+    <a class="flex justify-center font-LuckiestGuy text-2xl text-blue-500 underline" href="https://github.com/Aexll/TowerDefenseDevkit">Github</a>
+    
+    
+    <p class="text font-LuckiestGuy">A set of tools to make a tower defense on Unreal Engine</p>
     
     <a class="flex justify-center font-bold text-2xl text-blue-500 underline" href="https://drive.google.com/drive/folders/1FX5d2qh1IXuStesv0eUbHCSkTVxApRPw">Link to the documentation</a>
     
     <!-- https://drive.google.com/drive/folders/1FX5d2qh1IXuStesv0eUbHCSkTVxApRPw -->
 
-    <div class="content-center max-w-2xl mx-auto">
+    <div class="content-center max-w-2xl mx-auto rounded-xl ring-4 ring-white">
       <!-- min-h-[800px] -->
-      <Carousel images={imagestdtk} let:Indicators let:Controls imgClass="object-contain h-full w-fit" class="flex h-full size-full">
+      <Carousel images={imagestdtk} let:Indicators let:Controls imgClass="object-contain h-full w-fit rounded-xl ring-4 ring-white" class="flex h-full size-full">
         <Controls />
         <!-- <Indicators /> -->
       </Carousel>
@@ -381,6 +466,16 @@
     cardClass="absolute w-40 rounded-xl ring-2 ring-orange-500/30"
     cardBody="bg-black/70 outline outline-1 outline-orange-600">
     <h1 class="flex justify-center font-bold text-8xl text-orange-600 title_orange">Skirmish</h1>
+
+    <iframe 
+    title="Doodle"
+    class="flex mx-auto justify-center"
+    scrolling="no"
+    src="https://aexll.github.io/Skirmish/index.html"
+    allowfullscreen
+    width="1200" height="680"
+    style="border:none; overflow:hidden"></iframe>
+
     <br>
       <p class="flex justify-center text-white">Card/Board game Similar to chess on a cricle-ish board</p>
       <p class="flex justify-center text-white">(currently a private repo)</p>
@@ -388,7 +483,18 @@
       <img src="/img/skirmishUnity.png" alt="img of randomized ores and items" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/>
       <!-- <img src="/img/generand_2.png" alt="img of randomizd craft and world gen" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)]"/> -->
 
+
+
+
+
     </Project>
+
+
+
+
+
+
+
     <!-- https://aexll.github.io/Skull/skull.html -->
     <!-- Skull -->
     <Project
@@ -594,7 +700,7 @@
 
     <br>
     <iframe 
-    title="Platformer"
+    title="Doodle"
     class="flex mx-auto justify-center"
     scrolling="no"
     src="https://aexll.github.io/Doodle/index.html"
@@ -607,7 +713,25 @@
 
     </Project>
 
-    
+
+    <!-- Suikasteroid -->
+    <Project
+    cardImg="img/suicalc.png"
+    cardTitle="Project asteroid"
+    shadowColor="#880088"
+    cardBackground="fixed inset-0 z-40 bg-black/50"
+    cardClass="absolute w-40 rounded-xl ring-2 ring-purple-500"
+    cardBody="bg-black/70 outline outline-1 outline-purple-500">
+    <h1 class="flex justify-center font-bold text-8xl text-purple-800 title_darkblue">Suikalculator</h1>
+    <br>
+      <p class="flex justify-center text-white">a suika game made with the suika template</p>
+      <p class="flex justify-center text-white">made in 15 min, and never debuged</p>
+      <p class="flex justify-center text-white">the game is not fun, i know it</p>
+
+    <a class="flex justify-center underline" href="https://aexll.github.io/Suicalculator/suicalculator.html"> Play here </a>
+
+    </Project>
+
 
     <!-- Soon -->
 
