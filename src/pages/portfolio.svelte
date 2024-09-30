@@ -622,6 +622,16 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     cardClass="absolute w-40 rounded-xl ring-2 ring-orange-300/30"
     cardBody="bg-black/70 outline outline-1 outline-orange-300">
     <h1 class="flex justify-center font-bold text-8xl text-orange-300 title_orange">Suika</h1>
+
+    <iframe 
+    title="Suika"
+    class="flex mx-auto justify-center"
+    scrolling="no"
+    src="../suika_v2/index.html"
+    allowfullscreen
+    width="1200" height="675"
+    style="border:none; overflow:hidden"></iframe>
+
     <br>
       <p class="flex justify-center text-white">a suika game made in a hours during lunch time</p>
       <p class="flex justify-center text-white"></p>
