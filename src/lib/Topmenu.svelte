@@ -46,7 +46,7 @@ let menu = [
     <!-- <MegaMenu items={menu} let:item>
       <a href={item.href} class="hover:text-primary-600 dark:hover:text-primary-500">{item.name}</a>
     </MegaMenu> -->
-    <NavLi href="/doc">Writeups</NavLi>
+    <NavLi href="/notes">Maths</NavLi>
     <!-- <NavLi href="/services">Products</NavLi> -->
     <!-- <NavLi href="/services">Contact</NavLi> -->
   </NavUl>

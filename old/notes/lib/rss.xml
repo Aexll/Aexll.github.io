@@ -1,4 +1,26 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Math]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib\media\favicon.png</url><title>Math</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Wed, 16 Oct 2024 19:14:52 GMT</lastBuildDate><atom:link href="lib\rss.xml" rel="self" type="application/rss+xml"/><pubDate>Wed, 16 Oct 2024 19:14:50 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[Ex12 - polynôme de l'Hermite annulable]]></title><description><![CDATA[ 
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Math]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib\media\favicon.png</url><title>Math</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Thu, 17 Oct 2024 18:27:58 GMT</lastBuildDate><atom:link href="lib\rss.xml" rel="self" type="application/rss+xml"/><pubDate>Thu, 17 Oct 2024 18:27:57 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[Intégration numérique]]></title><description><![CDATA[ 
+ <br><br><br><br><br><br>Notes
+on remarque que la formule de Simpson partage des similitudes avec la formule des trapèzes
+<br><br>au cas ou h est constant:<br><br><br><br><br><img alt="Pasted image 20241014092323.png" src="lib\media\pasted-image-20241014092323.png"><br>
+Il suffit de remarquer que si p est un polynôme de degré n alors son polynôme<br>
+d'interpolation n'est autre que lui-même. <br>Nous avons vu au chapitre précédent que si  est le polynôme d'interpolation de<br>
+Lagrange de  aux points  alors :<br><br>où .<br>ainsi l'erreur est:<br><br>Erreur méthode rectangles à gauche et à droite avec pas constant<br><br>Point milieux<br><br><br><br>]]></description><link>map\intégration-numérique.html</link><guid isPermaLink="false">MAP/Intégration numérique.md</guid><pubDate>Thu, 17 Oct 2024 07:32:15 GMT</pubDate><enclosure url="lib\media\pasted-image-20241014092323.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\pasted-image-20241014092323.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Propriétés des Combinaisons]]></title><description><![CDATA[ 
+ <br><br>Définition : La combinaison de  objets pris  à la fois est donnée par :<br><br><br>Demonstration
+
+<br><br>\begin{gathered}<br>
+\text{Par définition} \ \<br>
+\binom{n}{0} = 1 \quad \text{et} \quad \binom{n}{n} = 1<br>
+\end{gathered}<br><br>\begin{gathered}<br>
+\text{Relation de Pascal} \ \<br>
+\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}<br>
+\end{gathered}<br><br>\begin{gathered}<br>
+\text{Théorème de Vandermonde} \ \<br>
+\sum_{k=0}^{r} \binom{m}{k} \binom{n}{r-k} = \binom{m+n}{r}<br>
+\end{gathered}<br><br>\begin{gathered}<br>
+\text{Formule de Hockey-Stick} \ \<br>
+\sum_{i=r}^{n} \binom{i}{r} = \binom{n+1}{r+1}<br>
+\end{gathered}<br>
+$$]]></description><link>maths\combinaisons.html</link><guid isPermaLink="false">Maths/Combinaisons.md</guid><pubDate>Thu, 17 Oct 2024 18:25:44 GMT</pubDate></item><item><title><![CDATA[Ex12 - polynôme de l'Hermite annulable]]></title><description><![CDATA[ 
  <br><br>Info
 la méthode traditionnelle dans ce gens d'exercice à deux points, et de poser un système d'équation à 4 inconnues, et d'utiliser le pivot de gausse, cela nous permet d'aller très vite dans la démonstration, sans avoir besoins de trop détailler de calcules, le pivot de gausse étant assez simple à expliquer
 devoir réexpliquer tout le procéder de la méthode de l'Hermite est souvent très complexe<br>
@@ -28,18 +50,7 @@ unique sous la forme :<br><br>où  et  sont des polynômes, et <br>
 <br>Conclusion:
 <br>Le polynôme  interpole  aux points  et a un degré inférieur ou égal à  .Par<br>
 conséquent,  est exactement le polynôme de Lagrange <br>Ainsi, nous avons montré que:<br>
-]]></description><link>map\correction,-explications\ex14-produit-euclidien-de-polynômes.html</link><guid isPermaLink="false">MAP/Correction, Explications/Ex14 - produit euclidien de polynômes.md</guid><pubDate>Wed, 16 Oct 2024 19:14:50 GMT</pubDate></item><item><title><![CDATA[Propriétés des Combinaisons]]></title><description><![CDATA[ 
- <br><br>
-<br>
-Définition : La combinaison de  objets pris  à la fois est donnée par :
-
-
-<br>
-Symétrie :
-
-<br><br>Demonstration
-
-<br><br>   \binom{n}{0} = 1 \quad \text{et} \quad \binom{n}{n} = 1<br><br>   \binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}<br><br>   \sum_{k=0}^{n} \binom{n}{k} = 2^n<br><br>   \sum_{k=0}^{n} (-1)^k \binom{n}{k} = 0 \quad \text{pour} \quad n &gt; 0<br><br>   \sum_{k=0}^{r} \binom{m}{k} \binom{n}{r-k} = \binom{m+n}{r}<br><br>   \sum_{i=r}^{n} \binom{i}{r} = \binom{n+1}{r+1}<br>]]></description><link>maths\combinaisons.html</link><guid isPermaLink="false">Maths/Combinaisons.md</guid><pubDate>Wed, 16 Oct 2024 17:42:52 GMT</pubDate></item><item><title><![CDATA[Complexes]]></title><description><![CDATA[ 
+]]></description><link>map\correction,-explications\ex14-produit-euclidien-de-polynômes.html</link><guid isPermaLink="false">MAP/Correction, Explications/Ex14 - produit euclidien de polynômes.md</guid><pubDate>Wed, 16 Oct 2024 19:14:50 GMT</pubDate></item><item><title><![CDATA[Complexes]]></title><description><![CDATA[ 
  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>Note
 très pratique pour prouver la subjectivité d'une fonction polynomial à coefficients complexes<br>
 pas besoins de démontrer ce théorème pour les polynômes de dégrées 2, nous pouvons juste parler du delta de notre fonction, et dire que notre polynôme admettra au minimum une racines, ce qui prouve bien que le polynôme est surjective
@@ -58,11 +69,7 @@ pas besoins de démontrer ce théorème pour les polynômes de dégrées 2, nous
 <a data-href="Combinaisons" href="maths\combinaisons.html" class="internal-link" target="_self" rel="noopener">Combinaisons</a><br>
 <a data-href="Fractions" href="maths\fractions.html" class="internal-link" target="_self" rel="noopener">Fractions</a><br>
 <a data-href="Sommes" href="maths\sommes.html" class="internal-link" target="_self" rel="noopener">Sommes</a>]]></description><link>maths\math.html</link><guid isPermaLink="false">Maths/Math.md</guid><pubDate>Wed, 16 Oct 2024 19:14:26 GMT</pubDate></item><item><title><![CDATA[Sommes]]></title><description><![CDATA[ 
- <br>somme des a:<br><br>simplification télescopique :<br><br>carré d'une somme:<br><br>somme géométrique:<br><br>binôme de newton:<br>]]></description><link>maths\sommes.html</link><guid isPermaLink="false">Maths/Sommes.md</guid><pubDate>Wed, 16 Oct 2024 17:48:11 GMT</pubDate></item><item><title><![CDATA[Intégration numérique]]></title><description><![CDATA[ 
- <br><br>à gauche:<br><br>à droite:<br><br>au milieu:<br><br><br>au cas ou h est constant:<br><br><br><br><br><img alt="Pasted image 20241014092323.png" src="lib\media\pasted-image-20241014092323.png"><br>
-Il suffit de remarquer que si p est un polynôme de degré n alors son polynôme<br>
-d'interpolation n'est autre que lui-même. <br>Nous avons vu au chapitre précédent que si  est le polynôme d'interpolation de<br>
-Lagrange de  aux points  alors :<br><br>où .<br>ainsi l'erreur est:<br><br>Erreur méthode rectangles à gauche et à droite avec pas constant<br><br>Point milieux<br><br>Trapèzes<br><br>Simpson<br>]]></description><link>map\intégration-numérique.html</link><guid isPermaLink="false">MAP/Intégration numérique.md</guid><pubDate>Tue, 15 Oct 2024 22:24:14 GMT</pubDate><enclosure url="lib\media\pasted-image-20241014092323.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="lib\media\pasted-image-20241014092323.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Interpolation]]></title><description><![CDATA[ 
+ <br>somme des a:<br><br>simplification télescopique :<br><br>carré d'une somme:<br><br>somme géométrique:<br><br>binôme de newton:<br>]]></description><link>maths\sommes.html</link><guid isPermaLink="false">Maths/Sommes.md</guid><pubDate>Wed, 16 Oct 2024 17:48:11 GMT</pubDate></item><item><title><![CDATA[Interpolation]]></title><description><![CDATA[ 
  <br><a data-href="Ex14 - produit euclidien de polynômes" href="map\correction,-explications\ex14-produit-euclidien-de-polynômes.html" class="internal-link" target="_self" rel="noopener"><span class="iconize-icon-in-link" title="LiLineChart" aria-label="LiLineChart" data-icon="LiLineChart" aria-hidden="true" style="transform: translateY(20%);"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-line-chart"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></span>Ex14 - produit euclidien de polynômes</a><br><br><br><br><br>Soient  des polynômes tels que  polynômes  avec  tels que   sont uniques.<br><br><br><br><br>Soit  fois continûment dérivable et  le polynôme<br>
 d'interpolation de Lagrange aux points  de <br><br>où  et <br><br><br><br><br><br>]]></description><link>map\interpolation.html</link><guid isPermaLink="false">MAP/Interpolation.md</guid><pubDate>Tue, 15 Oct 2024 22:24:14 GMT</pubDate></item><item><title><![CDATA[MAP]]></title><description><![CDATA[ 
  <br><a data-href="Interpolation" href="map\interpolation.html" class="internal-link" target="_self" rel="noopener"><span class="iconize-icon-in-link" title="LiLineChart" aria-label="LiLineChart" data-icon="LiLineChart" aria-hidden="true" style="transform: translateY(20%);"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-line-chart"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></span>Interpolation</a><br>
