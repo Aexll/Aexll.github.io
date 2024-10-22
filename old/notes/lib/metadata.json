@@ -1,6 +1,6 @@
 {
   "vaultName": "Math",
-  "lastExport": 1729189677039,
+  "lastExport": 1729619951152,
   "pluginVersion": "1.8.01",
   "validBodyClasses": "publish css-settings-manager theme-dark show-inline-title show-ribbon",
   "useCustomHeadContent": false,
@@ -16,23 +16,35 @@
     "Images/Pasted image 20241013223407.png",
     "Images/Pasted image 20241014092323.png",
     "Images/Pasted image 20241016190913.png",
+    "Images/Pasted image 20241022180542.png",
     "MAP/Correction, Explications/Ex12 - polynôme de l'Hermite annulable.md",
     "MAP/Correction, Explications/Ex14 - produit euclidien de polynômes.md",
     "MAP/Intégration numérique.md",
     "MAP/Interpolation.md",
     "MAP/MAP.md",
+    "Maths/Exercices/Ensembles en extensions.md",
+    "Maths/Exercices/Linéarisation sin cos.md",
+    "Maths/Exercices/Récurrence et inégalité.md",
+    "Maths/Exercices/Simplification de nombre complexe.md",
+    "Maths/Exercices/TD4 - polynôme complexe.md",
+    "Maths/Exercices/TD4 - Sommes.md",
     "Maths/Combinaisons.md",
     "Maths/Complexes.md",
     "Maths/Dérivation.md",
+    "Maths/Factoriels.md",
     "Maths/Fractions.md",
     "Maths/Integration.md",
     "Maths/Logarithme et expodentiel.md",
     "Maths/Math.md",
     "Maths/Primitives.md",
+    "Maths/Puissances.md",
     "Maths/Sommes.md",
+    "Maths/Trigonometrie.md",
+    "Mec/Cinematique.md",
+    "Mec/Unités.md",
+    "IA.md",
     "index.md",
     "Liens utiles.md",
-    "lib/media/pasted-image-20241014092323.png",
     "lib/scripts/graph-wasm.wasm",
     "lib/fonts/94f2f163d4b698242fef.otf",
     "lib/fonts/72505e6a122c6acd5471.woff2",
@@ -83,6 +95,7 @@
     "lib/styles/obsidian.css",
     "lib/styles/global-variable-styles.css",
     "lib/styles/main-styles.css",
+    "lib/media/pasted-image-20241014092323.png",
     "lib/media/pasted-image-20241012103308.png",
     "lib/media/pasted-image-20241012103321.png",
     "lib/media/pasted-image-20241012103411.png",
@@ -198,14 +211,14 @@
       "dependencies": []
     },
     "Maths/Complexes.md": {
-      "modifiedTime": 1729106090569,
-      "sourceSize": 2049,
+      "modifiedTime": 1729619951152,
+      "sourceSize": 3844,
       "exportedPath": "maths/complexes.html",
       "dependencies": []
     },
     "Maths/Integration.md": {
-      "modifiedTime": 1729106090569,
-      "sourceSize": 1057,
+      "modifiedTime": 1729619951152,
+      "sourceSize": 1112,
       "exportedPath": "maths/integration.html",
       "dependencies": []
     },
@@ -232,8 +245,8 @@
       ]
     },
     "Liens utiles.md": {
-      "modifiedTime": 1729031054305,
-      "sourceSize": 870,
+      "modifiedTime": 1729619951152,
+      "sourceSize": 955,
       "exportedPath": "liens-utiles.html",
       "dependencies": []
     },
@@ -280,91 +293,91 @@
       "dependencies": []
     },
     "lib/scripts/graph-wasm.wasm": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 23377,
       "exportedPath": "lib/scripts/graph-wasm.wasm",
       "dependencies": []
     },
     "lib/fonts/94f2f163d4b698242fef.otf": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 66800,
       "exportedPath": "lib/fonts/94f2f163d4b698242fef.otf",
       "dependencies": []
     },
     "lib/fonts/72505e6a122c6acd5471.woff2": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 104232,
       "exportedPath": "lib/fonts/72505e6a122c6acd5471.woff2",
       "dependencies": []
     },
     "lib/fonts/2d5198822ab091ce4305.woff2": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 104332,
       "exportedPath": "lib/fonts/2d5198822ab091ce4305.woff2",
       "dependencies": []
     },
     "lib/fonts/c8ba52b05a9ef10f4758.woff2": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 98868,
       "exportedPath": "lib/fonts/c8ba52b05a9ef10f4758.woff2",
       "dependencies": []
     },
     "lib/fonts/cb10ffd7684cd9836a05.woff2": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 106876,
       "exportedPath": "lib/fonts/cb10ffd7684cd9836a05.woff2",
       "dependencies": []
     },
     "lib/fonts/b5f0f109bc88052d4000.woff2": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 105804,
       "exportedPath": "lib/fonts/b5f0f109bc88052d4000.woff2",
       "dependencies": []
     },
     "lib/fonts/cbe0ae49c52c920fd563.woff2": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 106108,
       "exportedPath": "lib/fonts/cbe0ae49c52c920fd563.woff2",
       "dependencies": []
     },
     "lib/fonts/535a6cf662596b3bd6a6.woff2": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 111708,
       "exportedPath": "lib/fonts/535a6cf662596b3bd6a6.woff2",
       "dependencies": []
     },
     "lib/fonts/70cc7ff27245e82ad414.ttf": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 192740,
       "exportedPath": "lib/fonts/70cc7ff27245e82ad414.ttf",
       "dependencies": []
     },
     "lib/fonts/454577c22304619db035.ttf": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 161376,
       "exportedPath": "lib/fonts/454577c22304619db035.ttf",
       "dependencies": []
     },
     "lib/fonts/52ac8f3034507f1d9e53.ttf": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 191568,
       "exportedPath": "lib/fonts/52ac8f3034507f1d9e53.ttf",
       "dependencies": []
     },
     "lib/fonts/05b618077343fbbd92b7.ttf": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 155288,
       "exportedPath": "lib/fonts/05b618077343fbbd92b7.ttf",
       "dependencies": []
     },
     "lib/fonts/4bb6ac751d1c5478ff3a.woff2": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 7876,
       "exportedPath": "lib/fonts/4bb6ac751d1c5478ff3a.woff2",
       "dependencies": []
     },
     "lib/media/874d8b8e340f75575caa.svg": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 317,
       "exportedPath": "lib/media/874d8b8e340f75575caa.svg",
       "dependencies": []
@@ -376,211 +389,211 @@
       "dependencies": []
     },
     "lib/fonts/mathjax_zero.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 1368,
       "exportedPath": "lib/fonts/mathjax_zero.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_main-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 34160,
       "exportedPath": "lib/fonts/mathjax_main-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_main-bold.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 34464,
       "exportedPath": "lib/fonts/mathjax_main-bold.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_math-italic.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 19360,
       "exportedPath": "lib/fonts/mathjax_math-italic.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_main-italic.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 20832,
       "exportedPath": "lib/fonts/mathjax_main-italic.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_math-bolditalic.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 19776,
       "exportedPath": "lib/fonts/mathjax_math-bolditalic.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_size1-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 5792,
       "exportedPath": "lib/fonts/mathjax_size1-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_size2-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 5464,
       "exportedPath": "lib/fonts/mathjax_size2-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_size3-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 3244,
       "exportedPath": "lib/fonts/mathjax_size3-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_size4-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 5148,
       "exportedPath": "lib/fonts/mathjax_size4-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_ams-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 40808,
       "exportedPath": "lib/fonts/mathjax_ams-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_calligraphic-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 9600,
       "exportedPath": "lib/fonts/mathjax_calligraphic-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_calligraphic-bold.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 9908,
       "exportedPath": "lib/fonts/mathjax_calligraphic-bold.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_fraktur-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 21480,
       "exportedPath": "lib/fonts/mathjax_fraktur-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_fraktur-bold.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 22340,
       "exportedPath": "lib/fonts/mathjax_fraktur-bold.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_sansserif-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 12660,
       "exportedPath": "lib/fonts/mathjax_sansserif-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_sansserif-bold.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 15944,
       "exportedPath": "lib/fonts/mathjax_sansserif-bold.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_sansserif-italic.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 14628,
       "exportedPath": "lib/fonts/mathjax_sansserif-italic.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_script-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 11852,
       "exportedPath": "lib/fonts/mathjax_script-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_typewriter-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 17604,
       "exportedPath": "lib/fonts/mathjax_typewriter-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_vector-regular.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 1136,
       "exportedPath": "lib/fonts/mathjax_vector-regular.woff",
       "dependencies": []
     },
     "lib/fonts/mathjax_vector-bold.woff": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 1116,
       "exportedPath": "lib/fonts/mathjax_vector-bold.woff",
       "dependencies": []
     },
     "lib/html/file-tree.html": {
-      "modifiedTime": 1729189677039,
-      "sourceSize": 26036,
+      "modifiedTime": 1729619951152,
+      "sourceSize": 38305,
       "exportedPath": "lib/html/file-tree.html",
       "dependencies": []
     },
     "lib/scripts/webpage.js": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 47290,
       "exportedPath": "lib/scripts/webpage.js",
       "dependencies": []
     },
     "lib/scripts/graph-view.js": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 15519,
       "exportedPath": "lib/scripts/graph-view.js",
       "dependencies": []
     },
     "lib/scripts/graph-wasm.js": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 14021,
       "exportedPath": "lib/scripts/graph-wasm.js",
       "dependencies": []
     },
     "lib/scripts/graph-render-worker.js": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 5179,
       "exportedPath": "lib/scripts/graph-render-worker.js",
       "dependencies": []
     },
     "lib/scripts/tinycolor.js": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 29832,
       "exportedPath": "lib/scripts/tinycolor.js",
       "dependencies": []
     },
     "lib/scripts/pixi.js": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 449509,
       "exportedPath": "lib/scripts/pixi.js",
       "dependencies": []
     },
     "lib/scripts/minisearch.js": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 29422,
       "exportedPath": "lib/scripts/minisearch.js",
       "dependencies": []
     },
     "lib/media/favicon.png": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 1105,
       "exportedPath": "lib/media/favicon.png",
       "dependencies": []
     },
     "lib/scripts/graph-data.js": {
-      "modifiedTime": 1729189677039,
-      "sourceSize": 1314,
+      "modifiedTime": 1729619951152,
+      "sourceSize": 1967,
       "exportedPath": "lib/scripts/graph-data.js",
       "dependencies": []
     },
     "lib/styles/obsidian.css": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 131134,
       "exportedPath": "lib/styles/obsidian.css",
       "dependencies": []
     },
     "lib/styles/global-variable-styles.css": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 236,
       "exportedPath": "lib/styles/global-variable-styles.css",
       "dependencies": []
     },
     "lib/styles/main-styles.css": {
-      "modifiedTime": 1729189677039,
+      "modifiedTime": 1729619951152,
       "sourceSize": 23130,
       "exportedPath": "lib/styles/main-styles.css",
       "dependencies": []
@@ -600,8 +613,8 @@
       ]
     },
     "MAP/Interpolation.md": {
-      "modifiedTime": 1729031054305,
-      "sourceSize": 1685,
+      "modifiedTime": 1729619951152,
+      "sourceSize": 1825,
       "exportedPath": "map/interpolation.html",
       "dependencies": []
     },
@@ -652,8 +665,8 @@
       "dependencies": []
     },
     "MAP/Correction, Explications/Ex12 - polynôme de l'Hermite annulable.md": {
-      "modifiedTime": 1729106090569,
-      "sourceSize": 2810,
+      "modifiedTime": 1729619951152,
+      "sourceSize": 2727,
       "exportedPath": "map/correction,-explications/ex12-polynôme-de-l'hermite-annulable.html",
       "dependencies": []
     },
@@ -661,6 +674,84 @@
       "modifiedTime": 1729106090569,
       "sourceSize": 411,
       "exportedPath": "maths/sommes.html",
+      "dependencies": []
+    },
+    "Images/Pasted image 20241022180542.png": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 66347,
+      "exportedPath": "images/pasted-image-20241022180542.png",
+      "dependencies": []
+    },
+    "Maths/Exercices/Ensembles en extensions.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 318,
+      "exportedPath": "maths/exercices/ensembles-en-extensions.html",
+      "dependencies": []
+    },
+    "Maths/Exercices/Linéarisation sin cos.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 742,
+      "exportedPath": "maths/exercices/linéarisation-sin-cos.html",
+      "dependencies": []
+    },
+    "Maths/Exercices/Récurrence et inégalité.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 2232,
+      "exportedPath": "maths/exercices/récurrence-et-inégalité.html",
+      "dependencies": []
+    },
+    "Maths/Exercices/Simplification de nombre complexe.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 5259,
+      "exportedPath": "maths/exercices/simplification-de-nombre-complexe.html",
+      "dependencies": []
+    },
+    "Maths/Exercices/TD4 - polynôme complexe.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 24,
+      "exportedPath": "maths/exercices/td4-polynôme-complexe.html",
+      "dependencies": []
+    },
+    "Maths/Exercices/TD4 - Sommes.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 24,
+      "exportedPath": "maths/exercices/td4-sommes.html",
+      "dependencies": []
+    },
+    "Maths/Factoriels.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 615,
+      "exportedPath": "maths/factoriels.html",
+      "dependencies": []
+    },
+    "Maths/Puissances.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 100,
+      "exportedPath": "maths/puissances.html",
+      "dependencies": []
+    },
+    "Maths/Trigonometrie.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 2353,
+      "exportedPath": "maths/trigonometrie.html",
+      "dependencies": []
+    },
+    "Mec/Cinematique.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 121,
+      "exportedPath": "mec/cinematique.html",
+      "dependencies": []
+    },
+    "Mec/Unités.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 156,
+      "exportedPath": "mec/unités.html",
+      "dependencies": []
+    },
+    "IA.md": {
+      "modifiedTime": 1729619951152,
+      "sourceSize": 38,
+      "exportedPath": "ia.html",
       "dependencies": []
     }
   }
