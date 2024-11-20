@@ -1,0 +1,196 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{bookmark}
+
+
+% \renewcommand{\thesubsection}{\Roman{subsection}}
+% \newcommand{\exo}[2]{\textbf{\Roman{#1} #2} }
+
+% \geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8em}
+
+\title{Intégration}
+\author{Axel}
+\date{\today}
+
+
+\newcommand{\exo}[1]{
+    \vspace{5mm}
+    \textbf{Exercice #1}
+    \hrulefill
+}
+
+\newcommand{\smalltext}[1]{
+    \scriptsize
+    \textit{#1}
+    \normalsize
+}
+
+
+\begin{document}
+
+\maketitle
+
+
+\section{Exercices}
+
+\exo{1}
+
+\begin{equation*}
+    \int \frac{1}{x^2} \, dx
+\end{equation*}
+
+\exo{2}
+
+\begin{equation*}
+    \int \frac{1}{x^2 - 1} \, dx
+\end{equation*}
+
+\exo{3}
+
+\begin{equation*}
+    \int \frac{x}{x^2 + 1} \, dx
+\end{equation*}
+
+
+\exo{4}
+
+\begin{equation*}
+    \int \frac{1}{x^2 + x} \, dx
+\end{equation*}
+
+\exo{5}
+
+\begin{equation*}
+    \int xln(x) \, dx
+\end{equation*}
+
+
+\exo{6}
+
+\begin{equation*}
+    \int x^2 ln(x) \, dx
+\end{equation*}
+
+\exo{7}
+
+\begin{equation*}
+    \int ln(x)^2 \, dx
+\end{equation*}
+
+\exo{8}
+
+\begin{equation*}
+    \int x^2 e^x \, dx
+\end{equation*}
+
+
+
+\exo{I}
+
+\begin{equation*}
+    \int sin(x^2) e^{\frac{x^2}{2}} dx
+\end{equation*}
+
+\section{Solutions}
+
+\exo{1}
+
+% \begin{align*}
+%     \int \frac{1}{x^2} \, dx &= \int x^{-2} \, dx \\
+%     &= \frac{x^{-1}}{-1} + C \\
+%     &= -\frac{1}{x} + C
+% \end{align*}
+\begin{equation*}
+    -\frac{1}{x}
+\end{equation*}
+
+\exo{2}
+
+\begin{equation*}
+    \ln \left| \frac{\sqrt{x - 1}}{\sqrt{x + 1}} \right|
+\end{equation*}
+% \begin{gathered}
+%     \int \frac{1}{x^2 - 1} \, dx \\
+%     &= \int \frac{1}{(x - 1)(x + 1)} \, dx \\
+%     &= \int \frac{A}{x - 1} + \frac{B}{x+1} \, dx
+% \end{gathered}
+
+% \begin{align*}
+% \end{align*}
+% \begin{equation*}
+%     A = 1/2 \quad B = -1/2
+% \end{equation*}
+% \begin{align*}
+%     &= \frac{1}{2} \int \frac{1}{x - 1} - \frac{1}{x + 1} \, dx \\
+%     &= \frac{1}{2} \ln |x - 1| - \ln |x + 1| + C \\
+%     &= \ln \left| \frac{\sqrt{x - 1}}{\sqrt{x + 1}} \right| + C
+% \end{align*}
+
+\exo{3}
+
+\begin{equation*}
+    \frac{1}{2} \ln |x^2 + 1|
+\end{equation*}
+
+\exo{4}
+
+\begin{equation*}
+    \ln |x| - \ln |x + 1|
+\end{equation*}
+
+\exo{5}
+
+\begin{equation*}
+    \frac{x^2}{2} \ln |x| - \frac{x^2}{4} + C
+\end{equation*}
+
+\exo{6}
+
+\begin{equation*}
+    \frac{1}{9} x^3 (3 \ln x - 1)
+\end{equation*}
+
+\exo{7}
+
+\begin{equation*}
+    x (ln(x)^2 - 2ln(x) + 2)
+\end{equation*}
+
+\exo{8}
+
+\begin{equation*}
+    (x^2 - 2x + 2) e^x
+\end{equation*}
+
+
+
+
+\exo{I}
+
+\begin{equation*}
+    \frac{1}{5} e^{x^2/2} (sin(x^2) - 2 cos(x^2))
+\end{equation*}
+
+
+\section{Astuces}
+
+\begin{equation*}
+    \int \frac{f'(x)}{f(x)} \, dx = \ln |f(x)| + C
+\end{equation*}
+
+\begin{equation*}
+    u^2 + \frac{1}{u^2} = \left( u + \frac{1}{u} \right)^2 + 2
+\end{equation*}
+
+
+\end{document}
+
+

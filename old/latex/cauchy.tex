@@ -1,0 +1,539 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{bookmark}
+
+
+% \renewcommand{\thesubsection}{\Roman{subsection}}
+% \newcommand{\exo}[2]{\textbf{\Roman{#1} #2} }
+
+% \geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8em}
+
+\title{Problèmes de Cauchy}
+\author{Axel}
+\date{\today}
+
+
+\newcommand{\exo}[1]{
+    \vspace{5mm}
+    \textbf{Exercice #1}
+    \hrulefill
+}
+
+\newcommand{\smalltext}[1]{
+    \scriptsize
+    \textit{#1}
+    \normalsize
+}
+
+\begin{document}
+
+\maketitle
+% \tableofcontents
+
+\section{Introduction}
+dans ce document, nous allons étudier les problèmes de Cauchy.
+Nous allons commencer par définir ce qu'est un problème de Cauchy,
+la methode de résolution et enfin nous allons résoudre quelques exemples.
+
+\subsection{Définition}
+Un problème de Cauchy est un problème de résolution d'une équation différentielle
+avec une condition initiale. En d'autres termes, il s'agit de trouver une fonction
+qui vérifie une équation différentielle et qui vérifie une condition initiale.
+
+\textit{exemple 1}
+\begin{equation}
+    \begin{cases}
+        y'(x) = 2x \\
+        y(0) = 1
+    \end{cases}
+\end{equation}
+
+pour résoudre les problèmes de Cauchy, il est impératif de savoir primitiver une fonction.
+dans l'exemple 1, la fonction $y(x)$ est la primitive de la fonction $2x$.
+
+\section{Méthode de résolution}
+
+\subsection{ordre 1}
+
+les problèmes de Cauchy d'ordre 1 sont de la forme suivante
+
+\begin{equation}\tag{E}\label{E}
+    \begin{cases}
+        y'(x) + a(x)y(x) = b(x) \\
+        y(x_0) = y_0
+    \end{cases}
+\end{equation}
+
+pour résoudre ce type de problème, il faut suivre les étapes suivantes
+
+\begin{enumerate}
+    \item trouver la solution homogene de l'équation différentielle
+    \item trouver la solution particulière de l'équation différentielle
+    \item trouver la solution du problème de Cauchy
+\end{enumerate}
+
+l'équation homogène associée à l'équation différentielle \eqref{E} est:
+
+\begin{equation}\tag{H}
+    y'(x) + a(x)y(x) = 0
+\end{equation}
+
+les solutions de l'équation homogène sont de la forme $y_h(x) = Ce^{-A(x)}$ où $C$ est une constante et $A(x)$ est une primitive de $a(x)$.
+
+Pour trouver la solution particulière de l'équation différentielle \eqref{E}, il faut trouver une fonction $y_p(x)$ qui vérifie l'équation différentielle \eqref{E}.
+
+en utilisant la méthode de variation de la constante,
+la solution particulière de l'équation différentielle \eqref{E} est de la forme 
+\begin{equation*}
+    y_p(x) = u(x)y_h(x)
+\end{equation*}
+où $u(x)$ est une primitive de $\frac{b(x)}{y_h(x)}$.
+
+Ainsi, la solution générale de l'équation différentielle \eqref{E} est de la forme
+\begin{equation*}
+    y(x) = y_h(x) + y_p(x)
+\end{equation*}
+
+il ne reste plus qu'à trouver la constante $C$ en utilisant la condition initiale $y(x_0) = y_0$.
+
+\subsection{ordre 2}
+Les problèmes de Cauchy d'ordre 2 sont de la forme suivante :
+\begin{equation}
+    y''(x) + a(x)y'(x) + b(x)y(x) = c(x)
+\end{equation}
+
+Pour résoudre ce type de problème, suivez les étapes suivantes :
+\begin{enumerate}
+    \item Trouver les solutions de l'équation homogène associée.
+    \item Trouver une solution particulière de l'équation non homogène.
+    \item Combiner les solutions pour obtenir la solution générale.
+    \item Utiliser les conditions initiales pour déterminer les constantes.
+\end{enumerate}
+
+L'équation homogène associée est :
+\begin{equation}
+    y''(x) + a(x)y'(x) + b(x)y(x) = 0
+\end{equation}
+
+Les solutions de l'équation homogène dépendent des racines de l'équation caractéristique :
+\begin{equation}
+    r^2 + ar + b = 0
+\end{equation}
+
+\begin{itemize}
+    \item Si les racines sont réelles et distinctes, la solution est de la forme $y_h(x) = C_1 e^{r_1 x} + C_2 e^{r_2 x}$.
+    \item Si les racines sont réelles et égales, la solution est de la forme $y_h(x) = (C_1 + C_2 x)e^{r x}$.
+    \item Si les racines sont complexes, la solution est de la forme $y_h(x) = e^{\alpha x}(C_1 \cos(\beta x) + C_2 \sin(\beta x))$.
+\end{itemize}
+
+Pour trouver une solution particulière $y_p(x)$, utilisez des méthodes comme l'ansatz ou la variation des constantes.
+
+La solution générale est :
+\begin{equation}
+    y(x) = y_h(x) + y_p(x)
+\end{equation}
+
+Utilisez les conditions initiales pour déterminer les constantes $C_1$ et $C_2$.
+
+\section{Exercices}
+
+
+\exo{1}
+
+\begin{equation*}
+\begin{cases}
+2y' + y = -4x+1\\
+y(1)=0 
+\end{cases}
+\end{equation*}
+
+\scriptsize
+\textit{indication : nous pouvons chercher une solution particulière de la forme $y_p(x) = ax+b$}
+\normalsize
+
+
+\exo{2}
+
+\begin{equation*}
+\begin{cases}
+y' + y = xe^{-x}\\
+y(1)=\frac{1}{2}
+\end{cases}
+\end{equation*}
+
+\scriptsize
+\textit{indication : nous pouvons chercher une solution particulière avec la méthode de variation de la constante}
+\normalsize
+
+
+\exo{3}
+
+\begin{equation*}
+\begin{cases}
+    y'' + y' + y = 0  \\
+    y(0)=0
+\end{cases}
+\end{equation*}
+
+\scriptsize
+\textit{indication : il nous faudra passer par l'équation caractéristique à deux racines complexes}
+\normalsize
+
+\exo{4}
+
+\begin{equation*}
+\begin{cases}
+    y' + xy = x\sin(x^2) \\
+    y(0)=0
+\end{cases}
+\end{equation*}
+
+\scriptsize
+\textit{indication : le changement de variable $u = x^2$ peut être utile}
+\normalsize
+
+\section{Correction}
+\subsection{Exercice 1}
+Résoudre le problème de Cauchy suivant :
+\begin{equation*}
+\begin{cases}
+2y' + y = -4x+1\\
+y(1)=0 
+\end{cases}
+\end{equation*}
+
+On pose l'équation homogène suivante :
+\begin{equation*}
+\begin{aligned}
+2y' + y &= 0 \\
+y' + \frac{1}{2}y &= 0 
+\end{aligned}
+\end{equation*}
+On retrouve la forme $y'+a(x)y = 0$. On applique la formule triviale :
+
+\begin{equation*}
+y = \lambda e^{-A(x)} \quad  \lambda\in \mathbb{R}
+\end{equation*}
+
+où $A(x)$ est la primitive de $a(x)$. 
+
+Ainsi, nous avons comme solution de l'équation homogène $y_h$:
+\begin{equation*}
+y_{h} = \lambda e^{-x/2}\quad \lambda\in \mathbb{R}
+\end{equation*}
+
+Cherchons une solution particulière. On remarque que $-4x+1$ est un polynôme, on cherche alors une fonction du même type.
+Soit $a,b \in \mathbb{R}$, on suppose la solution particulière de la forme $y_{p} = ax+b$.
+On pose l'équation suivante:
+\begin{equation*}
+\begin{aligned}
+ 2y'_{p} + y_{p} &= -4x+1 \\
+ 2a + ax + b &= -4x + 1
+\end{aligned}
+\end{equation*}
+Nous avons donc le système suivant :
+\begin{equation*}
+\begin{gathered}
+\begin{cases}
+2a+b = 1\\
+a = -4
+\end{cases} \\
+\Leftrightarrow \\
+\begin{cases}
+b = 9\\
+a = -4
+\end{cases}
+\end{gathered}
+\end{equation*}
+Ainsi,
+\begin{equation*}
+y_{p} = -4x+9
+\end{equation*}
+
+On a donc la solution générale à notre équation :
+\begin{equation*}
+\lambda e^{-x/2} -4x+9\quad \lambda\in \mathbb{R}
+\end{equation*}
+Il s'agit maintenant de déterminer la valeur de $\lambda$ telle que $y(1)=0$.
+On pose alors : 
+\begin{equation*}
+\begin{aligned}
+\lambda e^{-1/2} -4+9 &= 0 \\
+\lambda e^{-1/2}  &= -5 \\
+\lambda   &= -5e^{1/2} 
+\end{aligned}
+\end{equation*}
+
+Nous avons donc la solution au problème de Cauchy suivante :
+\begin{equation*}
+\begin{gathered}
+ -5e^{1/2}e^{-x/2} -4x+9 \\
+ -5e^{-x\frac{1}{2} + \frac{1}{2}} -4x+9 \\
+ -5e^{\frac{1-x}{2}} -4x+9 
+\end{gathered}
+\end{equation*}
+
+\begin{equation*}
+y(x) = -5e^{\frac{1-x}{2}} -4x+9 
+\end{equation*}
+
+\subsection{Exercice 2}
+
+Résoudre le problème de Cauchy suivant :
+\begin{equation*}
+\begin{cases}
+y' + y = xe^{-x}\\
+y(1)=\frac{1}{2}
+\end{cases}
+\end{equation*}
+
+On pose l'équation homogène suivante :
+\begin{equation*}
+y_{0}' + y_{0} = 0
+\end{equation*}
+Les solutions de l'équation homogène sont de la forme :
+\begin{equation*}
+y_{0} = \lambda e^{-x}
+\end{equation*}
+
+En utilisant la méthode de variation de la constante, on cherche $\lambda(x)$ tel que :
+\begin{equation*}
+\lambda'(x)y_{0} = xe^{-x}
+\end{equation*}
+Ainsi,
+\begin{equation*}
+\lambda'(x) = x \implies \lambda(x) = \frac{x^2}{2}
+\end{equation*}
+
+On a donc une solution particulière $y_{p}$ :
+\begin{equation*}
+y_{p} = \frac{x^2}{2}e^{-x}
+\end{equation*}
+
+La solution générale de l'équation différentielle est donc :
+\begin{equation*}
+y(x) = \frac{x^2}{2}e^{-x} + \lambda e^{-x}
+\end{equation*}
+
+Il reste à déterminer la constante $\lambda$ en utilisant la condition initiale $y(1) = \frac{1}{2}$ :
+\begin{equation*}
+\frac{1}{2} = \frac{1}{2}e^{-1} + \lambda e^{-1} \implies \frac{1}{2} = \frac{1}{2e} + \frac{\lambda}{e}
+\end{equation*}
+\begin{equation*}
+\frac{1}{2} = \frac{1}{2e} + \frac{\lambda}{e} \implies \frac{1}{2} - \frac{1}{2e} = \frac{\lambda}{e}
+\end{equation*}
+\begin{equation*}
+\lambda = \frac{1}{2}(e - 1)
+\end{equation*}
+
+La solution au problème de Cauchy est donc :
+\begin{equation*}
+y(x) = \frac{x^2}{2}e^{-x} + \frac{1}{2}(e - 1)e^{-x}
+\end{equation*}
+
+\subsection{Exercice 3}
+Résoudre le problème de Cauchy suivant :
+\begin{equation*}
+\begin{cases}
+    y'' + y' + y = 0  \\
+    y(0)=0
+\end{cases}
+\end{equation*}
+
+\textbf{Étape 1 : Établir l'équation caractéristique}
+
+L'équation différentielle donnée est une équation linéaire à coefficients constants. Pour la résoudre, nous associons l'équation caractéristique :
+\begin{equation*}
+r^2 + r + 1 = 0
+\end{equation*}
+
+\textbf{Étape 2 : Résoudre l'équation caractéristique}
+
+Calculons le discriminant de cette équation quadratique :
+\begin{equation*}
+\Delta = b^2 - 4ac = (1)^2 - 4 \times 1 \times 1 = 1 - 4 = -3
+\end{equation*}
+
+Comme le discriminant est négatif, les racines sont complexes conjuguées :
+\begin{equation*}
+r = \frac{-b \pm i\sqrt{|\Delta|}}{2a} = \frac{-1 \pm i\sqrt{3}}{2}
+\end{equation*}
+où \( i \) est l'unité imaginaire.
+
+\textbf{Étape 3 : Écrire la solution générale de l'équation différentielle}
+
+Lorsque les racines de l'équation caractéristique sont complexes conjuguées de la forme \( r = \alpha \pm i\beta \), la solution générale de l'équation différentielle est :
+\begin{equation*}
+y(x) = e^{\alpha x} \left( A\cos(\beta x) + B\sin(\beta x) \right)
+\end{equation*}
+où \( A \) et \( B \) sont des constantes réelles.
+
+Dans notre cas, \( \alpha = -\dfrac{1}{2} \) et \( \beta = \dfrac{\sqrt{3}}{2} \). Donc, la solution générale est :
+\begin{equation*}
+y(x) = e^{-\frac{x}{2}} \left( A\cos\left( \frac{\sqrt{3}}{2} x \right) + B\sin\left( \frac{\sqrt{3}}{2} x \right) \right)
+\end{equation*}
+
+\textbf{Étape 4 : Appliquer la condition initiale}
+
+Nous disposons de la condition initiale \( y(0) = 0 \). Calculons \( y(0) \) :
+\begin{align*}
+y(0) &= e^{0} \left( A\cos\left( 0 \right) + B\sin\left( 0 \right) \right) \\
+&= 1 \left( A \times 1 + B \times 0 \right) \\
+&= A
+\end{align*}
+Étant donné que \( y(0) = 0 \), nous en déduisons :
+\begin{equation*}
+A = 0
+\end{equation*}
+
+\textbf{Étape 5 : Écrire la solution particulière avec la constante déterminée}
+
+La solution devient donc :
+\begin{equation*}
+y(x) = e^{-\frac{x}{2}} B\sin\left( \frac{\sqrt{3}}{2} x \right)
+\end{equation*}
+
+\textbf{Remarque :} Pour déterminer la constante \( B \), une seconde condition initiale serait nécessaire, par exemple la valeur de \( y'(0) \). Sans cette information supplémentaire, \( B \) reste indéterminée.
+
+\subsection{Exercice 4}
+Résoudre le problème de Cauchy suivant :
+\begin{equation*}
+\begin{cases}
+    y' + xy = x\sin(x^2) \\
+    y(0)=0
+\end{cases}
+\end{equation*}
+
+\textbf{Étape 1 : Trouver la solution homogène}
+
+L'équation différentielle donnée est une équation linéaire à coefficients constants. Pour la résoudre, nous associons l'équation homogène :
+\begin{equation*}
+y' + xy = 0
+\end{equation*}
+
+Les solutions de l'équation homogène sont de la forme :
+\begin{align*}
+    y_h &= \lambda e^{-\!\int\!x} \\
+    &= \lambda e^{-\frac{1}{2}x^2}
+\end{align*}
+
+
+\textbf{Étape 2 : Trouver la solution particulière}
+
+Nous utilisons la méthode de variation de la constante :
+
+\begin{align*}
+y_p &= \lambda(x) e^{ - \frac{1}{2} x^2 } \\
+\lambda'(x) &= x\sin(x^2) e^{ \frac{1}{2} x^2 }
+\end{align*}
+
+Calculons \(\lambda(x)\) en intégrant :
+
+\begin{equation*}
+\lambda(x) = \int x\sin(x^2) e^{ \frac{1}{2} x^2 } dx
+\end{equation*}
+
+Effectuons le changement de variable :
+
+\begin{equation*}
+t = x^2 \quad \Rightarrow \quad dt = 2x\,dx \quad \Rightarrow \quad x\,dx = \frac{dt}{2}
+\end{equation*}
+
+L'intégrale devient :
+
+\begin{equation*}
+\lambda(x) = \frac{1}{2} \int \sin(t) e^{ \frac{1}{2} t } dt
+\end{equation*}
+
+Calculons l'intégrale \(I\) :
+
+\begin{equation*}
+I = \int \sin(t) e^{ \frac{1}{2} t } dt
+\end{equation*}
+
+Utilisons la méthode DI pour l'intégration par parties :
+
+\begin{center}
+\begin{tabular}{c|c}
+\textbf{D} (Dérive) & \textbf{I} (Intègre) \\
+\hline
+\(\sin(t)\) & \(e^{ \frac{1}{2} t }\) \\
+\(\cos(t)\) & \(\frac{2}{1} e^{ \frac{1}{2} t }\) \\
+\(-\sin(t)\) & \(\frac{4}{1} e^{ \frac{1}{2} t }\) \\
+\(\cos(t)\) & \(\frac{8}{1} e^{ \frac{1}{2} t }\) \\
+\end{tabular}
+\end{center}
+
+En pratique, il est plus efficace d'utiliser la formule standard pour cette intégrale :
+
+\begin{equation*}
+I = \int e^{ a t } \sin( b t ) dt = \frac{ e^{ a t } }{ a^2 + b^2 } \left( a \sin( b t ) - b \cos( b t ) \right ) + C
+\end{equation*}
+
+Dans notre cas, \(a = \dfrac{1}{2}\) et \(b = 1\), donc :
+
+\begin{equation*}
+I = \frac{ e^{ \frac{1}{2} t } }{ \left( \dfrac{1}{2} \right)^2 + 1 } \left( \dfrac{1}{2} \sin( t ) - \cos( t ) \right ) + C
+\end{equation*}
+
+Calculons le dénominateur :
+
+\begin{equation*}
+\left( \dfrac{1}{2} \right)^2 + 1 = \dfrac{1}{4} + 1 = \dfrac{5}{4}
+\end{equation*}
+
+Simplifions l'expression :
+
+\begin{equation*}
+I = \frac{ 4 }{ 5 } e^{ \frac{1}{2} t } \left( \dfrac{1}{2} \sin( t ) - \cos( t ) \right ) + C
+\end{equation*}
+
+Ainsi, nous obtenons :
+
+\begin{equation*}
+\lambda(x) = \frac{1}{2} I = \frac{2}{5} e^{ \frac{1}{2} x^2 } \left( \dfrac{1}{2} \sin( x^2 ) - \cos( x^2 ) \right ) + C
+\end{equation*}
+
+La solution particulière est donc :
+
+\begin{equation*}
+y_p = \lambda(x) e^{ - \frac{1}{2} x^2 } = \frac{2}{5} \left( \dfrac{1}{2} \sin( x^2 ) - \cos( x^2 ) \right ) + C e^{ - \frac{1}{2} x^2 }
+\end{equation*}
+
+La solution générale est :
+
+\begin{equation*}
+y(x) = y_h + y_p = D e^{ - \frac{1}{2} x^2 } + \frac{2}{5} \left( \dfrac{1}{2} \sin( x^2 ) - \cos( x^2 ) \right )
+\end{equation*}
+
+En appliquant la condition initiale \(y(0) = 0\) :
+
+\begin{align*}
+0 &= D e^{ 0 } + \frac{2}{5} \left( \dfrac{1}{2} \sin( 0 ) - \cos( 0 ) \right ) \\
+0 &= D - \frac{2}{5} (1) \\
+D &= \frac{2}{5}
+\end{align*}
+
+La solution du problème de Cauchy est donc :
+
+\begin{equation*}
+y(x) = \frac{2}{5} e^{ - \frac{1}{2} x^2 } + \frac{2}{5} \left( \dfrac{1}{2} \sin( x^2 ) - \cos( x^2 ) \right )
+\end{equation*}
+
+Simplifions :
+
+\begin{equation*}
+y(x) = \frac{2}{5} \left( e^{ - \frac{1}{2} x^2 } + \dfrac{1}{2} \sin( x^2 ) - \cos( x^2 ) \right )
+\end{equation*}
+
+\end{document}
+
+
