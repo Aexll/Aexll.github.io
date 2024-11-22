@@ -1,0 +1,153 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{tikz}
+
+\usepackage{titling}
+
+% \pretitle{\begin{center}\Huge\bfseries}
+% \posttitle{\end{center}}
+% \preauthor{\begin{center}\large}
+% \postauthor{\end{center}}
+% \predate{\begin{center}\large}
+% \postdate{\end{center}}
+
+% \renewcommand{\thesubsection}{\Roman{subsection}}
+% \newcommand{\exo}[2]{\textbf{\Roman{#1} #2} }
+
+% \geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+\newcommand{\subtitle}[1]{
+    \posttitle{\par\end{center}\begin{center}\large#1\end{center}\vskip0.5em}
+}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8em}
+
+\title{Equation différentielle ordinaire}
+
+\subtitle{Methodes de résolution numérique} 
+
+\author{Axel Lavigne}
+\date{\today}
+
+
+\newcommand{\exo}[1]{
+    \vspace{5mm}
+    \textbf{Exercice #1}
+    \hrulefill
+}
+
+\newcommand{\smalltext}[1]{
+    \scriptsize
+    \textit{#1}
+    \normalsize
+}
+
+\begin{document}
+
+\maketitle
+
+\textbf{Problèmes de Cauchy}
+
+\begin{equation*}
+    \frac{dy}{dt} = f(t, y)
+\end{equation*}
+
+avec comme conditions initiales:
+
+\begin{equation*}
+    y(t_0) = y_0
+\end{equation*}
+
+
+\textbf{Methode d'Euler}
+
+\textit{Explicite}
+
+\begin{align*}
+    y_{n+1} &= y_n + h f(t_n, y_n) \\
+    t_{n+1} &= t_n + h
+\end{align*}
+
+\textit{Implicite}
+
+\begin{align*}
+    y_{n+1} &= y_n + h f(t_{n+1}, y_{n+1}) \\
+    t_{n+1} &= t_n + h
+\end{align*}
+
+\textbf{Shema}
+
+Un schéma est une formule \textit{discrétisée} qui transforme une équation différentielle en une relation algébrique
+
+il comporte 3 éléments:
+
+\begin{itemize}
+    \item Un temps discret $t_n = t_0 + n h$
+    \item Une approximation de la dérivée $y'(t_n) \approx \phi(t_n, y_n, h)$
+    \item Une relation de récurrence pour calculer $y_{n+1}$ à partir de $y_n$
+\end{itemize}
+
+Un shema doit être consistant, stable et convergent pour correctement approximer une solution
+
+\textit{Consistance}: \hrulefill
+\begin{equation*}
+    \lim_{h \to 0} |y(t_n) - y_n| = 0
+\end{equation*}
+\smalltext{la différence entre la solution exacte et la solution approchée doit tendre vers 0 lorsque $h$ tend vers 0}
+
+\textit{Stabilité}: \hrulefill
+\begin{equation*}
+    |y(t_n)| \leq C
+\end{equation*}
+\smalltext{la solution approchée ne doit pas diverger}
+
+\textit{Convergence}: \hrulefill
+\begin{equation*}
+    |y(t_n) - y_n| \leq C h^p
+\end{equation*}
+\smalltext{la solution approchée doit converger vers la solution exacte avec un ordre $p$}
+
+
+
+
+\textbf{Methode de Heun}
+
+On substitue $y_{n+1}$ dans la formule Implicite par $y_n + h f(t_n, y_n)$
+
+\begin{align*}
+    y_{n+1} &= y_n + \frac{h}{2} (f(t_n, y_n) + f(t_{n+1}, y_n + h f(t_n, y_n))) \\
+    t_{n+1} &= t_n + h
+\end{align*}
+
+
+
+\textbf{Definitions}
+
+\textit{Ordre de convergence}: $p$ tel que $|y(t_n) - y_n| \leq C h^p$
+
+\textit{Stabilité}: la solution approchée ne doit pas diverger
+
+\textit{Consistance}: convergence de la solution approchée vers la solution exacte lorsque $h$ tend vers 0
+
+\textit{Implicite}: $y_{n+1} = y_n + h f(t_{n+1}, y_{n+1})$
+
+\textit{Explicite}: $y_{n+1} = y_n + h f(t_n, y_n)$
+
+\textit{Schéma}: formule discrétisée pour résoudre une équation différentielle
+
+\textit{discrétisée}: rendre un problème continu en un problème \textit{discret}
+
+\textit{discret}: séparé en éléments distincts
+
+
+
+\end{document}
+
+
