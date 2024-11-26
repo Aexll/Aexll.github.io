@@ -1,0 +1,206 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{tikz}
+
+\usepackage{titling}
+
+% \pretitle{\begin{center}\Huge\bfseries}
+% \posttitle{\end{center}}
+% \preauthor{\begin{center}\large}
+% \postauthor{\end{center}}
+% \predate{\begin{center}\large}
+% \postdate{\end{center}}
+
+% \renewcommand{\thesubsection}{\Roman{subsection}}
+% \newcommand{\exo}[2]{\textbf{\Roman{#1} #2} }
+
+% \geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+\newcommand{\subtitle}[1]{
+    \posttitle{\par\end{center}\begin{center}\large#1\end{center}\vskip0.5em}
+}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8em}
+
+\title{Equation différentielle ordinaire}
+
+\subtitle{Methodes de résolution numérique} 
+
+\author{Axel Lavigne}
+\date{\today}
+
+
+\newcommand{\exo}[1]{
+    \vspace{5mm}
+    \textbf{Exercice #1}
+    \hrulefill
+}
+
+\newcommand{\smalltext}[1]{
+    \scriptsize
+    \textit{#1}
+    \normalsize
+}
+
+\begin{document}
+
+\maketitle
+
+\section*{Equation différentielle linéaires}
+
+\begin{equation*}
+    y^{(n)} + a_{n-1}y^{(n-1)} + \ldots + a_1y' + a_0y = b(x)
+\end{equation*}
+
+\textit{methode de résolution générale:}
+\begin{itemize}
+    \item[--] Solution de l'équation homogène: $y_h(x)$
+    \item[--] Solution particulière: $y_p(x)$
+    \item[--] Solution générale: $y(x) = y_h(x) + y_p(x)$
+\end{itemize}
+
+\section*{Résoudre l'équation homogene}
+
+\hrulefill \,
+\textbf{Ordre 1}
+\hrulefill 
+
+\begin{equation*}
+    y_h' + a(t)y_h = 0
+\end{equation*}
+
+
+\begin{center}
+    \textit{Solution } \\ \vspace{1mm}
+    \boxed{
+        y_h(t) = \lambda e^{-\!\!\int\!a(t)\,dt}
+    }
+\end{center}
+
+\hrulefill \,
+\textbf{Ordre 2}
+\hrulefill 
+\begin{center}
+    Dans le cas ou les coefficients $a$ et $b$ sont constants
+    \begin{equation*}
+        y_h'' + ay_h' + by_h = 0
+    \end{equation*}
+
+    Equation caractéristique
+    \begin{equation*}
+        r^2 + ar + b = 0
+    \end{equation*}
+    \begin{equation*}
+        \Delta = a^2 - 4b
+    \end{equation*}
+
+    % On distingue 3 cas:
+    % \begin{itemize}
+    %     \item[--] $\Delta > 0$ : 2 racines réelles
+    %     \item[--] $\Delta = 0$ : 2 racines réelles égales
+    %     \item[--] $\Delta < 0$ : 2 racines complexes conjuguées
+    % \end{itemize}
+    \hrulefill \,
+    \textbf{$\Delta > 0$}
+    \hrulefill
+    \begin{equation*}
+        r_1 = \frac{-a + \sqrt{\Delta}}{2} \quad r_2 = \frac{-a - \sqrt{\Delta}}{2}
+    \end{equation*}
+    \textit{Solution } \\ \vspace{1mm}
+    \boxed{
+        y_h(t) = \lambda e^{r_1 t} + \mu e^{r_2 t}
+    }
+
+    \vspace{4mm}
+
+    \hrulefill \,
+    \textbf{$\Delta = 0$}
+    \hrulefill
+    \begin{equation*}
+        r = -\frac{a}{2}
+    \end{equation*}
+    \textit{Solution } \\ \vspace{1mm}
+    \boxed{
+        y_h(t) = (\lambda x + \mu)e^{rt}
+    }
+
+    \vspace{4mm}
+
+    \hrulefill \,
+    \textbf{$\Delta < 0$}
+    \hrulefill
+    \begin{equation*}
+        r = -\frac{a + i\sqrt{|\Delta|}}{2} \quad 
+    \end{equation*}
+    \begin{equation*}
+        \alpha = -\frac{a}{2} \quad \beta = \frac{\sqrt{|\Delta|}}{2}
+    \end{equation*}
+    \textit{Solution } \\ \vspace{1mm}
+    \boxed{
+        y_h(t) = e^{\alpha t}(\lambda \cos(\beta t) + \mu \sin(\beta t))
+    }
+
+    % \textit{Solution } \\ \vspace{1mm}
+    % \boxed{
+    %     y_h(t) = e^{-\frac{a}{2}t}(\lambda \cos(\frac{\sqrt{|\Delta|}}{2}t) + \mu \sin(\frac{\sqrt{|\Delta|}}{2}t))
+    % }
+    
+\end{center}
+
+\section*{Trouver la solution particulière}
+
+La methode générale est de trouver un fonction de la forme de $b(x)$
+par exemples si $b(x)$ est un polynôme, on cherche une solution de la forme d'un polynôme
+
+\textit{Note:} Si $b(x)$ est une combinaison de fonctions, on utilise la méthode de superposition:
+on trouve une solution particulière pour chaque fonction et on somme les solutions
+
+\hrulefill \,
+\textbf{Ordre 1}
+\hrulefill
+
+plusieurs cas en fonction de $b(x)$:
+\begin{itemize}
+    \item[--] $b(x) $ constant $ \longrightarrow $ solution constante
+    \item[--] $b(x) $ polynôme $ \longrightarrow $ solution polynomiale
+    \item[--] $b(x) = e^{\alpha x} $ $ \longrightarrow $ solution de la forme $Ae^{\alpha x}$
+    \item[--] Sinon on utilise la méthode de variation de la constante
+\end{itemize}
+
+\begin{equation*}
+    ay' + by = b(x)
+\end{equation*}
+
+
+
+\hrulefill \,
+\textbf{Methode de variation de la constante}
+\hrulefill
+
+\begin{equation*}
+    y_p(x) = \lambda(x)y_h(x)
+\end{equation*}
+
+\begin{equation*}
+    \lambda'(x) = \frac{b(x)}{y_h(x)}
+\end{equation*}
+
+\begin{equation*}
+    \lambda(x) = \int \frac{b(x)}{y_h(x)}
+\end{equation*}
+
+
+\hrulefill \,
+\textbf{Ordre 2}
+\hrulefill 
+
+\end{document}
+
+

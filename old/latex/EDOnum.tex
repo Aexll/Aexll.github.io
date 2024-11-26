@@ -71,18 +71,26 @@ avec comme conditions initiales:
 \textit{Explicite}
 
 \begin{align*}
-    y_{n+1} &= y_n + h f(t_n, y_n) \\
+    u_{n+1} &= u_n + h f(t_n, u_n) \\
     t_{n+1} &= t_n + h
 \end{align*}
 
 \textit{Implicite}
 
 \begin{align*}
-    y_{n+1} &= y_n + h f(t_{n+1}, y_{n+1}) \\
+    u_{n+1} &= u_n + h f(t_{n+1}, u_{n+1}) \\
     t_{n+1} &= t_n + h
 \end{align*}
 
+\smalltext{avec $h$ le pas de temps, $t_n$ le temps discret et $u_n$ l'approximation de $y(t_n)$}
+
+\smalltext{à noter que la methode implicite est plus stable que la methode explicite, 
+mais plus complexe à résoudre pour trouver $u_{n+1}$ en fonction de $u_n$} 
+
 \textbf{Shema}
+
+
+\smalltext{nous noterons $y(t_n)$ par $y_n$ et $y(t_{n+1})$ par $y_{n+1}$}
 
 Un schéma est une formule \textit{discrétisée} qui transforme une équation différentielle en une relation algébrique
 
@@ -90,17 +98,23 @@ il comporte 3 éléments:
 
 \begin{itemize}
     \item Un temps discret $t_n = t_0 + n h$
-    \item Une approximation de la dérivée $y'(t_n) \approx \phi(t_n, y_n, h)$
+    \item Une approximation de la dérivée $y'$ en fonction de $y$ et $t$ : $y'(t_n) \approx \phi(t_n, y_n, h)$
     \item Une relation de récurrence pour calculer $y_{n+1}$ à partir de $y_n$
 \end{itemize}
 
 Un shema doit être consistant, stable et convergent pour correctement approximer une solution
 
 \textit{Consistance}: \hrulefill
+\smalltext{On note l'erreur de consistance $\epsilon_n$}
 \begin{equation*}
-    \lim_{h \to 0} |y(t_n) - y_n| = 0
+    \epsilon_n=y(t_{n+1})-y(t_n)-h_nf(t_n,y(t_n))
 \end{equation*}
-\smalltext{la différence entre la solution exacte et la solution approchée doit tendre vers 0 lorsque $h$ tend vers 0}
+
+\smalltext{Un schéma est consistant si $\sum \epsilon_n$ tend vers 0 lorsque $h$ tend vers 0}
+
+% \smalltext{la différence entre la solution exacte et la solution approchée doit tendre vers 0 lorsque $h$ tend vers 0}
+
+
 
 \textit{Stabilité}: \hrulefill
 \begin{equation*}

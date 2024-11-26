@@ -1,0 +1,375 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{tikz}
+
+\usepackage{titling}
+
+
+\newcommand{\subtitle}[1]{
+    \posttitle{\par\end{center}\begin{center}\large#1\end{center}\vskip0.5em}
+}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8em}
+
+\title{Correction du CC3 2022}
+
+\subtitle{MAP 151} 
+
+\author{Axel Lavigne}
+\date{\today}
+
+
+\newcommand{\correction}[0]{
+    \vspace{1mm}
+    \textbf{Correction}
+    \hrulefill
+}
+
+\newcommand{\smalltext}[1]{
+    \scriptsize
+    \textit{#1}
+    \normalsize
+}
+
+\begin{document}
+
+\maketitle
+
+
+$\mathbf{Exercice}$1:
+
+On considère la fonction $f:x\mapsto\frac1{1+x^2}.$ L'objectif est d'évaluer l'intégrale
+$$I=\int_0^1\frac{1}{1+x^2}.$$
+
+
+(1) Donner la valeur exacte de $I.$
+
+\correction
+
+\begin{align*}
+    I &= \int_0^1\frac{1}{1+x^2}dx \\
+    &= \left[ \arctan(x) \right]_0^1 \\
+    &= \arctan(1) - \arctan(0) \\
+    &= \frac{\pi}{4} - 0 \\
+    &= \frac{\pi}{4}.
+\end{align*}
+
+
+\hrulefill
+
+
+(2) Evaluer numériquement avec 4 sous-intervalles en utilisant:
+
+
+a. la méthode des trapèzes. 
+
+b. la méthode de Simpson. On pensera à donner la formule du cours.
+
+On demande une précision à $10^{-5}$ près
+
+
+\correction
+
+Notons $x_i$ les points séparant les sous-intervalles. 
+On a $x_0=0, x_1=\frac14, x_2=\frac12, x_3=\frac34$ et $x_4=1.$
+
+On note $h=\frac14$ la longueur des sous-intervalles.
+
+a. La méthode des trapèzes consiste à approximer l'intégrale par l'aire d'un trapèze.
+On a la formule suivante:
+
+\begin{equation*}
+    \int_a^b f(x) \, dx \approx \frac{h}{2} \left[ f(a) + f(b) + 2 \sum_{i=1}^{n-1} f(x_i) \right].
+\end{equation*}
+
+\begin{equation*}
+    \sum_{i=1}^{n-1} f(x_i) \approx 2,381176471
+\end{equation*}
+
+En appliquant cette formule, on obtient:
+
+\begin{equation*}
+    \frac14 \left[ 1 + 0.39024 + 2 \sum_{i=1}^{n-1} f(x_i) \right] \approx 0.782794118
+\end{equation*}
+
+
+b. La méthode de Simpson consiste à approximer l'intégrale par l'aire d'un polynôme de degré 2.
+
+\begin{equation*}
+    \int_a^b f(x) \, dx \approx \frac{h}{6} \left[ f(a) + f(b) + 2 \sum_{i=1}^{n-1} f(x_{i}) + 4 \sum_{i=1}^{n} f(x_{i-\frac12}) \right].
+\end{equation*}
+
+avec $x_{i-\frac12} = \frac{x_{i-1} + x_i}{2}$.
+
+En faisaint les calculs, on obtient:
+
+\begin{equation*}
+    \int_a^b f(x) \, dx \approx \frac{h}{6} \left[ f(a) + f(b) + 2 \sum_{i=1}^{n-1} f(x_{i}) + 4 \sum_{i=1}^{n} f(x_{i-\frac12}) \right] = 0,782794118
+\end{equation*}
+
+Soit la meme valeur que la méthode des trapèzes.
+
+
+\hrulefill
+
+(3) 
+
+a. Justifier rapidement que $f$ est trois fois dérivable sur l'intervalle [0;1] et donner
+l'expression des dérivées $f^\prime,f^{\prime\prime}$ et $f^{(3)}.$
+
+\correction
+
+a. La fonction $f$ est trois fois dérivable sur $[0,1]$. car elle est la composée de fonctions dérivables.
+
+
+Ses dérivées successives sont:
+
+\begin{align*}
+    f'(x) &= -\dfrac{2x}{(1 + x^2)^2} \\
+    f''(x) &= \dfrac{6x^2 - 2}{(1 + x^2)^3} \\
+    f^{(3)}(x) &= -\dfrac{24x(x^2 - 1)}{(1 + x^2)^4}
+\end{align*}
+
+
+\hrulefill
+
+b. Donner la formule de l'erreur pour la méthode des trapèzes.
+
+c. En déduire un rang à partir duquel l'erreur de quadrature est inférieure à
+$10^{-6}.$
+
+
+\correction
+
+b. La formule de l'erreur pour la méthode des trapèzes est donnée par:
+
+\begin{equation*}
+    \left| \int_a^b f(x) \, dx - \frac{h}{2} \left[ f(a) + f(b) + 2 \sum_{i=1}^{n-1} f(x_i) \right] \right| \leq \frac{M_2}{12}h^2(b-a)
+\end{equation*}
+
+avec $M_2 = \max_{x \in [a,b]} |f''(x)|.$
+
+c. On a $M_2 = \max_{x \in [0,1]} |f''(x)|$. 
+
+Comme $f''(x)$ est croissante sur $[0,1]$, 
+
+$M_2 = |f''(1)| = \dfrac{8}{4} = \dfrac{1}{2}$.
+
+L'erreur de quadrature est majorée par:
+\begin{equation*}
+    \text{Erreur} \leq \dfrac{M_2}{12}h^2(b - a)
+\end{equation*}
+
+On veut que $\text{Erreur} \leq 10^{-6}$, donc:
+\begin{align*}
+    \dfrac{M_2}{12}h^2 &\leq 10^{-6} \\
+    h^2 &\leq \dfrac{12 \times 10^{-6}}{M_2} \\
+    h &\leq \sqrt{24 \times 10^{-6}} \approx 0.004898979486
+\end{align*}
+
+\hrulefill
+
+$\mathbf{Exercice}$2:
+
+On considère le problème de Cauchy suivant:
+
+$$
+\begin{cases}y'(t)+ty(t)=\left(t^2+1\right)e^{-\frac{t^2}{2}},\:\forall t\in\mathbb{R},\\y(0)=1.\end{cases}
+$$
+1. Résoudre le problème de Cauchy.
+
+\correction
+
+On cherche une solution de la forme $y(t) = y_h(t) + y_p(t)$, 
+où $y_h(t)$ est la solution de l'équation homogène 
+et $y_p(t)$ est une solution particulière de l'équation non homogène.
+
+L'équation homogène associée est $y'(t) + ty(t) = 0$.
+
+les solution sont triviales, on a $y_h(t) = \lambda e^{-\frac{t^2}{2}}$.
+
+Pour trouver une solution particulière, on utilise la méthode de variation de la constante.
+
+On pose $y_p(t) = \lambda(t) e^{-\frac{t^2}{2}}$.
+
+il s'agit de trouver $\lambda(t)$ tel que $y_p(t)$ soit solution de l'équation non homogène.
+
+On poses alors
+
+\begin{align*}
+    \lambda'(t) e^{-\frac{t^2}{2}} &= \left(t^2 + 1\right)e^{-\frac{t^2}{2}} \\
+    \lambda'(t) &= \left(t^2 + 1\right)e^{-\frac{t^2}{2}} e^{\frac{t^2}{2}} \\
+    \lambda'(t) &= \left(t^2 + 1\right)
+\end{align*}
+
+On intègre $\lambda'(t)$ pour trouver $\lambda(t)$:
+
+\begin{align*}
+    \int \lambda'(t) \, dt &= \int \left(t^2 + 1\right) \, dt \\
+    \lambda(t) &= \frac{t^3}{3} + t + C
+\end{align*}
+
+On fixe $C = 0$.
+
+On a donc $y_p(t) = \left(\frac{t^3}{3} + t\right) e^{-\frac{t^2}{2}}$.
+
+Ainsi la solution générale est $y(t) = \lambda e^{-\frac{t^2}{2}} + \left(\frac{t^3}{3} + t\right) e^{-\frac{t^2}{2}}$.
+
+Il reste à trouver $\lambda$ en utilisant la condition initiale $y(0) = 1$.
+
+\begin{align*}
+    y(0) &= \lambda e^{-\frac{0^2}{2}} + \left(\frac{0^3}{3} + 0\right) e^{-\frac{0^2}{2}} \\
+    1 &= \lambda + 0 \\
+    \lambda &= 1
+\end{align*}
+
+La solution du problème de Cauchy est donc 
+
+\begin{equation*}
+    y(t) = e^{-\frac{t^2}{2}} + \left(\frac{t^3}{3} + t\right) e^{-\frac{t^2}{2}}
+\end{equation*}
+
+\hrulefill
+
+2. On se place sur l'intervalle [0;2].
+
+Mettre en place la méthode d'Euler explicite avec un pas $h=\frac{1}{2}$.
+On notera $y_n$ l'élément de rang $n$ de la suite utilisée.  On prendra soin
+de donner tous les détails de la construction.
+
+\correction
+
+On a $h = \frac{1}{2}$ et $n = 4$.
+
+Notons $y_0 = 1$, $t_0 = 0$.
+
+On définit $t_{n+1} = t_n + h$.
+ce qui est équivalent à $t_{n} = nh \rightarrow t_{n} = \frac{n}{2}$.
+
+On a l'équation suivante:
+
+\begin{align*}
+    y'(t)+ty(t)&=\left(t^2+1\right)e^{-\frac{t^2}{2}} \\
+    y'(t) &= \left(t^2+1\right)e^{-\frac{t^2}{2}} - ty(t)
+\end{align*}
+
+On vois apparaite la forme $$y'(t) = f(t,y(t))$$
+dont le shema d'Euler explicite est donné par:
+$$
+\begin{cases}
+    y_{n+1} = y_n + h f(t_n,y_n) \\
+    t_n = nh
+\end{cases}
+$$
+
+
+On peut donc en déduire le shema d'Euler explicite suivant :
+
+\begin{equation*}
+    \begin{cases}
+        y_{n+1} = y_n + h \left[ \left(t_n^2 + 1\right)e^{-\frac{t_n^2}{2}} - t_n y_n \right] \\
+        y_{0} = 1
+    \end{cases}
+\end{equation*}
+
+On peut alors calculer les valeurs de $y_n$ pour $n = 0, 1, 2, 3, 4$.
+
+On obtient les valeurs suivantes:
+\begin{align*}
+    y_0 &= 1 \\
+    y_2 &= 1.5 \\
+    y_3 &= 1.676560564 \\
+    y_4 &= 1.444810942 \\
+    y_5 &= 0.888762995
+\end{align*}
+
+
+
+
+\hrulefill
+
+3. On se place sur l'intervalle [0;2]. Mettre en place la méthode d'Euler implicite avec
+un pas $h=\frac12.$ On notera $x_n$ l'élément de rang $n$ de la suite utilisée.
+
+\correction
+
+de meme que pour la méthode explicite, on a $h = \frac{1}{2}$ et $n = 4$.
+
+Nous pouvons alors dresser le shema d'Euler implicite suivant:
+
+\begin{equation*}
+    \begin{cases}
+        y_{n+1} = y_n + h \left[ \left(t_{n+1}^2 + 1\right)e^{-\frac{t_{n+1}^2}{2}} - t_{n+1} y_{n+1} \right] \\
+        y_{0} = 1
+    \end{cases}
+\end{equation*}
+
+En reformulant l'équation pour avoir $u_{n+1}$ en fonction de $u_n$, on obtient:
+
+\begin{equation*}
+    y_{n+1} = \dfrac{y_n + h \left[ \left(t_{n+1}^2 + 1\right)e^{-\frac{t_{n+1}^2}{2}} \right]}{1 + h t_{n+1}}
+\end{equation*}
+
+On peut alors calculer les valeurs de $y_n$ pour $n = 0, 1, 2, 3, 4$.
+
+On obtient les valeurs suivantes:
+
+\begin{align*}
+    y_0 &= 1 \\
+    y_2 &= 1.241248451 \\
+    y_3 &= 1.231852741 \\
+    y_4 &= 1.005378857 \\
+    y_5 &= 0.671858533
+\end{align*}
+
+
+\hrulefill
+
+4. Comparez les valeurs obtenues aux questions précédentes (pour l'approximation de
+$y(2))$ avec la valeur exacte $y(2)$ et commenter.
+
+\correction
+
+les valeurs exactes à chauqes étapes sont les suivantes:
+
+\begin{align*}
+    y(0) &= 1 \\
+    y(0.5) &= 1.360516058 \\
+    y(1) &= 1.415238206 \\
+    y(1.5) &= 1.176865194 \\
+    y(2) &= 0.766899938
+\end{align*}
+
+Nous pouvons alors comparer les valeurs obtenues avec les méthodes d'Euler explicite et implicite avec la valeur exacte.
+
+Nous avons le tableau suivant:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+    \hline
+    Méthode & $y(2)$ & Erreur \\
+    \hline
+    Exact & 0.766899938 & 0 \\
+    Euler explicite & 0.888762995 & 0.121863057 \\
+    Euler implicite & 0.671858533 & 0.095041405 \\
+    \hline
+\end{tabular}
+\end{center}
+
+L'érreur se calcule en faisant la différence entre la valeur exacte et la valeur obtenue.
+
+On remarque que la méthode d'Euler explicite est plus précise que la méthode d'Euler implicite.
+
+\hrulefill
+
+
+\end{document}
+
+

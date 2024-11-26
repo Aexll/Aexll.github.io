@@ -207,9 +207,24 @@ y(1)=\frac{1}{2}
 \end{cases}
 \end{equation*}
 
-\scriptsize
-\textit{indication : le changement de variable $u = x^2$ peut être utile}
-\normalsize
+\exo{5}
+
+\begin{equation*}
+\begin{cases}
+    y'' - y' - 2y = x^2 \\
+    y(0)=1
+\end{cases}
+\end{equation*}
+
+\exo{6}
+
+\begin{equation*}
+\begin{cases}
+    y' - ln(x)y = x^x \\
+    y(1) = 1
+\end{cases}
+\end{equation*}
+
 
 \section{Correction}
 \subsection{Exercice 1}
@@ -544,6 +559,184 @@ Simplifions :
 \begin{equation*}
 y(x) = \frac{2}{5} \left( e^{ - \frac{1}{2} x^2 } + \dfrac{1}{2} \sin( x^2 ) - \cos( x^2 ) \right )
 \end{equation*}
+
+
+\subsection{Exercice 5}
+
+Résoudre le problème de Cauchy suivant :
+\begin{equation*}
+\begin{cases}
+    y'' - y' - 2y = x^2 \\
+    y(0)=1
+\end{cases}
+\end{equation*}
+
+
+\textbf{Étape 1 : Trouver la solution homogène}
+
+L'équation différentielle donnée est une équation linéaire à coefficients constants.
+On a donc l'equation caractéristique suivante :
+
+\begin{equation*}
+r^2 - r - 2 = 0
+\end{equation*}
+
+$\Delta = 1 + 8 = 9$ donc les racines sont $r_1 = 2$ et $r_2 = -1$.
+
+La solution homogène est donc :
+\begin{equation*}
+    y_h = \lambda e^{2x} + \mu e^{-x}
+\end{equation*}
+
+chercheons une solution particulière de l'équation.
+On suppose que la solution particulière est de la forme $y_p = ax^2 + bx + c$.
+
+On a donc:
+\begin{equation*}
+\begin{aligned}
+    y_p &= ax^2 + bx + c \\
+    y_p' &= 2ax + b \\
+    y_p'' &= 2a
+\end{aligned}
+\end{equation*}
+
+En remplaçant dans l'équation différentielle, on obtient:
+\begin{equation*}
+\begin{aligned}
+    2a - 2ax - b - 2ax - b - 2(ax^2 + bx + c) &= x^2 \\
+    -2ax^2 - 2bx - 2c &= x^2
+\end{aligned}
+\end{equation*}
+
+On a donc le système suivant:
+\begin{equation*}
+\begin{aligned}
+    -2a &= 1 \\
+    -2(b + a) &= 0 \\
+    2a - b - 2c &= 0
+\end{aligned}
+\end{equation*}
+
+On trouve alors $a = -\frac{1}{2}$, $b = \frac{1}{2}$ et $c = -\frac{3}{4}$.
+
+La solution particulière est donc:
+\begin{equation*}
+    y_p = -\frac{1}{2}x^2 + \frac{1}{2}x - \frac{3}{4}
+\end{equation*}
+
+La solution générale est donc:
+\begin{equation*}
+    y = \lambda e^{2x} + \mu e^{-x} -\frac{1}{2}x^2 + \frac{1}{2}x - \frac{3}{4}
+\end{equation*}
+
+En utilisant la condition initiale $y(0) = 1$, nous pouvons eliminer $\mu$ et trouver $\lambda$.
+
+On pose alors:
+\begin{equation*}
+\begin{aligned}
+    1 &= \lambda + \mu - \frac{3}{4}   \\
+    \lambda &= 1 + \frac{3}{4} - \mu \\
+    \lambda &= \frac{7}{4} - \mu
+\end{aligned}
+\end{equation*}
+
+En remplaçant dans l'équation générale, on obtient:
+\begin{equation*}
+    y = (\frac{7}{4} - \mu)e^{2x} + \mu e^{-x} -\frac{1}{2}x^2 + \frac{1}{2}x - \frac{3}{4}
+\end{equation*}
+
+
+
+\subsection{Exercice 6}
+
+Résoudre le problème de Cauchy suivant :
+\begin{equation*}
+\begin{cases}
+    y' - \ln(x)y = x^x \\
+    y(1) = 1
+\end{cases}
+\end{equation*}
+
+\textbf{Étape 1 : Trouver la solution homogène}
+
+L'équation différentielle donnée est une équation linéaire dont le coefficient est une fonction de \( x \).
+
+Pour la résoudre, nous associons l'équation homogène :
+
+\begin{equation*}
+y' - \ln(x) y = 0
+\end{equation*}
+
+Les solutions de l'équation homogène sont de la forme :
+
+\begin{equation*}
+y_h = \lambda e^{-A(x)}
+\end{equation*}
+
+où \( A(x) \) est la primitive de \( \ln(x) \).
+
+il nous faut donc trouver la primitive de \( \ln(x) \) qui est \( x \ln(x) - x \).
+
+La solution homogène est donc :
+
+\begin{align*}
+y_h &= \lambda e^{x \ln(x) - x} \\
+    &= \lambda e^{-x} x^x
+\end{align*}
+
+\textbf{Étape 2 : Trouver la solution particulière}
+
+Nous utilisons la méthode de variation de la constante :
+
+\begin{align*}
+y_p &= \lambda(x) e^{-x} x^x \\
+\end{align*}
+
+Calculons \( \lambda(x) \):
+
+\begin{align*}
+\lambda'(x)(e^{-x} x^x) &= x^x \\
+\lambda'(x) &= \frac{x^x}{e^{-x} x^x} \\
+\lambda'(x) &= \frac{1}{e^{-x}} \\
+\lambda'(x) &= e^{x} \\
+\lambda(x) &= e^{x}
+\end{align*}
+
+La solution particulière est donc :
+
+\begin{align*}
+y_p &= e^{x} e^{-x} x^x \\
+    &= x^x
+\end{align*}
+
+La solution générale est :
+
+\begin{align*}
+y(x) &= y_h + y_p \\
+    &= \lambda e^{-x} x^x + x^x \\
+    &= x^x (\lambda e^{-x} + 1)
+\end{align*}
+
+\textbf{Étape 3 : Appliquer la condition initiale}
+
+Nous disposons de la condition initiale \( y(1) = 1 \). Calculons \( y(1) \):
+
+\begin{align*} 
+1^1 (\lambda e^{-1} + 1) &= 1\\
+    \lambda e^{-1} + 1 &= 1 \\
+    \lambda e^{-1} &= 0 \\
+    \lambda &= 0
+\end{align*}
+
+La solution du problème de Cauchy est donc :
+
+\begin{equation*}
+    y(x) = x^x
+\end{equation*}
+
+
+
+
 
 \end{document}
 
