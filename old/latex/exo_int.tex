@@ -1,0 +1,422 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{mdframed}
+\usepackage{xcolor}
+\usepackage{amsmath}
+
+
+% \renewcommand{\thesubsection}{\Roman{subsection}}
+% \newcommand{\exo}[2]{\textbf{\Roman{#1} #2} }
+
+% \geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8em}
+
+\title{Intégration}
+\author{Axel}
+\date{\today}
+
+
+
+
+\newcounter{exonb}
+\stepcounter{exonb} 
+\newcommand{\exo}[2]{
+    \vspace{5mm}
+    \textbf{#1}
+    \textbf{\arabic{exonb}}
+    \hrulefill
+    \textbf{#2}
+    \stepcounter{exonb} 
+}
+
+
+\newcounter{prblmnb}
+\stepcounter{prblmnb} 
+\newcommand{\problem}[1]{
+    \vspace{5mm}
+    \textbf{Problème}
+    \textbf{\Roman{prblmnb}}
+    \hrulefill
+    \textbf{#1}
+    \stepcounter{prblmnb} 
+}
+
+
+\newcommand{\smalltext}[1]{
+    \scriptsize
+    \textit{#1}
+    \normalsize
+}
+
+
+
+
+
+\newenvironment{correction}
+    {\begin{mdframed}[backgroundcolor=gray!20, roundcorner=10pt, linecolor=gray!10,
+        leftmargin=0, rightmargin=0, innerleftmargin=5, innerrightmargin=5,
+        innertopmargin=0, innerbottommargin=10]}
+    {\end{mdframed}}
+\begin{document}
+
+\newcommand{\correct}[1]{
+    \begin{correction}
+        #1
+    \end{correction}
+}
+
+
+\newcommand{\exocor}[3]{
+    \exo{Exercice}{#3}
+
+    \begin{equation*}
+        #1
+    \end{equation*}
+
+    \correct{
+        \begin{gather*}
+            #2
+        \end{gather*}
+    }
+}
+
+\maketitle
+
+les exercices sont classé par difficultée
+les étoiles(\star) indiquent la difficultée de l'exercice
+Les exercices sont réparties par leurs différentes methodes de résolution, 
+puis des problèmes plus complexes sont proposés à la fin. demandant une combinaison de méthodes de résolution.
+
+% les symboles suivantes sont utiliser pour proposer une Methode de resolution
+% \begin{itemize}
+%     \item[--] \odot  \: Forme évidente
+%     \item[--] \oslash   \: méthode de décomposition en éléments simples
+%     \item[--] \circledcirc   \: changement de variable
+%     \item[--] \otimes  \: intégration par partie
+% \end{itemize}
+
+Nous donnerons une solution pour chaque exercice.
+
+
+\section*{Exercices}
+\subsection*{Formes usuels}
+
+\exo{Exercice}{}
+\begin{equation*}
+    \int \frac{1}{x^2} \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        -\frac{1}{x}
+    \end{gather*}
+}
+
+\exo{Exercice}{}
+\begin{equation*}
+    \int \sqrt{x} \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        \frac{2}{3} x^{3/2}
+    \end{gather*}
+}
+
+\exo{Exercice}{}
+\begin{equation*}
+    \int \frac{1}{x+1} \, dx
+\end{equation*}
+
+
+\correct{
+    \begin{gather*}
+        \ln |x + 1|
+    \end{gather*}
+}
+
+\exo{Exercice}{}
+\begin{equation*}
+    \int \frac{1}{x^2+4} \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        \frac{1}{2} \arctan \left( \frac{x}{2} \right)
+    \end{gather*}
+}
+
+\exo{Exercice}{}
+\begin{equation*}
+    \int 2x e^{x^2} \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        e^{x^2}
+    \end{gather*}
+}
+
+\exo{Exercice}{}
+\begin{equation*}
+    \int \frac{1}{\sqrt{2-x^2}} \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        \arcsin \left( \frac{x}{\sqrt{2}} \right)
+    \end{gather*}
+}
+
+
+
+\exo{Exercice}{}
+\begin{equation*}
+    \int 2x\cos(x^2) \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        \sin(x^2)
+    \end{gather*}
+}
+
+\exo{Exercice}{\star}
+\begin{equation*}
+    \int \sin(x)\cos(\cos(x)) \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        -\sin(\cos(x))
+    \end{gather*}
+}
+
+
+\subsection*{Fractions simples}
+
+
+\exo{Exercice}{\star}
+
+\begin{equation*}
+    \int \frac{1}{x^2 - 1} \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        \ln \left| \frac{\sqrt{x - 1}}{\sqrt{x + 1}} \right|
+    \end{gather*}
+}
+
+\exo{Exercice}{}
+
+\begin{equation*}
+    \int \frac{x}{x^2 + 1} \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        \frac{1}{2} \ln |x^2 + 1|
+    \end{gather*}
+}
+
+
+\exo{Exercice}{}
+
+\begin{equation*}
+    \int \frac{1}{x^2 + x} \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        \ln |x| - \ln |x + 1|
+    \end{gather*}
+}
+
+\subsection*{Logarithmes}
+
+\exo{Exercice}{\star}
+
+\begin{equation*}
+    \int xln(x) \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        \frac{x^2}{2} \ln |x| - \frac{x^2}{4}
+    \end{gather*}
+}
+
+\exo{Exercice}{\star\star}
+
+\begin{equation*}
+    \int x^2 ln(x) \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        \frac{1}{9} x^3 (3 \ln x - 1)
+    \end{gather*}
+}
+
+\exo{Exercice}{\star\star}
+
+\begin{equation*}
+    \int ln(x)^2 \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        x (ln(x)^2 - 2ln(x) + 2)
+    \end{gather*}
+}
+
+
+\subsection*{Polynomes exponentielles}
+
+\exo{Exercice}{}
+
+\begin{equation*}
+    \int xe^{x} \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        (x - 1) e^x
+    \end{gather*}
+}
+
+\exo{Exercice}{\star}
+
+\begin{equation*}
+    \int x^2 e^x \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        (x^2 - 2x + 2) e^x
+    \end{gather*}
+}
+
+\exo{Exercice}{\star}
+
+\begin{equation*}
+    \int x^3 e^x \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        (x^3 - 3x^2 + 6x - 6) e^x
+    \end{gather*}
+}
+
+\subsection*{Trigo exponentielles}
+
+\exocor{
+    \int e^x \sin(x) \, dx
+}{
+    \frac{1}{2} e^x (\sin(x) - \cos(x))
+}{\star\star}
+
+\exocor{
+    \int sin(x^2) e^{\frac{x^2}{2}} dx
+}{
+    \frac{1}{5} e^{x^2/2} (sin(x^2) - 2 cos(x^2))
+}{\star\star\star}
+
+
+\problem{\star\star\star}
+
+Soit $\omega, \mu \in \mathbb{R}^*$
+
+$(1)$ Donner l'expression de l'intégrale suivante:
+
+\begin{equation*}
+    \int \sin(\omega x + \mu ) \, dx
+\end{equation*}
+
+$(2)$ En déduire l'expression de l'intégrale suivante:
+
+\begin{equation*}
+    \int e^x \sin(\omega x + \mu ) \, dx
+\end{equation*}
+
+$(3)$ Soit $\alpha \in \mathbb{R}^*$ Donner l'expression de l'intégrale suivante:
+
+\begin{equation*}
+    \int e^{\alpha x} \sin(\omega x + \mu ) \, dx
+\end{equation*}
+
+\correct{
+    \begin{gather*}
+        -\frac{1}{\omega} \cos(\omega x + \mu) \\
+        \frac{e^x}{\omega^2 + 1} (\sin(\omega x + \mu) - \omega \cos(\omega x + \mu)) \\
+        \dots
+    \end{gather*}
+}
+
+\subsection*{Fraction rationnelle}
+
+\exocor{
+    \int \frac{1}{x^2-x-1} \, dx
+}{
+    \frac{\ln\left(-2x+\sqrt{5}+1\right)-\ln\left(2x+\sqrt{5}-1\right)}{\sqrt{5}}
+}{\star\star\star}
+
+\exocor{
+    \int \frac{1}{x^2+x+1} \, dx
+}{
+    \frac{2\arctan\left(\frac{2x+1}{\sqrt{3}}\right)}{\sqrt{3}}
+}{\star\star}
+
+\exocor{
+    \int \frac{1}{x^3+1} \, dx
+}{
+    \frac{1}{6}\left[2\log(x+1)-\ln\left(x^{2}-x+1\right)+2\sqrt{3}\arctan\left(\frac{2x-1}{\sqrt{3}}\right)\right]
+}{\star\star\star\star}
+
+\subsection*{Introduction aux règles de Bioche}
+
+\exocor{
+    \int \sin^{3}(x) \, dx
+}{
+    -\cos(x) + \frac{\cos^3(x)}{3} 
+}{\star}
+
+\exocor{
+    \int \cos^{3}(x) \, dx
+}{
+    \sin(x) - \frac{\sin^3(x)}{3}
+}{\star}
+
+\exocor{
+    \int \tan^{3}(x) \, dx
+}{
+    \frac{1}{2\cos^2(x)}+\ln(\cos(x))
+}{\star\star}
+
+\exocor{
+    \int \frac{\sin^3(x)}{1+\cos^2x} \, dx
+}{
+    \frac{1}{2\cos^2(x)}+\ln(\cos(x))
+}{\star\star}
+
+\exocor{
+    \int \frac{\cos(t)}{1+\sin(t)} \, dx
+}{
+    \ln{\left|1+\sin(t)\right|}
+}{\star\star}
+
+
+
+\end{document}
+
+

@@ -1,0 +1,158 @@
+
+
+
+% \subsection{Intégrales de fonctions paires et impaires}
+
+% Pour une fonction paire $f(x)$ :
+
+% \begin{equation}
+%     \int_{-a}^{a} f(x) \, dx = 2 \int_{0}^{a} f(x) \, dx
+% \end{equation}
+
+% Pour une fonction impaire $f(x)$ :
+
+% \begin{equation}
+%     \int_{-a}^{a} f(x) \, dx = 0
+% \end{equation}
+
+% \subsubsection*{Exemple}
+
+% Calculer :
+
+% \begin{equation}
+%     \int_{-1}^{1} x^3 \, dx
+% \end{equation}
+
+% Comme $x^3$ est une fonction impaire :
+
+% \begin{equation}
+%     \int_{-1}^{1} x^3 \, dx = 0
+% \end{equation}
+
+\subsection{Méthode DI}
+
+La méthode DI (Dérivée Intégrale) est une technique pratique pour intégrer les produits de fonctions, en construisant un tableau alternant les dérivées et les intégrales. Elle est particulièrement utile pour les intégrales nécessitant plusieurs intégrations par parties.
+
+\subsubsection*{Principe}
+
+On construit un tableau avec deux colonnes :
+
+\begin{itemize}
+    \item Colonne $D$ (Dérivée) : on dérive successivement la fonction jusqu'à annulation ou identification d'un cycle.
+    \item Colonne $I$ (Intégrale) : on intègre successivement la fonction.
+\end{itemize}
+
+On place les signes $+$ et $-$ alternativement devant chaque ligne, en commençant par $+$.
+
+\subsubsection*{Cas des cycles infinis}
+
+Si les dérivées ne s'annulent jamais et reviennent à la fonction initiale (cycle), on obtient une équation à résoudre pour trouver l'intégrale.
+
+\subsubsection*{Exemple avec cycle infini}
+
+Calculer :
+
+\begin{equation}
+    \int e^{ax} \cos(bx) \, dx
+\end{equation}
+
+Construction du tableau :
+
+\begin{center}
+\begin{tabular}{r|c|c}
+    & $D$ (Dérivée) & $I$ (Intégrale) \\
+    \hline
+    $+$ & $\cos(bx)$          & $\dfrac{e^{ax}}{a}$ \\
+    $-$ & $-b\sin(bx)$        & $\dfrac{e^{ax}}{a^2}$ \\
+    $+$ & $-b^2\cos(bx)$      & $\dfrac{e^{ax}}{a^3}$ \\
+    $-$ & $b^3\sin(bx)$       & $\dfrac{e^{ax}}{a^4}$ \\
+    $\vdots$ & $\vdots$       & $\vdots$
+\end{tabular}
+\end{center}
+
+On observe un cycle car les dérivées alternent entre $\cos(bx)$ et $\sin(bx)$. Pour résoudre l'intégrale :
+
+\begin{align*}
+    I &= \int e^{ax} \cos(bx) \, dx \\
+    &= e^{ax} \dfrac{\cos(bx)}{a} + \dfrac{b}{a} \int e^{ax} \sin(bx) \, dx \\
+    &= e^{ax} \dfrac{\cos(bx)}{a} + \dfrac{b}{a} \left( e^{ax} \dfrac{\sin(bx)}{a} - \dfrac{b}{a} \int e^{ax} \cos(bx) \, dx \right) \\
+    &= e^{ax} \left( \dfrac{\cos(bx)}{a} + \dfrac{b \sin(bx)}{a^2} \right) - \left( \dfrac{b^2}{a^2} \right) I
+\end{align*}
+
+En isolant $I$ :
+
+\begin{equation*}
+    I + \left( \dfrac{b^2}{a^2} \right) I = e^{ax} \left( \dfrac{\cos(bx)}{a} + \dfrac{b \sin(bx)}{a^2} \right)
+\end{equation*}
+
+Donc :
+
+\begin{equation*}
+    I = \dfrac{e^{ax}}{a^2 + b^2} \left( a \cos(bx) + b \sin(bx) \right) + C
+\end{equation*}
+
+\subsubsection*{Conclusion}
+
+La méthode DI permet de calculer efficacement des intégrales complexes en repérant les cycles infinis et en résolvant l'équation obtenue.
+
+\subsection{Méthode de la décomposition en éléments simples}
+
+Cette méthode permet d'intégrer des fractions rationnelles en les décomposant en fractions plus simples.
+
+\subsubsection*{Exemple}
+
+Calculer :
+
+\begin{equation}
+    \int \frac{2x + 3}{x^2 + x} \, dx
+\end{equation}
+
+Décomposons en éléments simples :
+
+\begin{equation}
+    \frac{2x + 3}{x^2 + x} = \frac{A}{x} + \frac{B}{x + 1}
+\end{equation}
+
+En résolvant pour $A$ et $B$ :
+
+\begin{align*}
+    2x + 3 &= A(x + 1) + B x \\
+    2x + 3 &= (A + B) x + A
+\end{align*}
+
+En identifiant les termes :
+\begin{equation*}
+    \begin{cases}
+        A + B = 2 \\
+        A = 3
+    \end{cases}
+\end{equation*}
+
+Ainsi, $A = 3$ et $B = -1$.
+
+L'intégrale devient :
+
+\begin{align*}
+    \int \frac{2x + 3}{x^2 + x} \, dx &= \int \left( \frac{3}{x} - \frac{1}{x + 1} \right) dx \\
+    &= 3 \ln |x| - \ln |x + 1| + C
+\end{align*}
+
+\section{Astuces}
+
+\subsection{Intégrales de fonctions paires et impaires}
+
+\subsection{Methode DI}
+
+\subsection{Methode de la décomposition en éléments simples}
+
+
+
+\subsection{Autres}
+
+\begin{equation*}
+    \int \frac{f'(x)}{f(x)} \, dx = \ln |f(x)| + C
+\end{equation*}
+
+\begin{equation*}
+    u^2 + \frac{1}{u^2} = \left( u + \frac{1}{u} \right)^2 + 2
+\end{equation*}
