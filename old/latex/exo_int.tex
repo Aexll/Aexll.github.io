@@ -380,7 +380,7 @@ $(3)$ Soit $\alpha \in \mathbb{R}^*$ Donner l'expression de l'intégrale suivant
 \exocor{
     \int \frac{1}{x^3+1} \, dx
 }{
-    \frac{1}{6}\left[2\log(x+1)-\ln\left(x^{2}-x+1\right)+2\sqrt{3}\arctan\left(\frac{2x-1}{\sqrt{3}}\right)\right]
+    \frac{1}{6}\left[2\ln\left|x+1\right| - \ln\left|x^{2}-x+1\right|+2\sqrt{3}\arctan\left(\frac{2x-1}{\sqrt{3}}\right)\right]
 }{\star\star\star\star}
 
 \subsection*{Introduction aux règles de Bioche}
@@ -406,7 +406,7 @@ $(3)$ Soit $\alpha \in \mathbb{R}^*$ Donner l'expression de l'intégrale suivant
 \exocor{
     \int \frac{\sin^3(x)}{1+\cos^2x} \, dx
 }{
-    \frac{1}{2\cos^2(x)}+\ln(\cos(x))
+    -2\arctan(\cos(x))+\cos(x)
 }{\star\star}
 
 \exocor{
@@ -414,6 +414,44 @@ $(3)$ Soit $\alpha \in \mathbb{R}^*$ Donner l'expression de l'intégrale suivant
 }{
     \ln{\left|1+\sin(t)\right|}
 }{\star\star}
+
+\exocor{
+    \int \frac{1}{\cos(x)} \, dx
+}{
+    \ln\left[\frac{1+tan\left(\frac{x}{2}\right)}{1-tan\left(\frac{x}{2}\right)}\right]
+    % \; \Longleftrightarrow \; \frac{1}{2}\ln\left|1+\sin(x)\right|+\ln\left|1-\sin(x)\right|
+}{\star\star\star\star}
+
+\subsection*{Changement de variable 2}
+
+\exocor{
+    \int \frac{1}{\sqrt{1+e^x}} \, dx
+}{
+    \ln\left(\sqrt{\mathrm{e}^{x} + 1} - 1\right) - \ln\left(\sqrt{\mathrm{e}^{x} + 1} + 1\right)
+}{\star\star\star}
+
+\exocor{
+    \int x\ln^3 x \, dx
+}{
+    \frac{x^2}{8}\left(4ln^3x-6ln^2x+6lnx-3\right)
+}{\star\star\star\star}
+
+
+\subsection*{Double changement de variable}
+
+\exocor{
+    \int \frac{\cos^3x}{\sqrt{\sin x}} \, dx
+}{
+    \frac{2}{5}\sqrt{\sin x}\left(4+cos^2x\right)
+}{\star\star\star\star}
+
+\subsection*{Fraction rationnelle et forme évidente}
+
+\exocor{
+    \int\!{\frac{x^{3}}{\left(1+x^{2}\right)^{2}}}\,d x
+}{
+    \frac{1}{2}\biggl[l n\Bigl(1+x^{2}\Bigr)+\frac{1}{1+x^{2}}\biggr]
+}{\star\star\star\star}
 
 
 
