@@ -468,10 +468,11 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     <h1 class="flex justify-center font-bold text-8xl text-orange-600 title_orange">Skirmish</h1>
 
     <iframe 
-    title="Doodle"
+    title="Skirmish"
     class="flex mx-auto justify-center"
     scrolling="no"
-    src="https://aexll.github.io/Skirmish/index.html"
+    src="/Skirmish/index.html"
+    allow="cross-origin-isolated"
     allowfullscreen
     width="1200" height="680"
     style="border:none; overflow:hidden"></iframe>
@@ -510,14 +511,15 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     title="Skull"
     class="flex mx-auto justify-center"
     scrolling="no"
-    src="https://aexll.github.io/Skull/skull.html"
+    src="/Skull/skull.html"
+    allow="cross-origin-isolated"
     allowfullscreen
     width="1240" height="620"
     style="border:none; overflow:hidden"></iframe>
     
     
     
-    <a class="flex justify-center" href="https://aexll.github.io/Skull/skull.html">
+    <a class="flex justify-center" href="/Skull/skull.html">
       <img src="/img/Play.png" alt="Exo" class="flex p-4 mx-auto hover:scale-110 drop-shadow-[00px_00px_10px_rgba(0,0,0,0.5)]"/>
     </a>
     <div class="bg-black/90 mx-auto p-4 rounded-md">
@@ -627,7 +629,8 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     title="Suika"
     class="flex mx-auto justify-center"
     scrolling="no"
-    src="../suika_v2/index.html"
+    src="/suika_v2/index.html"
+    allow="cross-origin-isolated"
     allowfullscreen
     width="1200" height="675"
     style="border:none; overflow:hidden"></iframe>
@@ -636,7 +639,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
       <p class="flex justify-center text-white">a suika game made in a hours during lunch time</p>
       <p class="flex justify-center text-white"></p>
 
-    <a class="flex justify-center underline" href="https://aexll.github.io/Suika/suika.html"> Play here </a>
+    <a class="flex justify-center underline" href="/suika_v2/index.html"> Play here </a>
 
     </Project>
     
@@ -651,10 +654,20 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     cardBody="bg-black/70 outline outline-1 outline-blue-900">
     <h1 class="flex justify-center font-bold text-8xl text-blue-900 title_darkblue">Suikasteroid</h1>
     <br>
+    <iframe 
+    title="Suikasteroid"
+    class="flex mx-auto justify-center"
+    scrolling="no"
+    src="/Suikasteroid/suikasteroid.html"
+    allow="cross-origin-isolated"
+    allowfullscreen
+    width="1200" height="675"
+    style="border:none; overflow:hidden"></iframe>
+    <br>
       <p class="flex justify-center text-white">a suika game made with the suika template</p>
       <p class="flex justify-center text-white"></p>
 
-    <a class="flex justify-center underline" href="https://aexll.github.io/Suikasteroid/suikasteroid.html"> Play here </a>
+    <a class="flex justify-center underline" href="/Suikasteroid/suikasteroid.html"> Play here </a>
 
     </Project>
 
@@ -673,11 +686,12 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     title="Platformer"
     class="flex mx-auto justify-center"
     scrolling="no"
-    src="https://aexll.github.io/platformer/platformer.html"
+    src="/platformer/platformer.html"
+    allow="cross-origin-isolated"
     allowfullscreen
     width="1200" height="675"
     style="border:none; overflow:hidden"></iframe>
-    <a class="flex justify-center underline" href="https://aexll.github.io/platformer/platformer.html"> Fullscreen </a>
+    <a class="flex justify-center underline" href="/platformer/platformer.html"> Fullscreen </a>
 
       <p class="flex justify-center text-white">a platformer demo on godot, with a lot of smooth features</p>
       <p class="flex justify-center text-white">including:</p>
@@ -713,7 +727,8 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     title="Doodle"
     class="flex mx-auto justify-center"
     scrolling="no"
-    src="https://aexll.github.io/Doodle/index.html"
+    src="/Doodle/index.html"
+    allow="cross-origin-isolated"
     allowfullscreen
     width="1200" height="680"
     style="border:none; overflow:hidden"></iframe>
@@ -724,21 +739,31 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     </Project>
 
 
-    <!-- Suikasteroid -->
+    <!-- Suicalculator -->
     <Project
     cardImg="img/suicalc.png"
-    cardTitle="Project asteroid"
+    cardTitle="Suicalculator"
     shadowColor="#880088"
     cardBackground="fixed inset-0 z-40 bg-black/50"
     cardClass="absolute w-40 rounded-xl ring-2 ring-purple-500"
     cardBody="bg-black/70 outline outline-1 outline-purple-500">
     <h1 class="flex justify-center font-bold text-8xl text-purple-800 title_darkblue">Suikalculator</h1>
     <br>
+    <iframe 
+    title="Suicalculator"
+    class="flex mx-auto justify-center"
+    scrolling="no"
+    src="/Suicalculator/suicalculator.html"
+    allow="cross-origin-isolated"
+    allowfullscreen
+    width="1200" height="675"
+    style="border:none; overflow:hidden"></iframe>
+    <br>
       <p class="flex justify-center text-white">a suika game made with the suika template</p>
       <p class="flex justify-center text-white">made in 15 min, and never debuged</p>
       <p class="flex justify-center text-white">the game is not fun, i know it</p>
 
-    <a class="flex justify-center underline" href="https://aexll.github.io/Suicalculator/suicalculator.html"> Play here </a>
+    <a class="flex justify-center underline" href="/Suicalculator/suicalculator.html"> Play here </a>
 
     </Project>
 
