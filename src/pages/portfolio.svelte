@@ -555,7 +555,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     title="YouTube video player"
     width="1200" height="670"
     class="flex mx-auto justify-center"
-    src="https://www.youtube.com/embed/PBSmOvrlqPc?autoplay=1">
+    src="https://www.youtube.com/embed/PBSmOvrlqPc?autoplay=1" credentialless>
     </iframe> 
 
     <img src="/img/cutoff_title.png" alt="Exo" class="flex mx-auto drop-shadow-[00px_00px_10px_rgba(1,1,1,0.5)]"/>
@@ -602,7 +602,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     <p class="flex justify-center">a very simplistic game engine powered in lua</p>
     <a class="flex justify-center underline" href="https://www.lexaloffle.com/bbs/?tid=44993"> Play here </a>
     
-    <iframe title="Among Dash" class="flex mx-auto justify-center" scrolling="no" src="https://www.lexaloffle.com/bbs/widget.php?pid=amongdash" allowfullscreen width="620" height="620" style="border:none; overflow:hidden"></iframe>
+    <iframe title="Among Dash" class="flex mx-auto justify-center" scrolling="no" src="https://www.lexaloffle.com/bbs/widget.php?pid=amongdash" allowfullscreen width="620" height="620" style="border:none; overflow:hidden" credentialless></iframe>
 
 
     <p class="flex justify-center">There are 4 levels</p>
