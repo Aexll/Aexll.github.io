@@ -1,0 +1,16 @@
+{
+  "tracks": [
+    {
+      "name": "oof",
+      "file": "roblox_oof.wav"
+    },
+    {
+      "name": "epic warp",
+      "file": "epic_warp.mp3"
+    },
+    {
+      "name": "big hit intro",
+      "file": "short-riser-to-big-hit-intro.mp3"
+    }
+  ]
+}

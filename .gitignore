@@ -25,3 +25,6 @@ dist-ssr
 
 # hide credentials
 *.env
+
+CLAUDE.md
+.claude

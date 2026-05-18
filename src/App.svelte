@@ -3,6 +3,7 @@
   import Default from './pages/default.svelte';
   import NotFound from './pages/error.svelte';
   import Portfolio from './pages/portfolio.svelte';
+  import Ambiance from './pages/ambiance.svelte';
   // import db from './services/firebase.js';
 
 
@@ -15,6 +16,7 @@
   "/": Portfolio,
   "/doc": Default,
   "/ctf": Page1,
+  "/ambiance": Ambiance,
   "*": NotFound
   };
 

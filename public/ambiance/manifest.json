@@ -1,0 +1,80 @@
+{
+  "tracks": [
+    {
+      "name": "Relaxing music",
+      "file": "nice_music_loop.mp3"
+    },
+    {
+      "name": "Floating world",
+      "file": "Floating_world.mp3"
+    },
+    {
+      "name": "Storm",
+      "file": "storm.wav"
+    },
+    {
+      "name": "Forest",
+      "file": "forest.mp3"
+    },
+    {
+      "name": "Forest 2",
+      "file": "forest2.mp3"
+    },
+    {
+      "name": "Forest 3",
+      "file": "forest3.mp3"
+    },
+    {
+      "name": "Forest birds",
+      "file": "forest_bird.mp3"
+    },
+    {
+      "name": "Jungle",
+      "file": "jungle.mp3"
+    },
+    {
+      "name": "Night",
+      "file": "night.mp3"
+    },
+    {
+      "name": "Night 2",
+      "file": "night2.mp3"
+    },
+    {
+      "name": "Night 3",
+      "file": "night3.mp3"
+    },
+    {
+      "name": "Waterfall",
+      "file": "waterfall.mp3"
+    },
+    {
+      "name": "Wind",
+      "file": "wind-blowing-sfx-12809.wav"
+    },
+    {
+      "name": "African percussion",
+      "file": "african-percussion.mp3"
+    },
+    {
+      "name": "Epic",
+      "file": "epic1.mp3"
+    },
+    {
+      "name": "High tension and suspense",
+      "file": "high-tension-and-suspense.mp3"
+    },
+    {
+      "name": "Reflexion",
+      "file": "reflexion.mp3"
+    },
+    {
+      "name": "Sneaky music",
+      "file": "sneaky_music.mp3"
+    },
+    {
+      "name": "Suspense",
+      "file": "suspense.mp3"
+    }
+  ]
+}
