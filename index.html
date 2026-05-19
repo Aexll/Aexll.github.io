@@ -10,7 +10,21 @@
 
 <body>
   <div id="app"></div>
-  <script src="/coi-serviceworker.min.js"></script>
+  <script>
+    // The root-scope coi-serviceworker used to add COEP/COOP headers for
+    // cross-origin isolation. It blocked cross-origin iframes (YouTube,
+    // lexaloffle), and the SPA does not need isolation. Unregister any
+    // leftover root-scoped SW so future loads are unrestricted.
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((regs) => {
+        for (const r of regs) {
+          if (r.scope === location.origin + '/' || r.scope === location.origin) {
+            r.unregister();
+          }
+        }
+      }).catch(() => {});
+    }
+  </script>
   <script type="module" src="/src/main.js"></script>
 </body>
 
