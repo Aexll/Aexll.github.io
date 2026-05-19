@@ -2,79 +2,286 @@
   "tracks": [
     {
       "name": "Relaxing music",
-      "file": "nice_music_loop.mp3"
+      "file": "nice_music_loop.mp3",
+      "type": "music"
     },
     {
       "name": "Floating world",
-      "file": "Floating_world.mp3"
+      "file": "Floating_world.mp3",
+      "type": "music"
     },
     {
       "name": "Storm",
-      "file": "storm.wav"
+      "file": "storm.wav",
+      "type": "ambiance",
+      "tag": "Weather"
     },
     {
       "name": "Forest",
-      "file": "forest.mp3"
+      "file": "forest.mp3",
+      "type": "ambiance",
+      "tag": "Forest"
     },
     {
       "name": "Forest 2",
-      "file": "forest2.mp3"
+      "file": "forest2.mp3",
+      "type": "ambiance",
+      "tag": "Forest"
     },
     {
       "name": "Forest 3",
-      "file": "forest3.mp3"
+      "file": "forest3.mp3",
+      "type": "ambiance",
+      "tag": "Forest"
     },
     {
       "name": "Forest birds",
-      "file": "forest_bird.mp3"
+      "file": "forest_bird.mp3",
+      "type": "ambiance",
+      "tag": "Forest"
     },
     {
       "name": "Jungle",
-      "file": "jungle.mp3"
+      "file": "jungle.mp3",
+      "type": "ambiance",
+      "tag": "Jungle"
     },
     {
       "name": "Night",
-      "file": "night.mp3"
+      "file": "night.mp3",
+      "type": "ambiance",
+      "tag": "Night"
     },
     {
       "name": "Night 2",
-      "file": "night2.mp3"
+      "file": "night2.mp3",
+      "type": "ambiance",
+      "tag": "Night"
     },
     {
       "name": "Night 3",
-      "file": "night3.mp3"
+      "file": "night3.mp3",
+      "type": "ambiance",
+      "tag": "Night"
     },
     {
       "name": "Waterfall",
-      "file": "waterfall.mp3"
+      "file": "waterfall.mp3",
+      "type": "ambiance",
+      "tag": "Water"
     },
     {
       "name": "Wind",
-      "file": "wind-blowing-sfx-12809.wav"
+      "file": "wind-blowing-sfx-12809.wav",
+      "type": "ambiance",
+      "tag": "Weather"
     },
     {
       "name": "African percussion",
-      "file": "african-percussion.mp3"
+      "file": "african-percussion.mp3",
+      "type": "music"
     },
     {
       "name": "Epic",
-      "file": "epic1.mp3"
+      "file": "epic1.mp3",
+      "type": "music"
     },
     {
       "name": "High tension and suspense",
-      "file": "high-tension-and-suspense.mp3"
+      "file": "high-tension-and-suspense.mp3",
+      "type": "music",
+      "tag": "Tense"
     },
     {
       "name": "Reflexion",
-      "file": "reflexion.mp3"
+      "file": "reflexion.mp3",
+      "type": "music"
     },
     {
       "name": "Sneaky music",
-      "file": "sneaky_music.mp3"
+      "file": "sneaky_music.mp3",
+      "type": "music",
+      "tag": "Tense"
     },
     {
       "name": "Suspense",
-      "file": "suspense.mp3"
+      "file": "suspense.mp3",
+      "type": "music",
+      "tag": "Tense"
+    },
+    {
+      "name": "14.3 Billion Years",
+      "file": "outerwilds/14.3 Billion Years.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Castaways",
+      "file": "outerwilds/Castaways.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Dark Bramble",
+      "file": "outerwilds/Dark Bramble.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Echoes of the Eye Soundtrack - River’s End",
+      "file": "outerwilds/Echoes of the Eye Soundtrack - River’s End.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Echoes of the Eye Soundtrack - The River",
+      "file": "outerwilds/Echoes of the Eye Soundtrack - The River.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Echoes of the Eye Soundtrack - The Sound of Water",
+      "file": "outerwilds/Echoes of the Eye Soundtrack - The Sound of Water.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Echoes of the Eye Soundtrack - Travelers’ Encore",
+      "file": "outerwilds/Echoes of the Eye Soundtrack - Travelers’ Encore.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Echoes of the Eye",
+      "file": "outerwilds/Echoes of the Eye.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "End Times",
+      "file": "outerwilds/End Times.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Feeling Everything but Lost",
+      "file": "outerwilds/Feeling Everything but Lost.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Final Voyage",
+      "file": "outerwilds/Final Voyage.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Into the Wilds",
+      "file": "outerwilds/Into the Wilds.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Last Dream of Home - Outer Wilds: Echoes of the Eye (The Lost Reels)",
+      "file": "outerwilds/Last Dream of Home  - Outer Wilds： Echoes of the Eye (The Lost Reels).wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Nomai Ruins",
+      "file": "outerwilds/Nomai Ruins.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Now That This Old World Is Ending",
+      "file": "outerwilds/Now That This Old World Is Ending.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Outer Wilds - Gamerip Soundtrack - Final End Times",
+      "file": "outerwilds/Outer Wilds - Gamerip Soundtrack - Final End Times.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Outer Wilds - Reprise",
+      "file": "outerwilds/Outer Wilds - Reprise.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Outer Wilds",
+      "file": "outerwilds/Outer Wilds.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "See you in the next universe",
+      "file": "outerwilds/See you in the next universe.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Space",
+      "file": "outerwilds/Space.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "The Ancient Glade",
+      "file": "outerwilds/The Ancient Glade.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "The Ash Twin Project",
+      "file": "outerwilds/The Ash Twin Project.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "The Museum",
+      "file": "outerwilds/The Museum.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "The Nomai",
+      "file": "outerwilds/The Nomai.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "The Search",
+      "file": "outerwilds/The Search.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "The Sun Station",
+      "file": "outerwilds/The Sun Station.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "The Uncertainty Principle",
+      "file": "outerwilds/The Uncertainty Principle.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "Timber Hearth",
+      "file": "outerwilds/Timber Hearth.wav",
+      "type": "music",
+      "tag": "Outer Wilds"
+    },
+    {
+      "name": "What Could Have Been (from the series Arcane League of Legends)",
+      "file": "outerwilds/What Could Have Been (from the series Arcane League of Legends).wav",
+      "type": "music",
+      "tag": "Outer Wilds"
     }
   ]
 }
