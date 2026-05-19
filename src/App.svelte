@@ -8,8 +8,14 @@
 
 
   import { onMount } from 'svelte';
-  let url = ``;
-  onMount(() => url = window.location.href);
+  let path = '/';
+  onMount(() => {
+    // Use pathname (not href) and strip a trailing slash so GitHub Pages'
+    // directory-redirect (e.g. /ambiance → /ambiance/) still routes correctly.
+    let p = window.location.pathname || '/';
+    if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
+    path = p;
+  });
 
   // simple rooter:
   export const routes = {
@@ -23,4 +29,4 @@
 
 </script>
 
-<svelte:component this={routes[url.substring(url.trim().lastIndexOf('/'), url.trim().length)]}/>
+<svelte:component this={routes[path] ?? routes['*']}/>
