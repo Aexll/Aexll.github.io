@@ -17,6 +17,18 @@
   /** @type {Record<string, HTMLAudioElement>} */
   const audioEls = {};
 
+  // Download state per track. 'unloaded' = not in Cache Storage,
+  // 'loading' = cache.add() in flight, 'loaded' = persisted on device.
+  /** @type {Record<string, 'unloaded'|'loading'|'loaded'>} */
+  let trackState = {};
+  // Blob URLs created from Cache Storage entries. Populated on mount for
+  // already-cached tracks, so audio plays straight from local data on reload.
+  // We deliberately don't create new Blob URLs after a mid-session download
+  // (it would interrupt playback); the swap happens on next page load instead.
+  /** @type {Record<string, string>} */
+  let trackBlobUrls = {};
+  const AUDIO_CACHE = 'ambiance-audio-v1';
+
   // Global mixer controls
   let masterVolume = 1;
   let crossfadeSeconds = 3;
@@ -55,11 +67,18 @@
     soundboard = sb;
     for (const t of allTracks) {
       if (volumes[t.src] === undefined) volumes[t.src] = 0;
+      if (trackState[t.src] === undefined) trackState[t.src] = 'unloaded';
     }
+    trackState = trackState;
     // Default-expand every group so sliders are visible on first paint.
     const tags = new Set();
     for (const t of allTracks) if (t.tag) tags.add(t.tag);
     expandedGroups = tags;
+
+    // Check Cache Storage for already-downloaded tracks. Done in the
+    // background so the UI paints immediately; download buttons will simply
+    // hide as tracks resolve to 'loaded'.
+    initTrackStates();
 
     // Load worlds, with one-shot migration from the old per-tab keys.
     try {
@@ -83,10 +102,79 @@
     for (const t of [...allTracks, ...soundboard]) {
       if (t.isUpload) URL.revokeObjectURL(t.src);
     }
+    for (const url of Object.values(trackBlobUrls)) {
+      URL.revokeObjectURL(url);
+    }
     for (const el of Object.values(audioEls)) {
       if (el) { el.pause(); el.src = ''; }
     }
   });
+
+  /**
+   * On mount: parallel-check every bundled track against Cache Storage.
+   * For cached tracks we create a Blob URL upfront so the <audio> src binds
+   * directly to local data — no network on subsequent plays / reloads.
+   */
+  async function initTrackStates() {
+    if (!('caches' in window)) {
+      // No Cache API support — treat everything as 'loaded' (network only).
+      for (const t of allTracks) trackState[t.src] = 'loaded';
+      trackState = trackState;
+      return;
+    }
+    try {
+      const cache = await caches.open(AUDIO_CACHE);
+      await Promise.all(allTracks.map(async (t) => {
+        if (t.isUpload) { trackState[t.src] = 'loaded'; return; }
+        try {
+          const res = await cache.match(t.src);
+          if (res) {
+            const blob = await res.blob();
+            trackBlobUrls[t.src] = URL.createObjectURL(blob);
+            trackState[t.src] = 'loaded';
+          }
+        } catch { /* leave as 'unloaded' */ }
+      }));
+      trackState = trackState;
+      trackBlobUrls = trackBlobUrls;
+    } catch { /* opening cache failed — leave defaults */ }
+  }
+
+  /**
+   * Download a single track into Cache Storage. Safe to call repeatedly:
+   * early-returns if already loaded or in flight. Uploaded tracks short-circuit
+   * to 'loaded' since their data already lives in a session Blob URL.
+   */
+  async function ensureLoaded(track) {
+    if (trackState[track.src] === 'loaded' || trackState[track.src] === 'loading') return;
+    if (track.isUpload || !('caches' in window)) {
+      trackState[track.src] = 'loaded';
+      trackState = trackState;
+      return;
+    }
+    trackState[track.src] = 'loading';
+    trackState = trackState;
+    try {
+      const cache = await caches.open(AUDIO_CACHE);
+      await cache.add(track.src);
+      // Don't create a Blob URL now — swapping the <audio> src mid-session
+      // would interrupt playback. The cache is populated for next reload,
+      // and the network URL stays usable (HTTP cache is warm post-fetch).
+      trackState[track.src] = 'loaded';
+    } catch (e) {
+      console.error('Download failed for', track.src, e);
+      trackState[track.src] = 'unloaded';
+    }
+    trackState = trackState;
+  }
+
+  function downloadAllInSection(type) {
+    for (const t of allTracks) {
+      if (t.type === type && trackState[t.src] === 'unloaded') {
+        ensureLoaded(t);
+      }
+    }
+  }
 
   async function loadManifest(url, baseDir) {
     try {
@@ -106,14 +194,18 @@
 
   // Reactive: keep every loaded <audio> in sync with its slider × master.
   // Use raw slider (not master-scaled) to decide play/pause so master=0
-  // silences without stopping playback.
+  // silences without stopping playback. Sliding above 0 also fires off a
+  // background cache.add() so the track persists on device after first use.
   $: for (const t of allTracks) {
     const el = audioEls[t.src];
     if (!el) continue;
     const v = volumes[t.src] ?? 0;
     el.volume = Math.max(0, Math.min(1, v * masterVolume));
-    if (v > 0 && el.paused) {
-      el.play().catch(() => { /* autoplay-blocked until first user gesture */ });
+    if (v > 0) {
+      if (trackState[t.src] === 'unloaded') ensureLoaded(t);
+      if (el.paused) {
+        el.play().catch(() => { /* autoplay-blocked until first user gesture */ });
+      }
     } else if (v === 0 && !el.paused) {
       el.pause();
     }
@@ -258,7 +350,11 @@
       soundboard = [...soundboard, ...added];
     } else {
       allTracks = [...allTracks, ...added];
-      for (const t of added) volumes[t.src] = 0;
+      for (const t of added) {
+        volumes[t.src] = 0;
+        trackState[t.src] = 'loaded'; // upload data is already local
+      }
+      trackState = trackState;
     }
   }
 
@@ -279,6 +375,13 @@
     if (el) { el.pause(); el.src = ''; }
     delete audioEls[track.src];
     delete volumes[track.src];
+    delete trackState[track.src];
+    if (trackBlobUrls[track.src]) {
+      URL.revokeObjectURL(trackBlobUrls[track.src]);
+      delete trackBlobUrls[track.src];
+      trackBlobUrls = trackBlobUrls;
+    }
+    trackState = trackState;
     if (track.isUpload) URL.revokeObjectURL(track.src);
     allTracks = allTracks.filter(t => t.src !== track.src);
   }
@@ -325,8 +428,21 @@
       {#each SECTIONS as section (section.type)}
         {@const sectionTracks = allTracks.filter(t => t.type === section.type)}
         {@const grouped = groupTracks(sectionTracks)}
+        {@const unloadedInSection = sectionTracks.filter(t => trackState[t.src] === 'unloaded').length}
         <section class="mb-12">
-          <h2 class="text-2xl font-bold mb-4">{section.title}</h2>
+          <div class="flex items-baseline justify-between mb-4 gap-4 flex-wrap">
+            <h2 class="text-2xl font-bold">{section.title}</h2>
+            {#if unloadedInSection > 0}
+              <button
+                type="button"
+                on:click={() => downloadAllInSection(section.type)}
+                class="text-xs text-slate-400 hover:text-blue-400 transition-colors"
+                title="Download every undownloaded track in this section"
+              >
+                Download all ({unloadedInSection})
+              </button>
+            {/if}
+          </div>
 
           <div
             role="region"
@@ -361,8 +477,17 @@
                         {#each ts as track (track.src)}
                           <div class="bg-slate-800/70 rounded-lg p-3 outline outline-1 outline-white/10">
                             <div class="flex items-center justify-between mb-2 gap-2">
-                              <span class="font-semibold truncate text-sm" title={track.name}>{track.name}</span>
-                              <span class="text-xs text-slate-400 tabular-nums w-10 text-right">
+                              <div class="flex items-center gap-1.5 min-w-0">
+                                <span class="font-semibold truncate text-sm" title={track.name}>{track.name}</span>
+                                {#if trackState[track.src] === 'loading'}
+                                  <span class="inline-block w-3.5 h-3.5 border-2 border-slate-500 border-t-blue-400 rounded-full animate-spin flex-shrink-0" title="Downloading…" aria-label="Downloading"></span>
+                                {:else if trackState[track.src] === 'unloaded'}
+                                  <button type="button" on:click={() => ensureLoaded(track)} class="text-slate-500 hover:text-blue-400 transition-colors flex-shrink-0" title="Download to device" aria-label="Download {track.name}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 12 16 16 12"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+                                  </button>
+                                {/if}
+                              </div>
+                              <span class="text-xs text-slate-400 tabular-nums w-10 text-right flex-shrink-0">
                                 {Math.round((volumes[track.src] ?? 0) * 100)}%
                               </span>
                             </div>
@@ -384,7 +509,7 @@
                                 aria-label="Remove {track.name}"
                               >×</button>
                             </div>
-                            <audio bind:this={audioEls[track.src]} src={track.src} loop preload="auto"></audio>
+                            <audio bind:this={audioEls[track.src]} src={trackBlobUrls[track.src] || track.src} loop preload="none"></audio>
                           </div>
                         {/each}
                       </div>
@@ -398,8 +523,17 @@
                     {#each grouped.untagged as track (track.src)}
                       <div class="bg-slate-800/70 rounded-lg p-3 outline outline-1 outline-white/10">
                         <div class="flex items-center justify-between mb-2 gap-2">
-                          <span class="font-semibold truncate text-sm" title={track.name}>{track.name}</span>
-                          <span class="text-xs text-slate-400 tabular-nums w-10 text-right">
+                          <div class="flex items-center gap-1.5 min-w-0">
+                            <span class="font-semibold truncate text-sm" title={track.name}>{track.name}</span>
+                            {#if trackState[track.src] === 'loading'}
+                              <span class="inline-block w-3.5 h-3.5 border-2 border-slate-500 border-t-blue-400 rounded-full animate-spin flex-shrink-0" title="Downloading…" aria-label="Downloading"></span>
+                            {:else if trackState[track.src] === 'unloaded'}
+                              <button type="button" on:click={() => ensureLoaded(track)} class="text-slate-500 hover:text-blue-400 transition-colors flex-shrink-0" title="Download to device" aria-label="Download {track.name}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 12 16 16 12"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+                              </button>
+                            {/if}
+                          </div>
+                          <span class="text-xs text-slate-400 tabular-nums w-10 text-right flex-shrink-0">
                             {Math.round((volumes[track.src] ?? 0) * 100)}%
                           </span>
                         </div>
@@ -421,7 +555,7 @@
                             aria-label="Remove {track.name}"
                           >×</button>
                         </div>
-                        <audio bind:this={audioEls[track.src]} src={track.src} loop preload="auto"></audio>
+                        <audio bind:this={audioEls[track.src]} src={trackBlobUrls[track.src] || track.src} loop preload="none"></audio>
                       </div>
                     {/each}
                   </div>
