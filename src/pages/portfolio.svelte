@@ -26,6 +26,41 @@
   import { Badge } from 'flowbite-svelte';
   import { python } from 'svelte-highlight/languages/python';
 
+  const fabAssets = [
+    {
+      title: 'Advanced Thermal Vision Post Process',
+      img: '/img/fab/Termic_Thumbnail.png',
+      rating: 5.0,
+      reviews: 2,
+      shadowColor: '#00c3ff',
+      url: 'https://www.fab.com/sellers/Haksell'
+    },
+    {
+      title: 'Diseases Post Process Effects',
+      img: '/img/fab/DeseasePostProcess_Thumbnail.png',
+      rating: 5.0,
+      reviews: 1,
+      shadowColor: '#1aff00',
+      url: 'https://www.fab.com/sellers/Haksell'
+    },
+    {
+      title: 'Found Footage Camera Post Process',
+      img: '/img/fab/VHS_Thumbnail.png',
+      rating: 3.0,
+      reviews: 3,
+      shadowColor: '#ffaa00',
+      url: 'https://www.fab.com/sellers/Haksell'
+    },
+    {
+      title: '3D Minimap : Real-Time Holographic Radar',
+      img: '/img/fab/3dMinimap_Thumbnail.png',
+      rating: null,
+      reviews: 0,
+      shadowColor: '#00ffdd',
+      url: 'https://www.fab.com/sellers/Haksell'
+    }
+  ];
+
   export const images = [
     {
       alt: 'Screenshot 2',
@@ -268,7 +303,7 @@
     cardBodyStyle="background-image: url('/img/bomber_bg.png');"
     cardBackground="fixed inset-0 z-40 bg-black/50"
     cardBody="bg-center bg-scroll outline outline-2 outline-lime-500 rounded-xl"
-    cardClass="absolute w-40 rounded-xl ring-2 ring-lime-500/50"
+    cardClass="relative w-40 rounded-xl ring-2 ring-lime-500/50"
     >
     <!-- <h1 class="flex justify-center font-bold text-8xl title_black text-lime-500 title_green">Super Bomber</h1> -->
     
@@ -362,7 +397,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     cardBodyStyle="background-image: url('/img/tdtk_bg.png');"
     cardBackground="fixed inset-0 z-40 bg-black/50"
     cardBody="bg-[length:200px_100px] bg-center  outline outline-1 outline-white"
-    cardClass="absolute w-40 rounded-xl ring-2 ring-green-500/50">
+    cardClass="relative w-40 rounded-xl ring-2 ring-green-500/50">
     <!-- <h1 class="flex justify-center text-8xl text-lime-500 title_green font-['VCR']">Tower defense devkit</h1> -->
     
     
@@ -443,7 +478,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     shadowColor="#550055"
     cardBackground="fixed inset-0 z-40 bg-black/50"
     cardBody="bg-black/70 outline outline-2 outline-purple-500"
-    cardClass="absolute w-40 rounded-xl ring-2 ring-purple-500/50">
+    cardClass="relative w-40 rounded-xl ring-2 ring-purple-500/50">
     <!-- <h1 class="flex justify-center font-bold text-8xl text-orange-600 title_orange">Nano</h1> -->
     <!-- <br> -->
       <!-- <p class="flex justify-center text-white">A random mod generator for minecraft</p>
@@ -463,7 +498,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     cardTitle="Project 3"
     shadowColor="#aa5500"
     cardBackground="fixed inset-0 z-40 bg-black/50"
-    cardClass="absolute w-40 rounded-xl ring-2 ring-orange-500/30"
+    cardClass="relative w-40 rounded-xl ring-2 ring-orange-500/30"
     cardBody="bg-black/70 outline outline-1 outline-orange-600">
     <h1 class="flex justify-center font-bold text-8xl text-orange-600 title_orange">Skirmish</h1>
 
@@ -621,7 +656,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     cardTitle="Project 3"
     shadowColor="#aa5500"
     cardBackground="fixed inset-0 z-40 bg-black/50"
-    cardClass="absolute w-40 rounded-xl ring-2 ring-orange-300/30"
+    cardClass="relative w-40 rounded-xl ring-2 ring-orange-300/30"
     cardBody="bg-black/70 outline outline-1 outline-orange-300">
     <h1 class="flex justify-center font-bold text-8xl text-orange-300 title_orange">Suika</h1>
 
@@ -650,7 +685,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     cardTitle="Project asteroid"
     shadowColor="#220088"
     cardBackground="fixed inset-0 z-40 bg-black/50"
-    cardClass="absolute w-40 rounded-xl ring-2 ring-blue-900"
+    cardClass="relative w-40 rounded-xl ring-2 ring-blue-900"
     cardBody="bg-black/70 outline outline-1 outline-blue-900">
     <h1 class="flex justify-center font-bold text-8xl text-blue-900 title_darkblue">Suikasteroid</h1>
     <br>
@@ -677,7 +712,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     cardTitle="Project 3"
     shadowColor="#0055ff"
     cardBackground="fixed inset-0 z-40 bg-black/50"
-    cardClass="absolute w-40 rounded-xl ring-2 ring-blue-400/30"
+    cardClass="relative w-40 rounded-xl ring-2 ring-blue-400/30"
     cardBody="bg-[#4a97ff] rounded-xl outline outline-1 outline-blue-400">
     <h1 class="flex justify-center font-bold text-8xl text-white title_white">Platformer template</h1>
     
@@ -707,6 +742,34 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     </Project>
 
 
+    <!-- Moving Cube -->
+    <Project
+    cardImg="img/platformer.png"
+    cardTitle="Project 3"
+    shadowColor="#0055ff"
+    cardBackground="fixed inset-0 z-40 bg-black/50"
+    cardClass="relative w-40 rounded-xl ring-2 ring-blue-400/30"
+    cardBody="bg-[#4a97ff] rounded-xl outline outline-1 outline-blue-400">
+    <h1 class="flex justify-center font-bold text-8xl text-white title_white">Moving Cube</h1>
+
+    <br>
+    <iframe
+    title="Moving Cube"
+    class="flex mx-auto justify-center"
+    scrolling="no"
+    src="/MovingCube/platformer.html"
+    allow="cross-origin-isolated"
+    allowfullscreen
+    width="1200" height="675"
+    style="border:none; overflow:hidden"></iframe>
+    <a class="flex justify-center underline" href="/MovingCube/platformer.html"> Fullscreen </a>
+
+      <p class="flex justify-center text-white"></p>
+
+
+    </Project>
+
+
     <!-- Doodle Jump -->
     <Project
     cardImg="img/doodle.png"
@@ -714,7 +777,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     shadowColor="#ffff66"
     cardBodyStyle="background-image: url('/img/doodle_bg.png');"
     cardBackground="fixed inset-0 z-40 bg-black/50"
-    cardClass="absolute w-40 rounded-xl ring-2 ring-yellow-400/30"
+    cardClass="relative w-40 rounded-xl ring-2 ring-yellow-400/30"
     cardBody="bg-center outline outline-1 outline-gray">
 
     <img src="/img/doodle_title.png" alt="Exo" class="flex p-4 mx-auto drop-shadow-[00px_00px_10px_rgba(0,0,0,0.5)]"/>
@@ -745,7 +808,7 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     cardTitle="Suicalculator"
     shadowColor="#880088"
     cardBackground="fixed inset-0 z-40 bg-black/50"
-    cardClass="absolute w-40 rounded-xl ring-2 ring-purple-500"
+    cardClass="relative w-40 rounded-xl ring-2 ring-purple-500"
     cardBody="bg-black/70 outline outline-1 outline-purple-500">
     <h1 class="flex justify-center font-bold text-8xl text-purple-800 title_darkblue">Suikalculator</h1>
     <br>
@@ -772,6 +835,42 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
 
 
     </div>
+
+    <!-- Fab assets -->
+    <br>
+    <br>
+
+    <h1 class="title text-slate-900 font-verdana font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-center dark:text-white">
+      My Assets
+    </h1>
+
+    <p class="flex justify-center pt-4 text-white/70">
+      Unreal Engine assets published on
+      <a href="https://www.fab.com/sellers/Haksell" target="_blank" rel="noopener noreferrer" class="underline pl-1">Fab</a>
+    </p>
+
+    <div class="flex flex-row flex-wrap place-items-start justify-center pt-12 pl-32 pr-32 pb-16 h-fit size-auto">
+      {#each fabAssets as asset}
+        <a
+          href={asset.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="asset w-64 m-4 rounded-xl overflow-hidden bg-black/70 outline outline-1 outline-white/30"
+          style="--shadow-color:{asset.shadowColor};"
+        >
+          <img src={asset.img} alt={asset.title} class="w-full aspect-video object-cover" />
+          <div class="p-3">
+            <p class="text-white text-sm font-semibold">{asset.title}</p>
+            {#if asset.rating}
+              <p class="text-white/60 text-xs pt-1">
+                ★ {asset.rating.toFixed(1)} ({asset.reviews})
+              </p>
+            {/if}
+          </div>
+        </a>
+      {/each}
+    </div>
+
     </div> <!---->
     </div>
 
@@ -795,6 +894,18 @@ DF("java/generand/item/"+self.dico["Id"]+"Item.java") @ "super" << T("java/item/
     will-change: filter;
     /* transition: filter 300ms; */
     filter: drop-shadow(0 0 0.3em #ffffff7e);
+  }
+
+  .asset {
+    transition: 100ms;
+    filter: drop-shadow(0 0 0.4em var(--shadow-color));
+  }
+
+  .asset:hover {
+    z-index: 1;
+    filter: drop-shadow(0 0 1em var(--shadow-color));
+    scale: 108%;
+    transform: translate(0px, -10px);
   }
   .title_orange {
     will-change: filter;

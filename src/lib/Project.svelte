@@ -19,7 +19,7 @@ export let cardBackground;
 export let cardBody = "bg-black/70 outline outline-1 outline-white/30"
 export let cardBodyStyle = ""
 
-export let cardClass = "absolute w-40 rounded-xl ring-2 ring-white/30"; //ring-2  ring-white/30
+export let cardClass = "relative w-40 rounded-xl ring-2 ring-white/30"; //ring-2  ring-white/30
 const todo_card_class = "card"; //  ring-4 ring-red-400
 const done_card_class = "card_done outline outline-2 outline-green-500 outline-offset-4"; //  ring-4 ring-green-400
 
