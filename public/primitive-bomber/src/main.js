@@ -5,7 +5,11 @@
 // localement son propre déplacement, avec correction douce à chaque instantané.
 
 import { Renderer } from './gfx.js';
-import { Game, COLS, ROWS, TICK } from './game.js';
+import {
+  Game, COLS, ROWS, TICK, STATS, STAT_COUNT,
+  S_BOMBS, S_FIRE, S_SPEED, maxBombsOf, rangeOf, speedOf,
+  MODIFIERS, MOD_COUNT, hasMod,
+} from './game.js';
 import { Input } from './input.js';
 import { Fx, drawGame, PAL } from './view.js';
 import { Peer } from './net.js';
@@ -35,9 +39,12 @@ const app = {
   pingTimer: 0,
   rtt: 0,
   bombSeq: 0,              // client : compteur de poses (résiste aux pertes)
+  powerSeq: 0,             // idem pour la touche pouvoir
   pendingBomb: [false, false],
-  remote: { ax: 0, ay: 0, seq: 0 },
+  pendingPower: [false, false],
+  remote: { ax: 0, ay: 0, seq: 0, pseq: 0 },
   remoteAck: 0,
+  remoteAckPower: 0,
   sentGridVersion: -1,
 };
 
@@ -137,6 +144,50 @@ function toggleMute() {
 }
 
 $('#mute').addEventListener('click', toggleMute);
+
+// Légende des orbes, construite depuis la table des stats pour ne pas dériver.
+const RARITY_LABEL = ['Commun', 'Peu commun', 'Rare'];
+const STAT_HELP = [
+  'bombes simultanées',
+  'portée de l\'explosion',
+  'vitesse de déplacement',
+  'plus d\'orbes dans les blocs',
+  'blocs traversés par le souffle',
+  'bombes poussées d\'un coup',
+  'absorbe une explosion',
+  '+3 sur une stat au hasard',
+  '+1 à chaque stat commune',
+];
+
+/** Le tetrino d'un modifieur en SVG, pour le HUD et la légende. */
+function tetrinoSvg(m, px = 13) {
+  const cells = MODIFIERS[m].shape;
+  const w = Math.max(...cells.map((c) => c[0])) + 1;
+  const h = Math.max(...cells.map((c) => c[1])) + 1;
+  const side = px / Math.max(w, h);
+  const ox = (px - w * side) / 2, oy = (px - h * side) / 2;
+  const rects = cells.map(([x, y]) =>
+    `<rect x="${(ox + x * side).toFixed(2)}" y="${(oy + y * side).toFixed(2)}" ` +
+    `width="${(side * 0.86).toFixed(2)}" height="${(side * 0.86).toFixed(2)}" ` +
+    `rx="${(side * 0.2).toFixed(2)}"/>`).join('');
+  return `<svg viewBox="0 0 ${px} ${px}" width="${px}" height="${px}" ` +
+    `fill="currentColor" aria-hidden="true">${rects}</svg>`;
+}
+
+$('#legend').innerHTML = [0, 1, 2].map((r) => {
+  const rows = STATS
+    .map((s, i) => [s, i])
+    .filter(([s]) => s.rarity === r)
+    .map(([s, i]) => `<span class="pip" title="${STAT_HELP[i]}">` +
+      `<i style="background:${s.color}"></i>${s.label}</span>`)
+    .join('');
+  return `<div class="legend-row"><em>${RARITY_LABEL[r]}</em>${rows}</div>`;
+}).join('');
+
+$('#legend-mods').innerHTML = MODIFIERS.map((def, m) =>
+  `<span class="mod ${def.active ? 'act' : ''}" style="--mc:${def.color}" ` +
+  `title="${def.help}">${tetrinoSvg(m)}${def.label}` +
+  `${def.active ? `<u>${def.cd}s</u>` : ''}</span>`).join('');
 
 async function handleAction(act, btn) {
   switch (act) {
@@ -279,8 +330,10 @@ function startOnline(id) {
   app.mode = id === 0 ? 'host' : 'guest';
   app.localId = id;
   app.bombSeq = 0;
-  app.remote = { ax: 0, ay: 0, seq: 0 };
+  app.powerSeq = 0;
+  app.remote = { ax: 0, ay: 0, seq: 0, pseq: 0 };
   app.remoteAck = 0;
+  app.remoteAckPower = 0;
   app.sentGridVersion = -1;
   app.accum = 0;
   app.pendingBomb = [false, false];
@@ -319,7 +372,9 @@ function onMessage(m) {
       app.ready = true;
       app.accum = 0;
       app.bombSeq = 0;
+      app.powerSeq = 0;
       app.pendingBomb = [false, false];
+      app.pendingPower = [false, false];
       showScreen(null);
       $('#hud').classList.remove('hidden');
       startGameMusic();
@@ -363,6 +418,7 @@ function onMessage(m) {
       app.remote.ax = m.ax;
       app.remote.ay = m.ay;
       if (m.s > app.remote.seq) app.remote.seq = m.s;
+      if (m.w > app.remote.pseq) app.remote.pseq = m.w;
       break;
 
     case 'p':
@@ -434,7 +490,9 @@ function simulateAuthoritative(dt) {
   const in0 = local ? input.read(0) : input.readAny();
   const in1 = local ? input.read(1) : null;
   if (in0.bomb) app.pendingBomb[0] = true;
+  if (in0.power) app.pendingPower[0] = true;
   if (local && in1.bomb) app.pendingBomb[1] = true;
+  if (local && in1.power) app.pendingPower[1] = true;
 
   app.accum += dt;
   let ticks = 0;
@@ -444,15 +502,22 @@ function simulateAuthoritative(dt) {
 
     let p1;
     if (local) {
-      p1 = { ax: in1.ax, ay: in1.ay, bomb: app.pendingBomb[1] };
+      p1 = { ax: in1.ax, ay: in1.ay, bomb: app.pendingBomb[1], power: app.pendingPower[1] };
       app.pendingBomb[1] = false;
+      app.pendingPower[1] = false;
     } else {
       const fire = app.remote.seq > app.remoteAck;
       if (fire) app.remoteAck++;
-      p1 = { ax: app.remote.ax, ay: app.remote.ay, bomb: fire };
+      const zap = app.remote.pseq > app.remoteAckPower;
+      if (zap) app.remoteAckPower++;
+      p1 = { ax: app.remote.ax, ay: app.remote.ay, bomb: fire, power: zap };
     }
-    g.step(TICK, [{ ax: in0.ax, ay: in0.ay, bomb: app.pendingBomb[0] }, p1]);
+    g.step(TICK, [
+      { ax: in0.ax, ay: in0.ay, bomb: app.pendingBomb[0], power: app.pendingPower[0] },
+      p1,
+    ]);
     app.pendingBomb[0] = false;
+    app.pendingPower[0] = false;
   }
 
   consumeEvents();
@@ -479,6 +544,8 @@ function feedback(events) {
       audio.explosion(arg, (x - COLS / 2) / (COLS / 2));
     } else if (kind === 'die') {
       app.shake = 1;
+    } else if (kind === 'shield' || kind === 'boost') {
+      app.shake = Math.min(1, app.shake + 0.25);
     }
   }
 }
@@ -519,9 +586,10 @@ function netHostSend(dt) {
 function simulateGuest(dt) {
   const g = app.game;
   const inp = input.readAny();
-  if (inp.bomb) {
-    app.bombSeq++;
-    sendInput(inp, true);             // envoi immédiat : la pose ne doit pas attendre
+  if (inp.bomb || inp.power) {
+    if (inp.bomb) app.bombSeq++;
+    if (inp.power) app.powerSeq++;
+    sendInput(inp, true);             // envoi immédiat : l'action ne doit pas attendre
   }
 
   // prédiction locale du joueur contrôlé, à pas fixe
@@ -552,7 +620,7 @@ function simulateGuest(dt) {
 }
 
 function sendInput(inp, reliable) {
-  const msg = { t: 'i', ax: inp.ax, ay: inp.ay, s: app.bombSeq };
+  const msg = { t: 'i', ax: inp.ax, ay: inp.ay, s: app.bombSeq, w: app.powerSeq };
   if (reliable) app.peer?.sendCtl(msg);
   else app.peer?.sendState(msg);
 }
@@ -572,15 +640,57 @@ function updateBanner() {
   }
 }
 
+/**
+ * Les trois communes affichent leur valeur effective (bonus Général compris),
+ * les six autres n'apparaissent qu'une fois acquises — sinon la barre est
+ * illisible pour une information toujours nulle.
+ */
+function statPips(p) {
+  const out = [
+    [S_BOMBS, maxBombsOf(p)],
+    [S_FIRE, rangeOf(p)],
+    [S_SPEED, 1 + Math.round((speedOf(p) - 4.0) / 0.5)],
+  ];
+  for (let i = 0; i < STAT_COUNT; i++) {
+    if (i > S_SPEED && p.stats[i] > 0) out.push([i, p.stats[i]]);
+  }
+  return out;
+}
+
 function updateHud() {
   const g = app.game;
   for (let i = 0; i < 2; i++) {
     const el = $('#hud-p' + i);
     const p = g.players[i];
-    el.querySelector('[data-stat="bombs"]').textContent = p.maxBombs;
-    el.querySelector('[data-stat="range"]').textContent = p.range;
-    el.querySelector('[data-stat="speed"]').textContent =
-      Math.round((p.speed - 4.0) / 0.55) + 1;
+    const pips = statPips(p);
+
+    // le DOM n'est reconstruit que quand une valeur change
+    const sig = pips.map(([s, v]) => s + ':' + v).join(',');
+    if (el.dataset.sig !== sig) {
+      el.dataset.sig = sig;
+      el.querySelector('.hud-stats').innerHTML = pips.map(([s, v]) => {
+        const st = STATS[s];
+        return `<span class="pip" title="${st.label}">` +
+          `<i style="background:${st.color}"></i>${st.short}<b>${v}</b></span>`;
+      }).join('');
+    }
+
+    // Modifieurs : un jeton par tetrino possédé, grisé pendant sa recharge.
+    const mods = [];
+    for (let m = 0; m < MOD_COUNT; m++) if (hasMod(p, m)) mods.push(m);
+    const msig = mods.map((m) => m + ':' + Math.ceil(Math.max(0, p.cd[m]))).join(',');
+    if (el.dataset.msig !== msig) {
+      el.dataset.msig = msig;
+      el.querySelector('.hud-mods').innerHTML = mods.map((m) => {
+        const def = MODIFIERS[m];
+        const left = Math.max(0, p.cd[m]);
+        const cls = 'mod' + (def.active ? ' act' : '') + (left > 0 ? ' cooling' : '');
+        const badge = left > 0 ? `<u>${Math.ceil(left)}</u>` : '';
+        return `<span class="${cls}" title="${def.label} — ${def.help}" ` +
+          `style="--mc:${def.color}">${tetrinoSvg(m)}${badge}</span>`;
+      }).join('');
+    }
+
     el.querySelector('[data-stat="score"]').textContent = g.scores[i];
     el.style.opacity = p.alive ? '1' : '0.35';
   }
@@ -609,7 +719,8 @@ function render() {
   if (app.game && app.ready) {
     // Reste à parcourir du tick en cours : sans ça, la position n'avance que
     // les images où un tick est tombé, ce qui saccade au-dessus de 60 Hz.
-    drawGame(renderer, app.game, app.fx, app.time, Math.min(1, app.accum / TICK));
+    drawGame(renderer, app.game, app.fx, app.time,
+      Math.min(1, app.accum / TICK), app.mode === 'local' ? -1 : app.localId);
   } else {
     drawIdle(renderer, app.time);
   }

@@ -14,11 +14,8 @@
 <div id="hud" class="hidden">
   <div class="hud-side" id="hud-p0">
     <div class="hud-name">JOUEUR 1</div>
-    <div class="hud-stats">
-      <span title="Bombes">◉ <b data-stat="bombs">1</b></span>
-      <span title="Portée">✳ <b data-stat="range">2</b></span>
-      <span title="Vitesse">» <b data-stat="speed">1</b></span>
-    </div>
+    <div class="hud-stats"></div>
+    <div class="hud-mods"></div>
     <div class="hud-score" data-stat="score">0</div>
   </div>
   <div class="hud-mid">
@@ -26,11 +23,8 @@
   </div>
   <div class="hud-side right" id="hud-p1">
     <div class="hud-name">JOUEUR 2</div>
-    <div class="hud-stats">
-      <span title="Bombes">◉ <b data-stat="bombs">1</b></span>
-      <span title="Portée">✳ <b data-stat="range">2</b></span>
-      <span title="Vitesse">» <b data-stat="speed">1</b></span>
-    </div>
+    <div class="hud-stats"></div>
+    <div class="hud-mods"></div>
     <div class="hud-score" data-stat="score">0</div>
   </div>
 </div>
@@ -53,8 +47,21 @@
     </div>
     <div class="help">
       <b>Commandes</b> — Joueur 1 : <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> + <kbd>Espace</kbd>.
-      Joueur 2 (local) : <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd> + <kbd>Entrée</kbd>.
+      pouvoir <kbd>E</kbd>.<br>
+      Joueur 2 (local) : <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd> + <kbd>Entrée</kbd>,
+      pouvoir <kbd>Ctrl droit</kbd>.<br>
       En ligne, chacun joue avec les deux jeux de touches. <kbd>Échap</kbd> pour quitter une partie.
+    </div>
+
+    <div class="help">
+      <b>Orbes</b> — les blocs détruits en libèrent, à ramasser au sol.
+      <div id="legend" class="legend"></div>
+    </div>
+
+    <div class="help">
+      <b>Modifieurs</b> — plus rares, chacun a sa forme. Ceux marqués d'un point
+      se déclenchent avec la touche pouvoir, les autres sont permanents.
+      <div id="legend-mods" class="legend-mods"></div>
     </div>
   </section>
 

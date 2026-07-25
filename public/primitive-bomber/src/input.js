@@ -1,10 +1,13 @@
 // input.js — clavier, deux jeux de touches, avec détection de front pour la bombe.
 
 const SETS = [
-  { up: ['KeyW'], down: ['KeyS'], left: ['KeyA'], right: ['KeyD'], bomb: ['Space'] },
+  {
+    up: ['KeyW'], down: ['KeyS'], left: ['KeyA'], right: ['KeyD'],
+    bomb: ['Space'], power: ['KeyE'],
+  },
   {
     up: ['ArrowUp'], down: ['ArrowDown'], left: ['ArrowLeft'], right: ['ArrowRight'],
-    bomb: ['Enter', 'NumpadEnter', 'ShiftRight'],
+    bomb: ['Enter', 'NumpadEnter', 'ShiftRight'], power: ['ControlRight'],
   },
 ];
 
@@ -16,6 +19,7 @@ export class Input {
   constructor(target = window) {
     this.keys = new Set();
     this.bombQueued = [false, false];
+    this.powerQueued = [false, false];
 
     target.addEventListener('keydown', (e) => {
       if (BLOCKED.has(e.code) && e.target === document.body) e.preventDefault();
@@ -23,6 +27,7 @@ export class Input {
       this.keys.add(e.code);
       for (let i = 0; i < SETS.length; i++) {
         if (SETS[i].bomb.includes(e.code)) this.bombQueued[i] = true;
+        if (SETS[i].power.includes(e.code)) this.powerQueued[i] = true;
       }
     });
 
@@ -38,12 +43,14 @@ export class Input {
     };
   }
 
-  /** Lit un jeu de touches et consomme le front de la touche bombe. */
+  /** Lit un jeu de touches et consomme les fronts bombe et pouvoir. */
   read(which) {
     const { ax, ay } = this._axis(SETS[which]);
     const bomb = this.bombQueued[which];
+    const power = this.powerQueued[which];
     this.bombQueued[which] = false;
-    return { ax, ay, bomb };
+    this.powerQueued[which] = false;
+    return { ax, ay, bomb, power };
   }
 
   /** En ligne : les deux jeux de touches pilotent le joueur local. */
@@ -51,11 +58,14 @@ export class Input {
     const a = this._axis(SETS[0]);
     const b = this._axis(SETS[1]);
     const bomb = this.bombQueued[0] || this.bombQueued[1];
+    const power = this.powerQueued[0] || this.powerQueued[1];
     this.bombQueued[0] = this.bombQueued[1] = false;
+    this.powerQueued[0] = this.powerQueued[1] = false;
     return {
       ax: Math.sign(a.ax + b.ax),
       ay: Math.sign(a.ay + b.ay),
       bomb,
+      power,
     };
   }
 }
