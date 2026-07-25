@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softglow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <radialGradient id="vignette" cx="50%" cy="45%" r="62%">
+      <stop offset="0%" stop-color="#0d1430"/>
+      <stop offset="100%" stop-color="#04060f"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="34" fill="url(#vignette)"/>
+
+  <!-- damier de murs, comme la grille du jeu -->
+  <g opacity="0.85">
+    <g fill="#0b1230" stroke="#3f63ff" stroke-width="3" filter="url(#softglow)" opacity="0.55">
+      <rect x="86"  y="118" width="58" height="58" rx="10"/>
+      <rect x="227" y="118" width="58" height="58" rx="10"/>
+      <rect x="368" y="118" width="58" height="58" rx="10"/>
+      <rect x="86"  y="259" width="58" height="58" rx="10"/>
+      <rect x="368" y="259" width="58" height="58" rx="10"/>
+    </g>
+    <g fill="#150f30" stroke="#a06bff" stroke-width="3" filter="url(#softglow)" opacity="0.5">
+      <rect x="227" y="330" width="52" height="52" rx="12"/>
+      <rect x="157" y="189" width="52" height="52" rx="12"/>
+      <rect x="303" y="189" width="52" height="52" rx="12"/>
+    </g>
+  </g>
+
+  <!-- bombe : disque + jauge de mèche circulaire en contour -->
+  <g transform="translate(256 256)" filter="url(#glow)">
+    <circle r="46" fill="#3a2a18"/>
+    <circle r="46" fill="none" stroke="#ffb03a" stroke-width="4" opacity="0.75"/>
+    <circle r="15" fill="#fff0c8"/>
+    <circle r="70" fill="none" stroke="#221a10" stroke-width="10"/>
+    <path d="M 0 -70 A 70 70 0 1 1 -60.6 35" fill="none" stroke="#ff9330"
+          stroke-width="11" stroke-linecap="round"/>
+  </g>
+
+  <!-- les deux joueurs, de simples disques -->
+  <g filter="url(#glow)">
+    <circle cx="120" cy="212" r="26" fill="#0d3f48"/>
+    <circle cx="120" cy="212" r="26" fill="none" stroke="#35f0ff" stroke-width="5"/>
+    <circle cx="120" cy="212" r="9" fill="#eafcff"/>
+
+    <circle cx="398" cy="352" r="26" fill="#48123c"/>
+    <circle cx="398" cy="352" r="26" fill="none" stroke="#ff4fd8" stroke-width="5"/>
+    <circle cx="398" cy="352" r="9" fill="#ffeaf9"/>
+  </g>
+
+  <g font-family="Verdana, Geneva, sans-serif" text-anchor="middle" filter="url(#softglow)">
+    <text x="256" y="443" font-size="41" font-weight="bold" letter-spacing="5" fill="#35f0ff">PRIMITIVE</text>
+    <text x="256" y="482" font-size="41" font-weight="bold" letter-spacing="5" fill="#ff4fd8">BOMBER</text>
+  </g>
+</svg>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>PRIMITIVE BOMBER</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="gl"></canvas>
+
+<!-- ============ HUD en jeu ============ -->
+<div id="hud" class="hidden">
+  <div class="hud-side" id="hud-p0">
+    <div class="hud-name">JOUEUR 1</div>
+    <div class="hud-stats">
+      <span title="Bombes">◉ <b data-stat="bombs">1</b></span>
+      <span title="Portée">✳ <b data-stat="range">2</b></span>
+      <span title="Vitesse">» <b data-stat="speed">1</b></span>
+    </div>
+    <div class="hud-score" data-stat="score">0</div>
+  </div>
+  <div class="hud-mid">
+    <div id="hud-status">—</div>
+  </div>
+  <div class="hud-side right" id="hud-p1">
+    <div class="hud-name">JOUEUR 2</div>
+    <div class="hud-stats">
+      <span title="Bombes">◉ <b data-stat="bombs">1</b></span>
+      <span title="Portée">✳ <b data-stat="range">2</b></span>
+      <span title="Vitesse">» <b data-stat="speed">1</b></span>
+    </div>
+    <div class="hud-score" data-stat="score">0</div>
+  </div>
+</div>
+
+<div id="banner" class="hidden"></div>
+
+<button id="mute" title="Couper le son (M)" aria-label="Couper le son">♪</button>
+
+<!-- ============ Menus ============ -->
+<div id="ui">
+
+  <!-- Menu principal -->
+  <section class="panel" data-screen="menu">
+    <h1>PRIMITIVE<span>BOMBER</span></h1>
+    <p class="sub">2 joueurs · pair-à-pair · sans serveur</p>
+    <div class="btn-row">
+      <button class="btn primary" data-act="host">Héberger</button>
+      <button class="btn" data-act="join">Rejoindre</button>
+      <button class="btn ghost" data-act="local">Local (même clavier)</button>
+    </div>
+    <div class="help">
+      <b>Commandes</b> — Joueur 1 : <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> + <kbd>Espace</kbd>.
+      Joueur 2 (local) : <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd> + <kbd>Entrée</kbd>.
+      En ligne, chacun joue avec les deux jeux de touches. <kbd>Échap</kbd> pour quitter une partie.
+    </div>
+  </section>
+
+  <!-- Héberger -->
+  <section class="panel hidden" data-screen="host">
+    <h2>Héberger une partie</h2>
+
+    <div class="step">
+      <div class="step-head"><span class="num">1</span> Envoie ce code à ton ami</div>
+      <textarea id="host-offer" readonly placeholder="génération…"></textarea>
+      <div class="btn-row tight">
+        <button class="btn small" data-copy="host-offer">Copier le code</button>
+        <span class="hint" id="host-offer-hint"></span>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="num">2</span> Colle sa réponse ici</div>
+      <textarea id="host-answer" placeholder="PB1-…"></textarea>
+      <div class="btn-row tight">
+        <button class="btn small primary" data-act="host-connect">Se connecter</button>
+        <button class="btn small ghost" data-act="paste" data-target="host-answer">Coller</button>
+      </div>
+    </div>
+
+    <div class="status" id="host-status">En attente…</div>
+    <button class="btn ghost small back" data-act="menu">← Retour</button>
+  </section>
+
+  <!-- Rejoindre -->
+  <section class="panel hidden" data-screen="join">
+    <h2>Rejoindre une partie</h2>
+
+    <div class="step">
+      <div class="step-head"><span class="num">1</span> Colle le code reçu</div>
+      <textarea id="join-offer" placeholder="PB1-…"></textarea>
+      <div class="btn-row tight">
+        <button class="btn small primary" data-act="join-generate">Générer ma réponse</button>
+        <button class="btn small ghost" data-act="paste" data-target="join-offer">Coller</button>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="num">2</span> Renvoie-lui ta réponse</div>
+      <textarea id="join-answer" readonly placeholder="…"></textarea>
+      <div class="btn-row tight">
+        <button class="btn small" data-copy="join-answer">Copier la réponse</button>
+        <span class="hint" id="join-answer-hint"></span>
+      </div>
+    </div>
+
+    <div class="status" id="join-status">En attente…</div>
+    <button class="btn ghost small back" data-act="menu">← Retour</button>
+  </section>
+
+  <!-- Erreur fatale -->
+  <section class="panel hidden" data-screen="fatal">
+    <h2>Oups</h2>
+    <div class="status" id="fatal-msg"></div>
+  </section>
+
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

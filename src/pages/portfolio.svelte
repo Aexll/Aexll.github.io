@@ -333,12 +333,56 @@
     
     <br>
     <img src="/img/bombergif.gif" alt="Bomber" class="flex mx-auto rounded-xl drop-shadow-[00px_00px_10px_rgba(0,0,0,0.9)] outline outline-2 outline-white"/>
-    
-  
 
-  
-  
+
+
+
+
   </Project>
+
+    <!-- Primitive Bomber -->
+    <!-- Copié dans public/primitive-bomber/ par tools/deploy-to-site.mjs
+         du dépôt du jeu — ne pas éditer ce dossier à la main. -->
+
+    <Project
+    cardImg="img/Card_PrimitiveBomber.svg"
+    cardTitle="Primitive Bomber"
+    shadowColor="#35f0ff"
+    cardBackground="fixed inset-0 z-40 bg-black/60"
+    cardBody="bg-black/80 outline outline-2 outline-cyan-400/60 rounded-xl"
+    cardClass="relative w-40 rounded-xl ring-2 ring-cyan-400/40"
+    >
+
+    <h1 class="flex justify-center font-bold text-6xl text-cyan-300 drop-shadow-[0px_0px_14px_rgba(53,240,255,0.8)]">PRIMITIVE</h1>
+    <h1 class="flex justify-center font-bold text-6xl text-pink-400 drop-shadow-[0px_0px_14px_rgba(255,79,216,0.8)]">BOMBER</h1>
+
+    <br>
+
+    <iframe
+    title="Primitive Bomber"
+    class="flex mx-auto justify-center"
+    scrolling="no"
+    src="/primitive-bomber/index.html"
+    allowfullscreen
+    width="1200" height="675"
+    style="border:none; overflow:hidden"></iframe>
+
+    <a class="flex justify-center underline text-cyan-300" href="/primitive-bomber/index.html">Fullscreen</a>
+
+    <br>
+
+    <div class="bg-black/40 max-w-2xl mx-auto p-4 rounded-md">
+      <p class="flex justify-center text-white">a 2-player bomberman, peer-to-peer, no server at all</p>
+      <p class="flex justify-center text-white">host a game, send the code to a friend, he sends one back — that's it</p>
+      <br>
+      <p class="flex justify-center text-white">everything is drawn with signed distance fields in a single WebGL2 draw call,</p>
+      <p class="flex justify-center text-white">glow and bloom included — no sprite, no texture, only primitives</p>
+      <br>
+      <p class="flex justify-center text-white text-sm opacity-70">move : WASD or arrows &nbsp;·&nbsp; bomb : space or enter</p>
+      <p class="flex justify-center text-white text-sm opacity-70">click inside the frame first, so it grabs the keyboard</p>
+    </div>
+
+    </Project>
 
     <!-- Generand -->
     <Project
