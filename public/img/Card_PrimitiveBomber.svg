@@ -1,60 +1,114 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="7" result="b"/>
+    <radialGradient id="pbBg" cx="50%" cy="42%" r="72%">
+      <stop offset="0%" stop-color="#101a3e"/>
+      <stop offset="60%" stop-color="#070c1e"/>
+      <stop offset="100%" stop-color="#03050d"/>
+    </radialGradient>
+    <radialGradient id="pbCyanWash" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#35f0ff" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#35f0ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pbPinkWash" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff4fd8" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#ff4fd8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pbBombHalo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffb03a" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ffb03a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pbEdge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#35f0ff"/>
+      <stop offset="100%" stop-color="#ff4fd8"/>
+    </linearGradient>
+
+    <filter id="pbGlow" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="softglow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="3" result="b"/>
+    <filter id="pbSoft" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <radialGradient id="vignette" cx="50%" cy="45%" r="62%">
-      <stop offset="0%" stop-color="#0d1430"/>
-      <stop offset="100%" stop-color="#04060f"/>
-    </radialGradient>
   </defs>
 
-  <rect width="512" height="512" rx="34" fill="url(#vignette)"/>
+  <rect width="512" height="512" rx="38" fill="url(#pbBg)"/>
+  <ellipse cx="96" cy="96" rx="240" ry="240" fill="url(#pbCyanWash)"/>
+  <ellipse cx="416" cy="416" rx="240" ry="240" fill="url(#pbPinkWash)"/>
 
-  <!-- damier de murs, comme la grille du jeu -->
-  <g opacity="0.85">
-    <g fill="#0b1230" stroke="#3f63ff" stroke-width="3" filter="url(#softglow)" opacity="0.55">
-      <rect x="86"  y="118" width="58" height="58" rx="10"/>
-      <rect x="227" y="118" width="58" height="58" rx="10"/>
-      <rect x="368" y="118" width="58" height="58" rx="10"/>
-      <rect x="86"  y="259" width="58" height="58" rx="10"/>
-      <rect x="368" y="259" width="58" height="58" rx="10"/>
-    </g>
-    <g fill="#150f30" stroke="#a06bff" stroke-width="3" filter="url(#softglow)" opacity="0.5">
-      <rect x="227" y="330" width="52" height="52" rx="12"/>
-      <rect x="157" y="189" width="52" height="52" rx="12"/>
-      <rect x="303" y="189" width="52" height="52" rx="12"/>
+  <!-- damier au sol -->
+  <g fill="#080d20" stroke="#1e2f66" stroke-width="2" opacity="0.9">
+    <rect x="36"  y="36"  width="80" height="80" rx="14"/>
+    <rect x="124" y="36"  width="80" height="80" rx="14"/>
+    <rect x="212" y="36"  width="80" height="80" rx="14"/>
+    <rect x="300" y="36"  width="80" height="80" rx="14"/>
+    <rect x="388" y="36"  width="80" height="80" rx="14"/>
+    <rect x="36"  y="124" width="80" height="80" rx="14"/>
+    <rect x="124" y="124" width="80" height="80" rx="14"/>
+    <rect x="212" y="124" width="80" height="80" rx="14"/>
+    <rect x="300" y="124" width="80" height="80" rx="14"/>
+    <rect x="388" y="124" width="80" height="80" rx="14"/>
+    <rect x="36"  y="212" width="80" height="80" rx="14"/>
+    <rect x="124" y="212" width="80" height="80" rx="14"/>
+    <rect x="212" y="212" width="80" height="80" rx="14"/>
+    <rect x="300" y="212" width="80" height="80" rx="14"/>
+    <rect x="388" y="212" width="80" height="80" rx="14"/>
+    <rect x="36"  y="300" width="80" height="80" rx="14"/>
+    <rect x="124" y="300" width="80" height="80" rx="14"/>
+    <rect x="212" y="300" width="80" height="80" rx="14"/>
+    <rect x="300" y="300" width="80" height="80" rx="14"/>
+    <rect x="388" y="300" width="80" height="80" rx="14"/>
+    <rect x="36"  y="388" width="80" height="80" rx="14"/>
+    <rect x="124" y="388" width="80" height="80" rx="14"/>
+    <rect x="212" y="388" width="80" height="80" rx="14"/>
+    <rect x="300" y="388" width="80" height="80" rx="14"/>
+    <rect x="388" y="388" width="80" height="80" rx="14"/>
+  </g>
+
+  <!-- murs pleins, aux positions paires comme dans le jeu -->
+  <g filter="url(#pbSoft)">
+    <g fill="#0b1332" stroke="#3f63ff" stroke-width="5">
+      <rect x="128" y="128" width="80" height="80" rx="16"/>
+      <rect x="304" y="128" width="80" height="80" rx="16"/>
+      <rect x="128" y="304" width="80" height="80" rx="16"/>
+      <rect x="304" y="304" width="80" height="80" rx="16"/>
     </g>
   </g>
 
-  <!-- bombe : disque + jauge de mèche circulaire en contour -->
-  <g transform="translate(256 256)" filter="url(#glow)">
-    <circle r="46" fill="#3a2a18"/>
-    <circle r="46" fill="none" stroke="#ffb03a" stroke-width="4" opacity="0.75"/>
-    <circle r="15" fill="#fff0c8"/>
-    <circle r="70" fill="none" stroke="#221a10" stroke-width="10"/>
-    <path d="M 0 -70 A 70 70 0 1 1 -60.6 35" fill="none" stroke="#ff9330"
-          stroke-width="11" stroke-linecap="round"/>
+  <!-- briques destructibles -->
+  <g filter="url(#pbSoft)" opacity="0.95">
+    <g fill="#170f33" stroke="#a06bff" stroke-width="5">
+      <rect x="218" y="42"  width="68" height="68" rx="16"/>
+      <rect x="42"  y="218" width="68" height="68" rx="16"/>
+      <rect x="394" y="218" width="68" height="68" rx="16"/>
+      <rect x="218" y="394" width="68" height="68" rx="16"/>
+      <rect x="394" y="42"  width="68" height="68" rx="16"/>
+      <rect x="42"  y="394" width="68" height="68" rx="16"/>
+    </g>
+  </g>
+
+  <!-- bombe : disque + jauge de mèche circulaire -->
+  <circle cx="256" cy="256" r="120" fill="url(#pbBombHalo)"/>
+  <g transform="translate(256 256)" filter="url(#pbGlow)">
+    <circle r="44" fill="#3b2a16"/>
+    <circle r="44" fill="none" stroke="#ffb03a" stroke-width="5" opacity="0.8"/>
+    <circle r="15" fill="#fff3d2"/>
+    <circle r="66" fill="none" stroke="#241a0e" stroke-width="12"/>
+    <path d="M 0 -66 A 66 66 0 1 1 -57.2 33" fill="none" stroke="#ff9330"
+          stroke-width="12" stroke-linecap="round"/>
   </g>
 
   <!-- les deux joueurs, de simples disques -->
-  <g filter="url(#glow)">
-    <circle cx="120" cy="212" r="26" fill="#0d3f48"/>
-    <circle cx="120" cy="212" r="26" fill="none" stroke="#35f0ff" stroke-width="5"/>
-    <circle cx="120" cy="212" r="9" fill="#eafcff"/>
+  <g filter="url(#pbGlow)">
+    <circle cx="76" cy="76" r="30" fill="#0c3d47"/>
+    <circle cx="76" cy="76" r="30" fill="none" stroke="#35f0ff" stroke-width="6"/>
+    <circle cx="76" cy="76" r="11" fill="#eafdff"/>
 
-    <circle cx="398" cy="352" r="26" fill="#48123c"/>
-    <circle cx="398" cy="352" r="26" fill="none" stroke="#ff4fd8" stroke-width="5"/>
-    <circle cx="398" cy="352" r="9" fill="#ffeaf9"/>
+    <circle cx="436" cy="436" r="30" fill="#4a1140"/>
+    <circle cx="436" cy="436" r="30" fill="none" stroke="#ff4fd8" stroke-width="6"/>
+    <circle cx="436" cy="436" r="11" fill="#ffeafa"/>
   </g>
 
-  <g font-family="Verdana, Geneva, sans-serif" text-anchor="middle" filter="url(#softglow)">
-    <text x="256" y="443" font-size="41" font-weight="bold" letter-spacing="5" fill="#35f0ff">PRIMITIVE</text>
-    <text x="256" y="482" font-size="41" font-weight="bold" letter-spacing="5" fill="#ff4fd8">BOMBER</text>
-  </g>
+  <rect x="4" y="4" width="504" height="504" rx="36" fill="none"
+        stroke="url(#pbEdge)" stroke-width="5" opacity="0.85"/>
 </svg>

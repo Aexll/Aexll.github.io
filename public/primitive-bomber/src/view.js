@@ -2,7 +2,7 @@
 
 import { rgb, mixColor, scaleColor } from './gfx.js';
 import {
-  COLS, ROWS, T_EMPTY, T_SOLID, T_BRICK, FUSE, FLAME_TIME,
+  COLS, ROWS, T_EMPTY, T_SOLID, T_BRICK, FUSE, FLAME_TIME, LETHAL_TIME,
   PU_BOMB, PU_FIRE, PU_SPEED, F_CENTER, F_H,
 } from './game.js';
 
@@ -107,12 +107,17 @@ export class Fx {
 
 // ---------------------------------------------------------------- scène
 
-export function drawGame(g, game, fx, time) {
+/**
+ * @param {number} alpha avancement dans le tick courant (0..1). La simulation
+ *   tourne à pas fixe ; sans ce mélange, un écran à 144 Hz afficherait la même
+ *   position pendant plus d'une image sur deux, puis un saut d'un tick entier.
+ */
+export function drawGame(g, game, fx, time, alpha = 1) {
   drawGrid(g, game, time);
   drawPowerups(g, game, time);
   drawBombs(g, game, time);
   drawFlames(g, game);
-  drawPlayers(g, game, time);
+  drawPlayers(g, game, time, alpha);
   fx.draw(g);
 }
 
@@ -199,38 +204,46 @@ function drawBombs(g, game, time) {
 
 function drawFlames(g, game) {
   for (const f of game.flames) {
-    const life = f.t / FLAME_TIME;              // 1 -> 0
-    const grow = Math.min(1, (1 - life) / 0.14); // montée très rapide
-    const fade = Math.pow(life, 0.55);
+    const life = f.t / FLAME_TIME;               // 1 -> 0
+    const grow = Math.min(1, (1 - life) / 0.1);  // montée quasi instantanée
+    // Le coeur blanc marque exactement la fenêtre mortelle ; la traînée orange
+    // qui suit n'est que de la braise, traversable sans risque.
+    const hot = Math.max(0, Math.min(1, (f.t - (FLAME_TIME - LETHAL_TIME)) / 0.07 + 0.4));
+    const embers = Math.pow(life, 1.9);
     const cx = f.cx + 0.5, cy = f.cy + 0.5;
 
     const long = 0.5 * grow;
-    const thin = 0.33 * grow * (0.6 + fade * 0.4);
+    const thin = 0.32 * grow * (0.55 + hot * 0.45);
     const hx = f.k === F_H ? long : f.k === F_CENTER ? 0.44 * grow : thin;
     const hy = f.k === F_H ? thin : f.k === F_CENTER ? 0.44 * grow : long;
 
     g.box(cx, cy, hx, hy, Math.min(hx, hy) * 0.9, PAL.flame,
-      { alpha: fade * 0.85, glow: 1.6 * fade, falloff: 4.5 });
-    g.box(cx, cy, hx * 0.55, hy * 0.55, Math.min(hx, hy) * 0.5, PAL.flameHot,
-      { alpha: fade, glow: 2.2 * fade, falloff: 6 });
+      { alpha: embers * 0.8, glow: (0.5 + 1.4 * hot) * embers, falloff: 4.5 });
+    if (hot > 0.01) {
+      g.box(cx, cy, hx * 0.62, hy * 0.62, Math.min(hx, hy) * 0.55, PAL.flameHot,
+        { alpha: hot, glow: 2.4 * hot, falloff: 6 });
+    }
   }
 }
 
-function drawPlayers(g, game, time) {
+function drawPlayers(g, game, time, alpha) {
   for (const p of game.players) {
     if (!p.alive) continue;
     const color = PAL.players[p.id] || PAL.white;
     if (p.invuln > 0 && Math.floor(time * 14) % 2 === 0) continue;
 
+    const x = p.px + (p.x - p.px) * alpha;
+    const y = p.py + (p.y - p.py) * alpha;
+
     const pulse = 0.85 + 0.15 * Math.sin(time * 4 + p.id * 2);
-    g.disc(p.x, p.y, p.r * 0.78, scaleColor(color, 0.55),
+    g.disc(x, y, p.r * 0.78, scaleColor(color, 0.55),
       { alpha: 1, glow: 0.9 * pulse, falloff: 5.5 });
-    g.disc(p.x, p.y, p.r * 0.34, PAL.white, { alpha: 0.9, glow: 1.3, falloff: 9 });
-    g.ring(p.x, p.y, p.r, 0.03, color, { alpha: 1, glow: 1.3 * pulse, falloff: 8 });
+    g.disc(x, y, p.r * 0.34, PAL.white, { alpha: 0.9, glow: 1.3, falloff: 9 });
+    g.ring(x, y, p.r, 0.03, color, { alpha: 1, glow: 1.3 * pulse, falloff: 8 });
 
     // petit repère d'orientation, toujours une primitive
     const d = Math.hypot(p.dirx, p.diry) || 1;
-    g.disc(p.x + (p.dirx / d) * p.r * 0.72, p.y + (p.diry / d) * p.r * 0.72, 0.045,
+    g.disc(x + (p.dirx / d) * p.r * 0.72, y + (p.diry / d) * p.r * 0.72, 0.045,
       color, { alpha: 1, glow: 1.4, falloff: 14 });
   }
 }

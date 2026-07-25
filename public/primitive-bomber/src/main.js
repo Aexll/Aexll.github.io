@@ -607,7 +607,9 @@ function render() {
 
   renderer.begin(cam);
   if (app.game && app.ready) {
-    drawGame(renderer, app.game, app.fx, app.time);
+    // Reste à parcourir du tick en cours : sans ça, la position n'avance que
+    // les images où un tick est tombé, ce qui saccade au-dessus de 60 Hz.
+    drawGame(renderer, app.game, app.fx, app.time, Math.min(1, app.accum / TICK));
   } else {
     drawIdle(renderer, app.time);
   }

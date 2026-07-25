@@ -11,7 +11,10 @@ export const T_SOLID = 1;
 export const T_BRICK = 2;
 
 export const FUSE = 2.4;          // secondes avant explosion
-export const FLAME_TIME = 0.5;    // durée d'une flamme
+export const FLAME_TIME = 0.5;    // durée d'une flamme à l'écran
+// Une flamme ne tue qu'au moment du souffle. Elle reste visible bien plus
+// longtemps, mais on peut traverser les braises sans risque.
+export const LETHAL_TIME = 0.14;
 export const PLAYER_R = 0.31;
 export const BOMB_R = 0.36;
 export const TICK = 1 / 60;
@@ -73,6 +76,7 @@ function generateMap(seed) {
 function makePlayer(id, x, y) {
   return {
     id, x, y, r: PLAYER_R,
+    px: x, py: y,         // position au début du tick, pour l'interpolation de rendu
     alive: true,
     maxBombs: 1,
     active: 0,
@@ -107,7 +111,8 @@ export class Game {
     this.over = false;
     this.winner = -1;      // -1 = en cours, 0/1 = gagnant, 2 = égalité
     this.overTimer = 0;
-    this._flameSet = new Set();
+    this._flameSet = new Set();    // toutes les cases en feu : propage les chaînes
+    this._lethalSet = new Set();   // seulement celles qui viennent de souffler
   }
 
   tileAt(x, y) {
@@ -145,13 +150,15 @@ export class Game {
   }
 
   _updateFlames(dt) {
-    const set = this._flameSet;
-    set.clear();
+    this._flameSet.clear();
+    this._lethalSet.clear();
     for (let i = this.flames.length - 1; i >= 0; i--) {
       const f = this.flames[i];
       f.t -= dt;
-      if (f.t <= 0) this.flames.splice(i, 1);
-      else set.add(f.cy * COLS + f.cx);
+      if (f.t <= 0) { this.flames.splice(i, 1); continue; }
+      const key = f.cy * COLS + f.cx;
+      this._flameSet.add(key);
+      if (f.t > FLAME_TIME - LETHAL_TIME) this._lethalSet.add(key);
     }
   }
 
@@ -252,7 +259,10 @@ export class Game {
   }
 
   _addFlame(cx, cy, kind) {
+    // Ajouté aux deux ensembles : _updateFlames a déjà tourné pour ce tick, et
+    // un souffle doit tuer dès l'instant où il apparaît.
     this._flameSet.add(cy * COLS + cx);
+    this._lethalSet.add(cy * COLS + cx);
     const existing = this.flames.find((f) => f.cx === cx && f.cy === cy);
     if (existing) {
       existing.t = FLAME_TIME;
@@ -329,6 +339,10 @@ export class Game {
   }
 
   movePlayer(p, inp, dt) {
+    // Mémorisé ici plutôt que dans step() : le client appelle movePlayer
+    // directement pour prédire son propre déplacement.
+    p.px = p.x;
+    p.py = p.y;
     if (!p.alive) return;
     let ax = inp.ax || 0, ay = inp.ay || 0;
     const len = Math.hypot(ax, ay);
@@ -365,7 +379,7 @@ export class Game {
     for (const p of this.players) {
       if (!p.alive || p.invuln > 0) continue;
       const key = Math.floor(p.y) * COLS + Math.floor(p.x);
-      if (this._flameSet.has(key)) {
+      if (this._lethalSet.has(key)) {
         p.alive = false;
         died = true;
         this.events.push(['die', p.x, p.y, p.id]);
@@ -446,8 +460,7 @@ export class Game {
     this.bombs = keep;
 
     this.flames = s.f.map(([cx, cy, t, k]) => ({ cx, cy, t, k }));
-    this._flameSet.clear();
-    for (const f of this.flames) this._flameSet.add(f.cy * COLS + f.cx);
+    this._rebuildFlameSets();
 
     this.powerups = s.u.map(([cx, cy, kind]) => ({ cx, cy, kind }));
 
@@ -472,8 +485,7 @@ export class Game {
       this.flames[i].t -= dt;
       if (this.flames[i].t <= 0) this.flames.splice(i, 1);
     }
-    this._flameSet.clear();
-    for (const f of this.flames) this._flameSet.add(f.cy * COLS + f.cx);
+    this._rebuildFlameSets();
 
     this.time += dt;
     for (const p of this.players) {
@@ -482,6 +494,19 @@ export class Game {
       const k = 1 - Math.pow(0.0008, dt);   // lissage exponentiel ~ 20 Hz
       p.x += (p.tx - p.x) * k;
       p.y += (p.ty - p.y) * k;
+      // Déjà lissé à chaque image : l'interpolation de tick ne doit pas s'y ajouter.
+      p.px = p.x;
+      p.py = p.y;
+    }
+  }
+
+  _rebuildFlameSets() {
+    this._flameSet.clear();
+    this._lethalSet.clear();
+    for (const f of this.flames) {
+      const key = f.cy * COLS + f.cx;
+      this._flameSet.add(key);
+      if (f.t > FLAME_TIME - LETHAL_TIME) this._lethalSet.add(key);
     }
   }
 
