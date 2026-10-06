@@ -11,22 +11,18 @@
 <canvas id="gl"></canvas>
 
 <!-- ============ HUD en jeu ============ -->
+<!-- Les cartes de joueurs sont construites par main.js : leur nombre dépend
+     de la partie en cours. -->
 <div id="hud" class="hidden">
-  <div class="hud-side" id="hud-p0">
-    <div class="hud-name">JOUEUR 1</div>
-    <div class="hud-stats"></div>
-    <div class="hud-mods"></div>
-    <div class="hud-score" data-stat="score">0</div>
-  </div>
+  <div class="hud-col left" id="hud-c0"></div>
   <div class="hud-mid">
     <div id="hud-status">—</div>
   </div>
-  <div class="hud-side right" id="hud-p1">
-    <div class="hud-name">JOUEUR 2</div>
-    <div class="hud-stats"></div>
-    <div class="hud-mods"></div>
-    <div class="hud-score" data-stat="score">0</div>
-  </div>
+  <div class="hud-col right" id="hud-c1"></div>
+</div>
+<div id="hud-bottom" class="hidden">
+  <div class="hud-col left" id="hud-c2"></div>
+  <div class="hud-col right" id="hud-c3"></div>
 </div>
 
 <div id="banner" class="hidden"></div>
@@ -39,18 +35,22 @@
   <!-- Menu principal -->
   <section class="panel" data-screen="menu">
     <h1>PRIMITIVE<span>BOMBER</span></h1>
-    <p class="sub">2 joueurs · pair-à-pair · sans serveur</p>
+    <p class="sub">2 à 4 joueurs · pair-à-pair · sans serveur</p>
     <div class="btn-row">
       <button class="btn primary" data-act="host">Héberger</button>
       <button class="btn" data-act="join">Rejoindre</button>
-      <button class="btn ghost" data-act="local">Local (même clavier)</button>
+    </div>
+    <div class="btn-row tight">
+      <span class="row-label">Même clavier</span>
+      <button class="btn small ghost" data-act="local" data-n="2">2 joueurs</button>
+      <button class="btn small ghost" data-act="local" data-n="3">3 joueurs</button>
+      <button class="btn small ghost" data-act="local" data-n="4">4 joueurs</button>
     </div>
     <div class="help">
-      <b>Commandes</b> — Joueur 1 : <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> + <kbd>Espace</kbd>.
-      pouvoir <kbd>E</kbd>.<br>
-      Joueur 2 (local) : <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd> + <kbd>Entrée</kbd>,
-      pouvoir <kbd>Ctrl droit</kbd>.<br>
-      En ligne, chacun joue avec les deux jeux de touches. <kbd>Échap</kbd> pour quitter une partie.
+      <b>Commandes</b>
+      <div id="legend-keys" class="legend-keys"></div>
+      En ligne, chacun joue avec n'importe lequel de ces jeux de touches.
+      <kbd>Échap</kbd> pour quitter une partie.
     </div>
 
     <div class="help">
@@ -68,26 +68,18 @@
   <!-- Héberger -->
   <section class="panel hidden" data-screen="host">
     <h2>Héberger une partie</h2>
+    <p class="sub">Un code par invité — jusqu'à trois. Lance dès que tu veux.</p>
 
-    <div class="step">
-      <div class="step-head"><span class="num">1</span> Envoie ce code à ton ami</div>
-      <textarea id="host-offer" readonly placeholder="génération…"></textarea>
-      <div class="btn-row tight">
-        <button class="btn small" data-copy="host-offer">Copier le code</button>
-        <span class="hint" id="host-offer-hint"></span>
-      </div>
+    <!-- un bloc d'échange de codes par place, construit par main.js -->
+    <div id="host-slots"></div>
+
+    <div class="btn-row tight">
+      <button class="btn primary" data-act="host-launch" id="host-launch" disabled>
+        En attente d'un invité…
+      </button>
     </div>
 
-    <div class="step">
-      <div class="step-head"><span class="num">2</span> Colle sa réponse ici</div>
-      <textarea id="host-answer" placeholder="PB1-…"></textarea>
-      <div class="btn-row tight">
-        <button class="btn small primary" data-act="host-connect">Se connecter</button>
-        <button class="btn small ghost" data-act="paste" data-target="host-answer">Coller</button>
-      </div>
-    </div>
-
-    <div class="status" id="host-status">En attente…</div>
+    <div class="status" id="host-status">Génération des codes…</div>
     <button class="btn ghost small back" data-act="menu">← Retour</button>
   </section>
 

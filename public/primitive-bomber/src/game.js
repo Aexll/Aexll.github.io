@@ -16,6 +16,8 @@ export const FLAME_TIME = 0.5;    // durée d'une flamme à l'écran
 // longtemps, mais on peut traverser les braises sans risque.
 export const LETHAL_TIME = 0.14;
 export const PLAYER_R = 0.31;
+export const MAX_PLAYERS = 4;
+export const MIN_PLAYERS = 2;
 export const BOMB_R = 0.36;
 export const TICK = 1 / 60;
 export const PUSH_SLIDE = 0.14;   // durée du glissement d'une bombe poussée
@@ -56,7 +58,9 @@ export const MAX_STAT = 9;
 
 export const M_EMPATHY = 0, M_DETONATOR = 1, M_VERGLAS = 2, M_FLAMES = 3,
              M_SWAP = 4, M_WANDER = 5, M_BARRICADE = 6, M_DECOY = 7,
-             M_CAMO = 8, M_FRAG = 9, M_GHOST = 10, M_MORPH = 11;
+             M_CAMO = 8, M_FRAG = 9, M_GHOST = 10, M_MORPH = 11,
+             M_OVERHEAT = 12, M_DIAGONAL = 13, M_BURY = 14, M_TRAMPOLINE = 15,
+             M_FIREBALL = 16, M_NUKE = 17, M_JACKPOT = 18, M_GAMBLE = 19;
 
 /**
  * Chaque modifieur porte une forme en carrés — un « tetrino » — qui l'identifie
@@ -100,6 +104,30 @@ export const MODIFIERS = [
   { key: 'morph', label: 'Métamorphose', color: '#a3e635', active: true, cd: 10,
     shape: [[0, 0], [1, 0], [2, 0], [1, 1], [1, 2]],
     help: 'transforme toutes les orbes du terrain en bombes' },
+  { key: 'overheat', label: 'Surchauffe', color: '#ff2d55', active: true, cd: 10,
+    shape: [[0, 0], [1, 0], [2, 0], [3, 0], [0, 1]],
+    help: 'pendant 1 s, toutes les bombes ont une portée infinie' },
+  { key: 'diagonal', label: 'Diagonale', color: '#14b8a6', active: false, cd: 0,
+    shape: [[0, 0], [1, 1], [2, 2]],
+    help: 'tes bombes explosent aussi en diagonale' },
+  { key: 'bury', label: 'Enfouissement', color: '#a16207', active: true, cd: 5,
+    shape: [[0, 0], [1, 0], [2, 0], [0, 1], [1, 1], [2, 1]],
+    help: 'enterre toutes les bombes : mèche figée jusqu\'à ce qu\'on marche dessus' },
+  { key: 'trampoline', label: 'Tremplin', color: '#d946ef', active: false, cd: 0,
+    shape: [[0, 1], [1, 0], [2, 0], [3, 1]],
+    help: 'tes bombes projettent au lieu de tuer et de faire sauter les autres' },
+  { key: 'fireball', label: 'Boules de feu', color: '#f59e0b', active: false, cd: 0,
+    shape: [[1, 0], [2, 0], [0, 1], [1, 1], [1, 2]],
+    help: 'tes bombes lancent une boule de feu au lieu d\'exploser en croix' },
+  { key: 'nuke', label: 'Nuke', color: '#dc2626', active: false, cd: 0,
+    shape: [[1, 0], [0, 1], [1, 1], [2, 1], [0, 2], [2, 2]],
+    help: 'onde de choc circulaire qui traverse tous les obstacles' },
+  { key: 'jackpot', label: 'Jackpot', color: '#fde047', active: true, cd: 60,
+    shape: [[0, 0], [1, 0], [2, 0], [1, 1], [0, 2], [1, 2], [2, 2]],
+    help: 'bombes, portée et vitesse à 10 pendant 11 s, et tu es invincible' },
+  { key: 'gamble', label: 'Gambling', color: '#10b981', active: true, cd: 10,
+    shape: [[0, 0], [1, 0], [0, 1], [2, 1], [1, 2], [2, 2]],
+    help: 'une chance sur deux : une orbe au hasard, sinon une bombe' },
 ];
 
 export const MOD_COUNT = MODIFIERS.length;
@@ -110,6 +138,13 @@ const PERSIST_FIRE = 2.0;    // durée du brasier laissé par Flammes
 const WANDER_EVERY = 0.5;    // cadence de déplacement de Baladeuse
 const CAMO_REVEAL = 0.5;     // les bombes camouflées réapparaissent à ce reste de mèche
 const DECOY_LIFE = 6;        // sécurité si le clone ne rencontre jamais de mur
+const OVERHEAT_TIME = 1.0;   // fenêtre de portée infinie ouverte par Surchauffe
+const JACKPOT_TIME = 11;     // durée du bonus Jackpot
+const JACKPOT_LEVEL = 10;    // niveau imposé aux trois stats communes
+const INFINITE_RANGE = COLS + ROWS;
+const FIREBALL_SPEED = 7;    // cases par seconde
+const LAUNCH_DECAY = 0.02;   // amortissement par seconde de la poussée de Tremplin
+const LAUNCH_FORCE = 9;
 
 /** Poids de tirage par rareté : commun, peu commun, rare. */
 const RARITY_WEIGHTS = [62, 28, 10];
@@ -134,10 +169,15 @@ const PRECISION_BONUS = 3;
 
 const lvl = (p, s) => p.stats[s];
 
-export const maxBombsOf = (p) => Math.min(MAX_BOMBS, 1 + lvl(p, S_BOMBS) + lvl(p, S_GENERAL));
-export const rangeOf = (p) => Math.min(MAX_RANGE, 2 + lvl(p, S_FIRE) + lvl(p, S_GENERAL));
-export const speedOf = (p) =>
-  Math.min(MAX_SPEED, BASE_SPEED + (lvl(p, S_SPEED) + lvl(p, S_GENERAL)) * 0.5);
+// Jackpot court-circuite les plafonds : c'est tout l'intérêt du pouvoir.
+const jack = (p) => (p.jackpot > 0 ? JACKPOT_LEVEL : -1);
+
+export const maxBombsOf = (p) => (jack(p) > 0 ? JACKPOT_LEVEL
+  : Math.min(MAX_BOMBS, 1 + lvl(p, S_BOMBS) + lvl(p, S_GENERAL)));
+export const rangeOf = (p) => (jack(p) > 0 ? JACKPOT_LEVEL
+  : Math.min(MAX_RANGE, 2 + lvl(p, S_FIRE) + lvl(p, S_GENERAL)));
+export const speedOf = (p) => (jack(p) > 0 ? BASE_SPEED + JACKPOT_LEVEL * 0.5
+  : Math.min(MAX_SPEED, BASE_SPEED + (lvl(p, S_SPEED) + lvl(p, S_GENERAL)) * 0.5));
 /** Nombre de blocs qu'un rayon d'explosion traverse. */
 export const pierceOf = (p) => 1 + lvl(p, S_PIERCE);
 /** Nombre de bombes poussées d'un coup. 0 = ne pousse pas. */
@@ -157,13 +197,27 @@ export function mulberry32(seed) {
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 
-/** Les 5 cases autour de chaque spawn restent libres pour ne pas s'auto-piéger. */
-function isSpawnZone(x, y) {
-  const near = (sx, sy) => Math.abs(x - sx) + Math.abs(y - sy) <= 2;
-  return near(1, 1) || near(COLS - 2, ROWS - 2);
+/**
+ * Coins de départ, dans l'ordre d'attribution : les deux premiers sont opposés
+ * en diagonale, pour qu'une partie à deux reste exactement celle d'avant.
+ */
+export const SPAWNS = [
+  [1.5, 1.5],
+  [COLS - 1.5, ROWS - 1.5],
+  [COLS - 1.5, 1.5],
+  [1.5, ROWS - 1.5],
+];
+
+/** Les 5 cases autour de chaque spawn utilisé restent libres pour ne pas s'auto-piéger. */
+function isSpawnZone(x, y, count) {
+  for (let i = 0; i < count; i++) {
+    const sx = Math.floor(SPAWNS[i][0]), sy = Math.floor(SPAWNS[i][1]);
+    if (Math.abs(x - sx) + Math.abs(y - sy) <= 2) return true;
+  }
+  return false;
 }
 
-function generateMap(seed) {
+function generateMap(seed, count) {
   const rnd = mulberry32(seed);
   const grid = new Uint8Array(COLS * ROWS);
   for (let y = 0; y < ROWS; y++) {
@@ -171,7 +225,7 @@ function generateMap(seed) {
       const i = y * COLS + x;
       if (x === 0 || y === 0 || x === COLS - 1 || y === ROWS - 1) grid[i] = T_SOLID;
       else if (x % 2 === 0 && y % 2 === 0) grid[i] = T_SOLID;
-      else if (!isSpawnZone(x, y) && rnd() < 0.82) grid[i] = T_BRICK;
+      else if (!isSpawnZone(x, y, count) && rnd() < 0.82) grid[i] = T_BRICK;
       else grid[i] = T_EMPTY;
     }
   }
@@ -187,37 +241,62 @@ function makePlayer(id, x, y) {
     stats: new Array(STAT_COUNT).fill(0),
     mods: 0,                             // masque de bits des modifieurs possédés
     cd: new Array(MOD_COUNT).fill(0),    // recharges en cours
+    jackpot: 0,                          // reste du bonus Jackpot
+    lx: 0, ly: 0,                        // vitesse résiduelle donnée par Tremplin
     dirx: 0, diry: 1,
     invuln: 0.6,          // court sursis au démarrage du round
+    gone: false,          // pair déconnecté : la place reste vide pour la partie
   };
 }
 
 export class Game {
-  constructor(seed = 1) {
-    this.scores = [0, 0];
+  constructor(seed = 1, count = 2) {
+    this.count = Math.max(MIN_PLAYERS, Math.min(MAX_PLAYERS, count | 0));
+    this.scores = new Array(this.count).fill(0);
     this.reset(seed);
   }
 
   reset(seed) {
     this.seed = seed >>> 0;
-    this.grid = generateMap(this.seed);
+    this.grid = generateMap(this.seed, this.count);
     this.gridVersion = 0;
     this.time = 0;
-    this.players = [
-      makePlayer(0, 1.5, 1.5),
-      makePlayer(1, COLS - 1.5, ROWS - 1.5),
-    ];
+    const gone = this.players ? this.players.map((p) => p.gone) : [];
+    this.players = [];
+    for (let i = 0; i < this.count; i++) {
+      const p = makePlayer(i, SPAWNS[i][0], SPAWNS[i][1]);
+      // Un joueur parti ne revient pas au round suivant : sa place reste vide.
+      if (gone[i]) { p.gone = true; p.alive = false; }
+      this.players.push(p);
+    }
     this.bombs = [];
     this.flames = [];
     this.orbs = [];
     this.drops = [];       // modifieurs au sol
     this.decoys = [];      // clones lancés par Leurre
+    this.balls = [];       // boules de feu en vol
+    this.overheat = 0;     // fenêtre de portée infinie (Surchauffe)
     this.events = [];
     this.over = false;
-    this.winner = -1;      // -1 = en cours, 0/1 = gagnant, 2 = égalité
+    this.winner = -1;      // -1 = en cours, >= 0 = gagnant, -2 = égalité
     this.overTimer = 0;
     this._flameSet = new Set();    // toutes les cases en feu : propage les chaînes
     this._lethalSet = new Set();   // seulement celles qui viennent de souffler
+  }
+
+  /**
+   * Un pair a quitté la partie : son joueur disparaît pour de bon. Appelé par
+   * l'hôte seul — les clients l'apprennent par l'instantané suivant.
+   */
+  dropPlayer(id) {
+    const p = this.players[id];
+    if (!p || p.gone) return;
+    p.gone = true;
+    if (p.alive) {
+      p.alive = false;
+      this.events.push(['die', p.x, p.y, p.id]);
+    }
+    this._checkOver();
   }
 
   tileAt(x, y) {
@@ -239,14 +318,17 @@ export class Game {
   step(dt, inputs) {
     this.time += dt;
 
+    if (this.overheat > 0) this.overheat -= dt;
     for (let i = 0; i < this.players.length; i++) {
       const p = this.players[i];
       for (let m = 0; m < MOD_COUNT; m++) if (p.cd[m] > 0) p.cd[m] -= dt;
+      if (p.jackpot > 0) p.jackpot -= dt;
       if (inputs[i] && inputs[i].power) this.usePower(i);
     }
 
     this._updateFlames(dt);
     this._updateBombs(dt, inputs);
+    this._updateBalls(dt);
     this._updateDecoys(dt);
 
     for (let i = 0; i < this.players.length; i++) {
@@ -324,6 +406,44 @@ export class Game {
       return true;
     }
 
+    if (m === M_OVERHEAT) {
+      this.overheat = OVERHEAT_TIME;
+      return true;
+    }
+
+    if (m === M_JACKPOT) {
+      p.jackpot = JACKPOT_TIME;
+      return true;
+    }
+
+    if (m === M_GAMBLE) {
+      const cx = Math.floor(p.x), cy = Math.floor(p.y);
+      if (Math.random() < 0.5) {
+        if (this.tileAt(cx, cy) !== T_EMPTY) return false;
+        const stat = this._rollStat();
+        this.orbs.push({
+          cx, cy, stat,
+          i: this.orbs.filter((o) => o.cx === cx && o.cy === cy).length,
+          bt: this.time,
+        });
+        this.events.push(['orb', cx + 0.5, cy + 0.5, stat]);
+        return true;
+      }
+      return !!this.placeBomb(p.id);
+    }
+
+    if (m === M_BURY) {
+      // Enterre tout le terrain, y compris les bombes adverses.
+      let any = false;
+      for (const b of this.bombs) {
+        if (b.dead || b.buried) continue;
+        b.buried = true;
+        any = true;
+        this.events.push(['bury', b.x, b.y, b.owner]);
+      }
+      return any;
+    }
+
     if (m === M_MORPH) {
       if (!this.orbs.length) return false;
       for (const o of this.orbs) {
@@ -385,11 +505,27 @@ export class Game {
 
     for (const b of this.bombs) {
       if (b.dead) continue;
+
+      // Enfouissement : la mèche est figée. On déterre dès qu'un joueur ou une
+      // autre bombe passe dessus ; la mèche repart alors d'où elle s'était arrêtée.
+      if (b.buried) {
+        const walkedOn = this.players.some((pl) => this._occupies(pl, b.cx, b.cy))
+          || this.bombs.some((o) => o !== b && !o.dead && o.cx === b.cx && o.cy === b.cy);
+        if (walkedOn || this._flameSet.has(b.cy * COLS + b.cx)) {
+          b.buried = false;
+          this.events.push(['unbury', b.x, b.y, b.owner]);
+        } else {
+          continue;
+        }
+      }
+
       b.fuse -= dt;
       if (b.st > 0) b.st = Math.max(0, b.st - dt);
       if (b.st === 0) { this._glide(b); this._wander(b, dt); }
-      // une flamme qui touche une bombe la fait sauter immédiatement
-      if (this._flameSet.has(b.cy * COLS + b.cx)) b.fuse = 0;
+      // une flamme qui touche une bombe la fait sauter immédiatement — sauf si
+      // son propriétaire a Tremplin, auquel cas elle est projetée, pas amorcée.
+      if (this._flameSet.has(b.cy * COLS + b.cx) && !b.noChain) b.fuse = 0;
+      b.noChain = false;
     }
 
     // explosions en chaîne, traitées itérativement
@@ -434,6 +570,11 @@ export class Game {
       gdx: 0, gdy: 0,          // élan conservé par Verglas
       wt: 0,                   // minuterie de Baladeuse
       free: false,             // ne compte pas dans la limite de bombes
+      buried: false,           // mèche figée par Enfouissement
+      noChain: false,          // projetée par Tremplin au lieu d'être amorcée
+      // direction du regard au moment de la pose, utilisée par Boules de feu
+      fdx: Math.abs(p.dirx) >= Math.abs(p.diry) ? Math.sign(p.dirx) || 1 : 0,
+      fdy: Math.abs(p.dirx) >= Math.abs(p.diry) ? 0 : Math.sign(p.diry) || 1,
     };
     this.bombs.push(bomb);
     p.active++;
@@ -451,20 +592,88 @@ export class Game {
     const owner = this.players[bomb.owner];
     if (owner && !bomb.free) owner.active = Math.max(0, owner.active - 1);
 
+    const has = (m) => !!owner && hasMod(owner, m);
     const opt = {
       owner,
-      empathy: !!owner && hasMod(owner, M_EMPATHY),
-      frag: !!owner && hasMod(owner, M_FRAG),
-      persist: !!owner && hasMod(owner, M_FLAMES),
+      empathy: has(M_EMPATHY),
+      frag: has(M_FRAG),
+      persist: has(M_FLAMES),
+      tramp: has(M_TRAMPOLINE),
     };
+    // Surchauffe ouvre une fenêtre où toute explosion porte à travers la carte.
+    const range = this.overheat > 0 ? INFINITE_RANGE : bomb.range;
 
     if (!(opt.empathy && this._occupies(owner, bomb.cx, bomb.cy))) {
-      this._addFlame(bomb.cx, bomb.cy, F_CENTER, opt.persist);
+      this._addFlame(bomb.cx, bomb.cy, F_CENTER, opt.persist, bomb.owner);
     }
-    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-      this._ray(bomb.cx, bomb.cy, dx, dy, bomb.range, bomb.pierce, bomb.owner, opt, 0);
+
+    if (has(M_NUKE)) {
+      this._nuke(bomb, range, opt);
+    } else if (has(M_FIREBALL)) {
+      // La boule part dans la direction que regardait le poseur.
+      this.balls.push({
+        x: bomb.x, y: bomb.y, dx: bomb.fdx || 1, dy: bomb.fdy || 0,
+        owner: bomb.owner, left: range, persist: opt.persist,
+        pierce: bomb.pierce, acc: 0,
+      });
+    } else {
+      const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+      if (has(M_DIAGONAL)) dirs.push([1, 1], [1, -1], [-1, 1], [-1, -1]);
+      for (const [dx, dy] of dirs) {
+        this._ray(bomb.cx, bomb.cy, dx, dy, range, bomb.pierce, bomb.owner, opt, 0);
+      }
     }
     this.events.push(['boom', bomb.x, bomb.y, bomb.range]);
+  }
+
+  /** Nuke : disque plein, qui ignore complètement les murs. */
+  _nuke(bomb, range, opt) {
+    const r2 = range * range;
+    for (let dy = -range; dy <= range; dy++) {
+      for (let dx = -range; dx <= range; dx++) {
+        if (dx * dx + dy * dy > r2) continue;
+        const x = bomb.cx + dx, y = bomb.cy + dy;
+        const t = this.tileAt(x, y);
+        if (t === T_SOLID) continue;          // le mur dur ne brûle pas, mais n'arrête rien
+        if (t === T_BRICK) this._destroyBrick(x, y, bomb.owner);
+        if (opt.empathy && this._occupies(opt.owner, x, y)) continue;
+        this._addFlame(x, y, dx === 0 ? F_V : F_H, opt.persist, bomb.owner);
+        const other = this.bombAt(x, y);
+        if (other && opt.tramp) this._launchBomb(other, dx, dy);
+      }
+    }
+  }
+
+  /** Tremplin : au lieu d'amorcer la bombe voisine, on l'expédie plus loin. */
+  _launchBomb(b, dx, dy) {
+    b.noChain = true;
+    const ax = Math.abs(dx), ay = Math.abs(dy);
+    b.gdx = ax >= ay ? Math.sign(dx) : 0;
+    b.gdy = ax >= ay ? 0 : Math.sign(dy);
+    if (!b.gdx && !b.gdy) b.gdx = 1;
+  }
+
+  _updateBalls(dt) {
+    for (let i = this.balls.length - 1; i >= 0; i--) {
+      const q = this.balls[i];
+      const prevX = Math.floor(q.x), prevY = Math.floor(q.y);
+      q.x += q.dx * FIREBALL_SPEED * dt;
+      q.y += q.dy * FIREBALL_SPEED * dt;
+      const cx = Math.floor(q.x), cy = Math.floor(q.y);
+
+      if (cx !== prevX || cy !== prevY) {
+        const t = this.tileAt(cx, cy);
+        if (t === T_SOLID) { this.balls.splice(i, 1); continue; }
+        if (t === T_BRICK) {
+          this._destroyBrick(cx, cy, q.owner);
+          this._addFlame(cx, cy, F_CENTER, q.persist, q.owner);
+          if (--q.pierce <= 0) { this.balls.splice(i, 1); continue; }
+        } else {
+          this._addFlame(cx, cy, F_CENTER, q.persist, q.owner);
+        }
+        if (--q.left <= 0) { this.balls.splice(i, 1); continue; }
+      }
+    }
   }
 
   /**
@@ -504,14 +713,17 @@ export class Game {
 
       if (t === T_BRICK) {
         this._destroyBrick(x, y, ownerId);
-        this._addFlame(x, y, kind, opt.persist);
+        this._addFlame(x, y, kind, opt.persist, ownerId);
         if (--left <= 0) break;   // Percée : le rayon continue au-delà
         continue;
       }
 
-      this._addFlame(x, y, kind, opt.persist);
+      this._addFlame(x, y, kind, opt.persist, ownerId);
       const other = this.bombAt(x, y);
-      if (other) other.fuse = 0;   // sera traité par la boucle de chaîne
+      if (!other) continue;
+      // Tremplin : la bombe voisine est projetée au lieu d'être amorcée.
+      if (opt.tramp) this._launchBomb(other, dx, dy);
+      else other.fuse = 0;        // sera traité par la boucle de chaîne
     }
   }
 
@@ -576,7 +788,7 @@ export class Game {
     return S_BOMBS;
   }
 
-  _addFlame(cx, cy, kind, persist = false) {
+  _addFlame(cx, cy, kind, persist = false, ownerId = -1) {
     // Ajouté aux deux ensembles : _updateFlames a déjà tourné pour ce tick, et
     // un souffle doit tuer dès l'instant où il apparaît.
     this._flameSet.add(cy * COLS + cx);
@@ -586,9 +798,10 @@ export class Game {
     if (existing) {
       existing.t = Math.max(existing.t, life);
       existing.p = existing.p || (persist ? 1 : 0);
+      existing.o = ownerId;
       if (kind === F_CENTER) existing.k = F_CENTER;
     } else {
-      this.flames.push({ cx, cy, t: life, k: kind, p: persist ? 1 : 0 });
+      this.flames.push({ cx, cy, t: life, k: kind, p: persist ? 1 : 0, o: ownerId });
     }
     // Les orbes au sol brûlent — sauf celles nées dans ce même tick, sinon un
     // bloc détruirait l'orbe qu'il vient de libérer, et plus rien n'apparaîtrait.
@@ -754,6 +967,18 @@ export class Game {
     p.px = p.x;
     p.py = p.y;
     if (!p.alive) return;
+
+    // Poussée résiduelle de Tremplin, appliquée avant les commandes : elle
+    // s'amortit vite mais on ne la contrôle pas.
+    if (p.lx || p.ly) {
+      p.x += p.lx * dt;
+      p.y += p.ly * dt;
+      this._resolve(p);
+      const k = Math.pow(LAUNCH_DECAY, dt);
+      p.lx *= k; p.ly *= k;
+      if (Math.abs(p.lx) < 0.05 && Math.abs(p.ly) < 0.05) { p.lx = 0; p.ly = 0; }
+    }
+
     let ax = inp.ax || 0, ay = inp.ay || 0;
     const len = Math.hypot(ax, ay);
     if (len > 1) { ax /= len; ay /= len; }
@@ -813,9 +1038,26 @@ export class Game {
     if (this.over) return;
     let died = false;
     for (const p of this.players) {
-      if (!p.alive || p.invuln > 0) continue;
+      // Jackpot rend invincible : ni bouclier consommé, ni éjection, rien.
+      if (!p.alive || p.invuln > 0 || p.jackpot > 0) continue;
       const key = Math.floor(p.y) * COLS + Math.floor(p.x);
       if (!this._lethalSet.has(key)) continue;
+
+      // Tremplin : sa propre bombe ne le tue pas, elle l'éjecte.
+      if (hasMod(p, M_TRAMPOLINE)) {
+        const f = this.flames.find((x) => x.cy * COLS + x.cx === key);
+        if (f && f.o === p.id) {
+          const bx = f.cx + 0.5, by = f.cy + 0.5;
+          let dx = p.x - bx, dy = p.y - by;
+          if (Math.abs(dx) < 1e-3 && Math.abs(dy) < 1e-3) { dx = p.dirx; dy = p.diry; }
+          const len = Math.hypot(dx, dy) || 1;
+          p.lx = (dx / len) * LAUNCH_FORCE;
+          p.ly = (dy / len) * LAUNCH_FORCE;
+          p.invuln = Math.max(p.invuln, 0.35);
+          this.events.push(['launch', p.x, p.y, p.id]);
+          continue;
+        }
+      }
 
       // Le Bouclier encaisse un souffle et laisse un court sursis pour sortir.
       if (p.stats[S_SHIELD] > 0) {
@@ -829,15 +1071,20 @@ export class Game {
       this.events.push(['die', p.x, p.y, p.id]);
     }
     if (!died) return;
+    this._checkOver();
+  }
 
+  /** Le round s'arrête dès qu'il ne reste qu'un survivant — ou plus personne. */
+  _checkOver() {
+    if (this.over) return;
     const alive = this.players.filter((p) => p.alive);
+    if (alive.length > 1) return;
+    this.over = true;
     if (alive.length === 1) {
-      this.over = true;
       this.winner = alive[0].id;
       this.scores[this.winner]++;
-    } else if (alive.length === 0) {
-      this.over = true;
-      this.winner = 2;
+    } else {
+      this.winner = -2;
     }
   }
 
@@ -849,18 +1096,22 @@ export class Game {
     return {
       t: 's',
       p: this.players.map((p) => [
-        r2(p.x), r2(p.y), p.alive ? 1 : 0, p.active, r2(p.invuln), p.mods,
+        r2(p.x), r2(p.y), p.alive ? 1 : 0, p.active, r2(p.invuln), p.mods, r2(p.jackpot),
+        p.gone ? 1 : 0,
         // seules les recharges en cours voyagent, il y en a rarement plus d'une
         p.cd.map((v, m) => (v > 0 ? [m, r2(v)] : null)).filter(Boolean),
         ...p.stats,
       ]),
       b: this.bombs.map((b) => [
         b.cx, b.cy, r2(b.fuse), b.range, b.owner, r2(b.st), b.sdx, b.sdy,
+        b.buried ? 1 : 0,
       ]),
-      f: this.flames.map((f) => [f.cx, f.cy, r2(f.t), f.k, f.p || 0]),
+      f: this.flames.map((f) => [f.cx, f.cy, r2(f.t), f.k, f.p || 0, f.o]),
       u: this.orbs.map((o) => [o.cx, o.cy, o.stat, o.i]),
       m: this.drops.map((d) => [d.cx, d.cy, d.mod]),
       d: this.decoys.map((k) => [r2(k.x), r2(k.y), r2(k.dx), r2(k.dy), k.owner]),
+      q: this.balls.map((q) => [r2(q.x), r2(q.y), q.dx, q.dy, q.owner]),
+      h: r2(Math.max(0, this.overheat)),
       g: this.gridVersion,
       o: this.over ? 1 : 0,
       w: this.winner,
@@ -884,9 +1135,11 @@ export class Game {
       p.active = a[3];
       p.invuln = a[4];
       p.mods = a[5];
+      p.jackpot = a[6];
       p.cd.fill(0);
-      for (const [m, v] of a[6]) p.cd[m] = v;
-      for (let k = 0; k < STAT_COUNT; k++) p.stats[k] = a[7 + k] || 0;
+      p.gone = a[7] === 1;
+      for (const [m, v] of a[8]) p.cd[m] = v;
+      for (let k = 0; k < STAT_COUNT; k++) p.stats[k] = a[9 + k] || 0;
       if (i === localId) {
         authoritative = { x: a[0], y: a[1] };
       } else {
@@ -897,7 +1150,7 @@ export class Game {
 
     // Bombes : on conserve l'objet existant pour garder une mèche fluide.
     const keep = [];
-    for (const [cx, cy, fuse, range, owner, st, sdx, sdy] of s.b) {
+    for (const [cx, cy, fuse, range, owner, st, sdx, sdy, buried] of s.b) {
       let b = this.bombs.find((o) => o.cx === cx && o.cy === cy);
       if (!b) {
         b = { cx, cy, x: cx + 0.5, y: cy + 0.5, dead: false, pass: new Set(),
@@ -908,18 +1161,20 @@ export class Game {
         }
       }
       b.fuse = fuse; b.range = range; b.owner = owner;
-      b.st = st; b.sdx = sdx; b.sdy = sdy;
+      b.st = st; b.sdx = sdx; b.sdy = sdy; b.buried = buried === 1;
       keep.push(b);
     }
     this.bombs = keep;
 
-    this.flames = s.f.map(([cx, cy, t, k, p]) => ({ cx, cy, t, k, p }));
+    this.flames = s.f.map(([cx, cy, t, k, p, o]) => ({ cx, cy, t, k, p, o }));
     this._rebuildFlameSets();
 
     // `bt` n'est utile qu'à l'hôte : lui seul fait exploser et brûler.
     this.orbs = s.u.map(([cx, cy, stat, i]) => ({ cx, cy, stat, i, bt: 0 }));
     this.drops = s.m.map(([cx, cy, mod]) => ({ cx, cy, mod, bt: 0 }));
     this.decoys = s.d.map(([x, y, dx, dy, owner]) => ({ x, y, dx, dy, owner, t: 1 }));
+    this.balls = s.q.map(([x, y, dx, dy, owner]) => ({ x, y, dx, dy, owner }));
+    this.overheat = s.h;
 
     this.remoteGridVersion = s.g;
     this.over = s.o === 1;
@@ -945,6 +1200,11 @@ export class Game {
     }
     this._rebuildFlameSets();
 
+    for (const q of this.balls) {
+      q.x += q.dx * FIREBALL_SPEED * dt;
+      q.y += q.dy * FIREBALL_SPEED * dt;
+    }
+
     // les clones filent tout droit : inutile d'attendre l'instantané suivant
     for (const k of this.decoys) {
       k.x += k.dx * BASE_SPEED * 1.15 * dt;
@@ -955,6 +1215,7 @@ export class Game {
     for (const p of this.players) {
       if (p.invuln > 0) p.invuln -= dt;
       for (let m = 0; m < MOD_COUNT; m++) if (p.cd[m] > 0) p.cd[m] -= dt;
+      if (p.jackpot > 0) p.jackpot -= dt;
       if (p.tx === undefined) continue;
       const k = 1 - Math.pow(0.0008, dt);   // lissage exponentiel ~ 20 Hz
       p.x += (p.tx - p.x) * k;

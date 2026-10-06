@@ -4,10 +4,17 @@ import { rgb, mixColor, scaleColor } from './gfx.js';
 import {
   COLS, ROWS, T_EMPTY, T_SOLID, T_BRICK, FUSE, FLAME_TIME, LETHAL_TIME,
   PUSH_SLIDE, STATS, STAT_COUNT, COMMON, UNCOMMON, RARE,
-  S_SHIELD, F_CENTER, F_H, MODIFIERS, MOD_COUNT, M_CAMO, hasMod,
+  S_SHIELD, F_CENTER, F_H, MODIFIERS, MOD_COUNT, M_CAMO, M_JACKPOT, hasMod,
 } from './game.js';
 
 const TAU = Math.PI * 2;
+
+/**
+ * Couleurs des quatre joueurs, source unique : la vue en tire ses teintes et
+ * l'interface les reprend telles quelles pour le HUD et les menus. Les quatre
+ * tons sont choisis loin les uns des autres, et loin de l'orange des flammes.
+ */
+export const PLAYER_HEX = ['#35f0ff', '#ff4fd8', '#54ff6a', '#ffe03d'];
 
 export const PAL = {
   floor: rgb('#080c1c'),
@@ -16,7 +23,7 @@ export const PAL = {
   solidEdge: rgb('#3f63ff'),
   brick: rgb('#150f30'),
   brickEdge: rgb('#a06bff'),
-  players: [rgb('#35f0ff'), rgb('#ff4fd8')],
+  players: PLAYER_HEX.map(rgb),
   flame: rgb('#ff9330'),
   flameHot: rgb('#fff0c8'),
   shield: rgb('#22d3ee'),
@@ -128,6 +135,17 @@ export class Fx {
         case 'decoyEnd':
           this.burst(x, y, PAL.players[arg] || PAL.white, 12, 2.6);
           break;
+        case 'bury':
+          this.ring(x, y, 0.35, 0.1, modColor(14), 0.35);
+          this.burst(x, y, modColor(14), 8, 1.6);
+          break;
+        case 'unbury':
+          this.ring(x, y, 0.1, 0.6, modColor(14), 0.3);
+          break;
+        case 'launch':
+          this.ring(x, y, 0.2, 1.1, modColor(15), 0.35);
+          this.burst(x, y, modColor(15), 14, 4.0);
+          break;
       }
     }
   }
@@ -207,8 +225,9 @@ export function drawGame(g, game, fx, time, alpha = 1, viewerId = -1) {
   drawDrops(g, game, time);
   drawBombs(g, game, time, viewerId);
   drawFlames(g, game);
+  drawBalls(g, game, time);
   drawDecoys(g, game, time);
-  drawPlayers(g, game, time, alpha);
+  drawPlayers(g, game, time, alpha, viewerId);
   fx.draw(g);
 }
 
@@ -220,6 +239,21 @@ function drawDrops(g, game, time) {
     const cell = 0.15 + 0.012 * Math.sin(time * 3 + d.cy);
     drawTetrino(g, d.mod, d.cx + 0.5, d.cy + 0.5 + bob, cell,
       { alpha: 1, glow: 1.1 * pulse });
+  }
+}
+
+/** Boules de feu en vol : un noyau blanc dans une enveloppe orange. */
+function drawBalls(g, game, time) {
+  for (const q of game.balls) {
+    const wob = 1 + 0.12 * Math.sin(time * 22 + q.x * 3);
+    g.disc(q.x, q.y, 0.3 * wob, PAL.flame, { alpha: 0.8, glow: 1.9, falloff: 4 });
+    g.disc(q.x, q.y, 0.15 * wob, PAL.flameHot, { alpha: 1, glow: 2.4, falloff: 7 });
+    // courte traînée derrière la boule
+    for (let i = 1; i <= 3; i++) {
+      const a = 0.35 / i;
+      g.disc(q.x - q.dx * i * 0.19, q.y - q.dy * i * 0.19, 0.13 / i, PAL.flame,
+        { alpha: a, glow: a * 2.2, falloff: 9 });
+    }
   }
 }
 
@@ -311,6 +345,17 @@ function drawBombs(g, game, time, viewerId) {
     const frac = Math.max(0, Math.min(1, b.fuse / FUSE));
     const urgency = 1 - frac;
 
+    // Enfouie : plus qu'un monticule sourd, sans jauge ni battement — c'est
+    // justement l'information qui disparaît le temps qu'on marche dessus.
+    if (b.buried) {
+      const dull = scaleColor(owner, 0.3);
+      g.disc(b.x, b.y, 0.3, PAL.brick, { alpha: 1, glow: 0.1, falloff: 14 });
+      g.ring(b.x, b.y, 0.3, 0.03, dull, { alpha: 0.9, glow: 0.25, falloff: 16 });
+      const bump = 0.06 + 0.02 * Math.sin(time * 2 + b.cx);
+      g.disc(b.x, b.y, bump, dull, { alpha: 0.8, glow: 0.3, falloff: 18 });
+      continue;
+    }
+
     // Poussée : la case est déjà celle d'arrivée, seul l'affichage rattrape.
     const slide = b.st > 0 ? b.st / PUSH_SLIDE : 0;
     const bx = b.x - (b.sdx || 0) * slide;
@@ -378,32 +423,48 @@ function drawFlames(g, game) {
   }
 }
 
-function drawPlayers(g, game, time, alpha) {
+function drawPlayers(g, game, time, alpha, viewerId) {
   for (const p of game.players) {
     if (!p.alive) continue;
     const color = PAL.players[p.id] || PAL.white;
     if (p.invuln > 0 && Math.floor(time * 14) % 2 === 0) continue;
 
+    const vis = 1;
     const x = p.px + (p.x - p.px) * alpha;
     const y = p.py + (p.y - p.py) * alpha;
 
     const pulse = 0.85 + 0.15 * Math.sin(time * 4 + p.id * 2);
     g.disc(x, y, p.r * 0.78, scaleColor(color, 0.55),
-      { alpha: 1, glow: 0.55 * pulse, falloff: 7 });
-    g.disc(x, y, p.r * 0.34, PAL.white, { alpha: 0.8, glow: 0.8, falloff: 11 });
-    g.ring(x, y, p.r, 0.03, color, { alpha: 1, glow: 0.9 * pulse, falloff: 9.5 });
+      { alpha: vis, glow: 0.55 * pulse * vis, falloff: 7 });
+    g.disc(x, y, p.r * 0.34, PAL.white,
+      { alpha: 0.8 * vis, glow: 0.8 * vis, falloff: 11 });
+    g.ring(x, y, p.r, 0.03, color,
+      { alpha: vis, glow: 0.9 * pulse * vis, falloff: 9.5 });
 
     // petit repère d'orientation, toujours une primitive
     const d = Math.hypot(p.dirx, p.diry) || 1;
     g.disc(x + (p.dirx / d) * p.r * 0.72, y + (p.diry / d) * p.r * 0.72, 0.045,
-      color, { alpha: 1, glow: 1.0, falloff: 16 });
+      color, { alpha: vis, glow: 1.0 * vis, falloff: 16 });
 
     // Bouclier : un arc par charge restante, en rotation lente.
     const shields = p.stats ? p.stats[S_SHIELD] : 0;
     for (let i = 0; i < shields; i++) {
       const start = (time * 0.9 + (i * TAU) / shields) % TAU;
       g.arc(x, y, p.r + 0.1, 0.035, start, (TAU / shields) * 0.55, PAL.shield,
-        { alpha: 0.95, glow: 1.2 * pulse, falloff: 11 });
+        { alpha: 0.95 * vis, glow: 1.2 * pulse * vis, falloff: 11 });
+    }
+
+    // Jackpot : couronne dorée en rotation rapide, qui clignote sur la fin pour
+    // annoncer le retour à la normale.
+    if (p.jackpot > 0) {
+      const gold = modColor(M_JACKPOT);
+      const ending = p.jackpot < 2 ? 0.45 + 0.55 * Math.sin(time * 16) : 1;
+      g.disc(x, y, p.r + 0.24, gold, { alpha: 0, glow: 0.75 * ending, falloff: 4.5 });
+      for (let i = 0; i < 3; i++) {
+        const start = (-time * 2.4 + (i * TAU) / 3) % TAU + TAU;
+        g.arc(x, y, p.r + 0.17, 0.045, start, TAU / 5, gold,
+          { alpha: ending, glow: 1.6 * ending, falloff: 9 });
+      }
     }
   }
 }

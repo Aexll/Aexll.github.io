@@ -1,17 +1,22 @@
 // main.js — boucle de jeu, protocole réseau et interface.
 //
 // Modèle réseau : l'hôte fait autorité. Il simule à pas fixe (60 Hz) et diffuse
-// un instantané 20 fois par seconde. Le client envoie ses entrées et prédit
-// localement son propre déplacement, avec correction douce à chaque instantané.
+// un instantané 20 fois par seconde à chacun de ses invités. Chaque invité
+// envoie ses entrées et prédit localement son propre déplacement, avec
+// correction douce à chaque instantané.
+//
+// Topologie en étoile : les invités ne se parlent jamais entre eux, ils n'ont
+// qu'un lien avec l'hôte. Une place d'invité = une connexion WebRTC, donc un
+// échange de codes à part.
 
 import { Renderer } from './gfx.js';
 import {
-  Game, COLS, ROWS, TICK, STATS, STAT_COUNT,
+  Game, COLS, ROWS, TICK, STATS, STAT_COUNT, MAX_PLAYERS,
   S_BOMBS, S_FIRE, S_SPEED, maxBombsOf, rangeOf, speedOf,
   MODIFIERS, MOD_COUNT, hasMod,
 } from './game.js';
 import { Input } from './input.js';
-import { Fx, drawGame, PAL } from './view.js';
+import { Fx, drawGame, PAL, PLAYER_HEX } from './view.js';
 import { Peer } from './net.js';
 import { AudioSystem } from './audio.js';
 
@@ -19,32 +24,37 @@ const SNAPSHOT_HZ = 20;
 const INPUT_HZ = 30;
 const ROUND_PAUSE = 2.8;
 
+/** Places d'invités proposées par l'hôte : tout le monde sauf lui. */
+const HOST_SLOTS = MAX_PLAYERS - 1;
+
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
 
 // ---------------------------------------------------------------- état global
 
 const app = {
-  mode: 'menu',            // menu | local | host | guest
+  mode: 'menu',            // menu | lobby | local | host | guest
   game: null,
   fx: new Fx(),
-  peer: null,
+  peer: null,              // invité : lien unique vers l'hôte
+  slots: [],               // hôte : places en cours de négociation
+  guests: [],              // hôte : pairs entrés en jeu, chacun avec son `pid`
   localId: 0,
   accum: 0,
   time: 0,
   shake: 0,
-  ready: false,            // client : instantané initial reçu
+  ready: false,            // invité : instantané initial reçu
   snapTimer: 0,
   inputTimer: 0,
   pingTimer: 0,
   rtt: 0,
-  bombSeq: 0,              // client : compteur de poses (résiste aux pertes)
+  bombSeq: 0,              // invité : compteur de poses (résiste aux pertes)
   powerSeq: 0,             // idem pour la touche pouvoir
-  pendingBomb: [false, false],
-  pendingPower: [false, false],
-  remote: { ax: 0, ay: 0, seq: 0, pseq: 0 },
-  remoteAck: 0,
-  remoteAckPower: 0,
+  pendingBomb: [],
+  pendingPower: [],
+  remote: [],              // hôte : dernière entrée reçue, par identifiant de joueur
+  remoteAck: [],
+  remoteAckPower: [],
   sentGridVersion: -1,
 };
 
@@ -112,20 +122,22 @@ async function copyToClipboard(text) {
   }
 }
 
-$$('[data-copy]').forEach((btn) => {
-  btn.addEventListener('click', async () => {
-    const ta = document.getElementById(btn.dataset.copy);
-    if (!ta.value) return;
+// Délégation : les blocs de l'hôte sont créés à la volée, un écouteur posé une
+// fois pour toutes évite d'avoir à les relier après chaque reconstruction.
+document.addEventListener('click', async (ev) => {
+  const copy = ev.target.closest('[data-copy]');
+  if (copy) {
+    const ta = document.getElementById(copy.dataset.copy);
+    if (!ta || !ta.value) return;
     if (!(await copyToClipboard(ta.value))) {
       ta.focus(); ta.select();
       try { document.execCommand('copy'); } catch {}
     }
-    flashHint('#' + btn.dataset.copy + '-hint');
-  });
-});
-
-$$('[data-act]').forEach((btn) => {
-  btn.addEventListener('click', () => handleAction(btn.dataset.act, btn));
+    flashHint('#' + copy.dataset.copy + '-hint');
+    return;
+  }
+  const act = ev.target.closest('[data-act]');
+  if (act) handleAction(act.dataset.act, act);
 });
 
 // Échap : quitter la partie en cours et revenir au menu.
@@ -159,6 +171,17 @@ const STAT_HELP = [
   '+1 à chaque stat commune',
 ];
 
+/**
+ * Libellés affichables des quatre jeux de touches. Les codes font foi dans
+ * input.js ; ici on ne décrit que ce qui est lisible par un joueur.
+ */
+const KEY_HELP = [
+  { move: ['W', 'A', 'S', 'D'], bomb: 'Espace', power: 'E' },
+  { move: ['↑', '←', '↓', '→'], bomb: 'Entrée', power: 'Ctrl droit' },
+  { move: ['I', 'J', 'K', 'L'], bomb: 'U', power: 'O' },
+  { move: ['T', 'F', 'G', 'H'], bomb: 'R', power: 'Y' },
+];
+
 /** Le tetrino d'un modifieur en SVG, pour le HUD et la légende. */
 function tetrinoSvg(m, px = 13) {
   const cells = MODIFIERS[m].shape;
@@ -173,6 +196,16 @@ function tetrinoSvg(m, px = 13) {
   return `<svg viewBox="0 0 ${px} ${px}" width="${px}" height="${px}" ` +
     `fill="currentColor" aria-hidden="true">${rects}</svg>`;
 }
+
+$('#legend-keys').innerHTML = KEY_HELP.map((k, i) =>
+  `<div class="legend-row" style="--pc:${PLAYER_HEX[i]}">` +
+  `<em>Joueur ${i + 1}</em>` +
+  k.move.map((c) => `<kbd>${c}</kbd>`).join('') +
+  `<span class="sep">bombe</span><kbd>${k.bomb}</kbd>` +
+  `<span class="sep">pouvoir</span><kbd>${k.power}</kbd></div>`).join('') +
+  '<div class="legend-note">Le joueur 4 peut aussi jouer au pavé numérique ' +
+  '(<kbd>8</kbd><kbd>4</kbd><kbd>5</kbd><kbd>6</kbd>, bombe <kbd>0</kbd>, ' +
+  'pouvoir <kbd>+</kbd>).</div>';
 
 $('#legend').innerHTML = [0, 1, 2].map((r) => {
   const rows = STATS
@@ -197,7 +230,7 @@ async function handleAction(act, btn) {
       break;
 
     case 'local':
-      startLocal();
+      startLocal(parseInt(btn.dataset.n, 10) || 2);
       break;
 
     case 'host':
@@ -219,8 +252,12 @@ async function handleAction(act, btn) {
       break;
     }
 
-    case 'host-connect':
-      await hostConnect();
+    case 'slot-connect':
+      await slotConnect(parseInt(btn.dataset.slot, 10));
+      break;
+
+    case 'host-launch':
+      hostLaunch();
       break;
 
     case 'join-generate':
@@ -231,67 +268,187 @@ async function handleAction(act, btn) {
 
 // ---------------------------------------------------------------- connexion
 
-function newPeer() {
-  teardown();
-  const peer = new Peer();
-  app.peer = peer;
-  peer.onMessage = onMessage;
-  peer.onClose = () => {
-    if (app.mode === 'menu') return;
-    teardown();
-    showScreen('menu');
-    banner('CONNEXION PERDUE', '#ff7b8f');
-    setTimeout(() => banner(null), 2500);
-  };
-  return peer;
-}
-
 function teardown() {
   if (app.peer) { app.peer.close(); app.peer = null; }
+  for (const s of app.slots) { if (s) { try { s.peer.close(); } catch {} } }
+  app.slots = [];
+  app.guests = [];
   app.mode = 'menu';
   app.game = null;
   app.ready = false;
   app.fx.clear();
   $('#hud').classList.add('hidden');
+  $('#hud-bottom').classList.add('hidden');
   banner(null);
 }
 
-async function beginHost() {
-  const peer = newPeer();
-  const ta = $('#host-offer');
-  ta.value = '';
-  setStatus('#host-status', 'Génération du code…');
-  try {
-    ta.value = await peer.host();
-    setStatus('#host-status',
-      'Code prêt. Envoie-le à ton ami, puis colle sa réponse ci-dessous.');
-  } catch (e) {
-    setStatus('#host-status', 'Échec : ' + e.message, 'err');
-    return;
-  }
-  peer.onOpen = () => {
-    setStatus('#host-status', 'Connecté !', 'ok');
-    startOnline(0);
-  };
+// ---- hôte : une place par invité -------------------------------------------
+
+function slotState(i, text, cls = '') {
+  const el = $('#slot-state-' + i);
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'slot-state' + (cls ? ' ' + cls : '');
 }
 
-async function hostConnect() {
-  const peer = app.peer;
-  const code = $('#host-answer').value.trim();
-  if (!peer) { setStatus('#host-status', 'Recommence l\'hébergement.', 'err'); return; }
-  if (!code) { setStatus('#host-status', 'Colle d\'abord la réponse de ton ami.', 'err'); return; }
+async function beginHost() {
+  teardown();
+  app.mode = 'lobby';
+
+  $('#host-slots').innerHTML = Array.from({ length: HOST_SLOTS }, (_, i) =>
+    `<div class="slot" id="slot-${i}" style="--pc:${PLAYER_HEX[i + 1]}">
+      <div class="slot-head"><i></i>Joueur ${i + 2}
+        <span class="slot-state" id="slot-state-${i}">génération…</span></div>
+      <textarea id="slot-offer-${i}" readonly placeholder="génération…"></textarea>
+      <div class="btn-row tight">
+        <button class="btn small" data-copy="slot-offer-${i}">Copier son code</button>
+        <span class="hint" id="slot-offer-${i}-hint"></span>
+      </div>
+      <textarea id="slot-answer-${i}" placeholder="colle ici sa réponse PB1-…"></textarea>
+      <div class="btn-row tight">
+        <button class="btn small primary" data-act="slot-connect" data-slot="${i}">Connecter</button>
+        <button class="btn small ghost" data-act="paste" data-target="slot-answer-${i}">Coller</button>
+      </div>
+    </div>`).join('');
+
+  setStatus('#host-status',
+    'Envoie un code différent à chaque invité, puis colle leurs réponses.');
+  updateLaunch();
+
+  // Les trois négociations tournent en parallèle : la collecte ICE a le même
+  // coût pour une place ou pour trois.
+  for (let i = 0; i < HOST_SLOTS; i++) openSlot(i);
+}
+
+async function openSlot(i) {
+  const peer = new Peer();
+  const slot = { peer, connected: false };
+  app.slots[i] = slot;
+
+  peer.onMessage = (m) => onMessage(m, peer);
+  peer.onOpen = () => {
+    slot.connected = true;
+    slotState(i, 'connecté', 'ok');
+    $('#slot-' + i)?.classList.add('ready');
+    updateLaunch();
+  };
+  peer.onClose = () => onPeerClose(peer, i);
+
   try {
-    setStatus('#host-status', 'Établissement du lien…');
-    await peer.acceptAnswer(code);
+    const code = await peer.host();
+    const ta = $('#slot-offer-' + i);
+    if (!ta || app.slots[i] !== slot) return;   // écran quitté entre-temps
+    ta.value = code;
+    if (!slot.connected) slotState(i, 'code prêt');
   } catch (e) {
-    setStatus('#host-status', 'Échec : ' + e.message, 'err');
+    slotState(i, 'échec : ' + e.message, 'err');
   }
 }
+
+async function slotConnect(i) {
+  const slot = app.slots[i];
+  if (!slot) { setStatus('#host-status', 'Recommence l\'hébergement.', 'err'); return; }
+  const code = $('#slot-answer-' + i).value.trim();
+  if (!code) { slotState(i, 'colle d\'abord sa réponse', 'err'); return; }
+  try {
+    slotState(i, 'établissement du lien…');
+    await slot.peer.acceptAnswer(code);
+  } catch (e) {
+    slotState(i, 'échec : ' + e.message, 'err');
+  }
+}
+
+function updateLaunch() {
+  const btn = $('#host-launch');
+  if (!btn) return;
+  const n = app.slots.filter((s) => s && s.connected).length;
+  btn.disabled = n === 0;
+  btn.textContent = n === 0
+    ? 'En attente d\'un invité…'
+    : `Lancer la partie (${n + 1} joueurs)`;
+}
+
+/** Les places connectées deviennent les joueurs 2, 3, 4 — dans l'ordre. */
+function hostLaunch() {
+  const ready = app.slots.filter((s) => s && s.connected);
+  if (!ready.length) return;
+
+  // Les places restées vides n'ont plus de raison d'être : on ferme pour ne pas
+  // laisser une négociation ouverte derrière la partie.
+  for (const s of app.slots) {
+    if (s && !s.connected) { try { s.peer.close(); } catch {} }
+  }
+  app.slots = ready;
+
+  app.guests = ready.map((s, k) => {
+    s.peer.pid = k + 1;
+    return s.peer;
+  });
+
+  const count = app.guests.length + 1;
+  app.mode = 'host';
+  app.localId = 0;
+  app.game = new Game(randomSeed(), count);
+  resetNetState(app.game.count);
+  app.ready = true;
+
+  for (const peer of app.guests) {
+    peer.sendCtl({
+      t: 'h', id: peer.pid, n: app.game.count, seed: app.game.seed,
+      grid: app.game.encodeGrid(), sc: app.game.scores,
+    });
+  }
+
+  buildHud(app.game.count, 0);
+  showScreen(null);
+  $('#hud').classList.remove('hidden');
+  startGameMusic();
+}
+
+/** Perte d'un lien : côté hôte la place se vide, côté invité la partie s'arrête. */
+function onPeerClose(peer, slotIndex) {
+  if (app.mode === 'lobby') {
+    const slot = app.slots[slotIndex];
+    if (slot) {
+      slot.connected = false;
+      slotState(slotIndex, 'lien perdu', 'err');
+      $('#slot-' + slotIndex)?.classList.remove('ready');
+      updateLaunch();
+    }
+    return;
+  }
+
+  if (app.mode === 'host') {
+    app.guests = app.guests.filter((g) => g !== peer);
+    if (peer.pid != null && app.game) app.game.dropPlayer(peer.pid);
+    // Plus personne en face : la partie n'a plus d'objet.
+    if (!app.guests.length) {
+      teardown();
+      showScreen('menu');
+      banner('PLUS D\'ADVERSAIRE', '#ff7b8f');
+      setTimeout(() => banner(null), 2500);
+    }
+    return;
+  }
+
+  if (app.mode === 'guest') {
+    teardown();
+    showScreen('menu');
+    banner('CONNEXION PERDUE', '#ff7b8f');
+    setTimeout(() => banner(null), 2500);
+  }
+}
+
+// ---- invité ----------------------------------------------------------------
 
 async function joinGenerate() {
   const code = $('#join-offer').value.trim();
   if (!code) { setStatus('#join-status', 'Colle d\'abord le code reçu.', 'err'); return; }
-  const peer = newPeer();
+  teardown();
+  const peer = new Peer();
+  app.peer = peer;
+  peer.onMessage = (m) => onMessage(m, peer);
+  peer.onClose = () => onPeerClose(peer, -1);
   peer.onOpen = () => {
     setStatus('#join-status', 'Connecté ! En attente de la partie…', 'ok');
   };
@@ -306,17 +463,30 @@ async function joinGenerate() {
 
 // ---------------------------------------------------------------- démarrage
 
-function startLocal() {
+function resetNetState(count) {
+  app.bombSeq = 0;
+  app.powerSeq = 0;
+  app.accum = 0;
+  app.sentGridVersion = -1;
+  app.pendingBomb = new Array(count).fill(false);
+  app.pendingPower = new Array(count).fill(false);
+  app.remote = [];
+  app.remoteAck = new Array(count).fill(0);
+  app.remoteAckPower = new Array(count).fill(0);
+  for (let i = 0; i < count; i++) app.remote[i] = { ax: 0, ay: 0, seq: 0, pseq: 0 };
+}
+
+function startLocal(count) {
   teardown();
   app.mode = 'local';
-  app.game = new Game(randomSeed());
+  app.game = new Game(randomSeed(), count);
   app.localId = -1;
   app.ready = true;
-  app.accum = 0;
-  app.pendingBomb = [false, false];
+  resetNetState(app.game.count);
+  buildHud(app.game.count, -1);
   showScreen(null);
   $('#hud').classList.remove('hidden');
-  $('#hud-status').textContent = 'LOCAL — 2 JOUEURS';
+  $('#hud-status').textContent = `LOCAL — ${app.game.count} JOUEURS`;
   startGameMusic();
 }
 
@@ -326,55 +496,50 @@ function startGameMusic() {
   audio.playGameMusic();
 }
 
-function startOnline(id) {
-  app.mode = id === 0 ? 'host' : 'guest';
-  app.localId = id;
-  app.bombSeq = 0;
-  app.powerSeq = 0;
-  app.remote = { ax: 0, ay: 0, seq: 0, pseq: 0 };
-  app.remoteAck = 0;
-  app.remoteAckPower = 0;
-  app.sentGridVersion = -1;
-  app.accum = 0;
-  app.pendingBomb = [false, false];
-
-  if (id === 0) {
-    app.game = new Game(randomSeed());
-    app.ready = true;
-    app.peer.sendCtl({
-      t: 'h', id: 1, seed: app.game.seed,
-      grid: app.game.encodeGrid(), sc: app.game.scores,
-    });
-    showScreen(null);
-    $('#hud').classList.remove('hidden');
-    startGameMusic();
-  }
-  // le client attend le message 'h' avant d'afficher quoi que ce soit
-}
-
 function randomSeed() {
   return (Math.random() * 0xffffffff) >>> 0;
 }
 
+/**
+ * Place de chaque joueur dans le HUD : 0 haut-gauche, 1 haut-droit,
+ * 2 bas-gauche, 3 bas-droit. L'ordre suit celui des coins de départ, si bien
+ * que la carte d'un joueur se trouve toujours du côté où il apparaît.
+ */
+const HUD_CORNER = [0, 3, 1, 2];
+
+/** Cartes du HUD : une par joueur, une par coin de l'écran. */
+function buildHud(count, localId) {
+  const cols = [$('#hud-c0'), $('#hud-c1'), $('#hud-c2'), $('#hud-c3')];
+  for (const c of cols) c.innerHTML = '';
+  // La barre du bas n'existe que s'il y a quelqu'un à y mettre.
+  $('#hud-bottom').classList.toggle('hidden', count < 2);
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'hud-card' + (i === localId ? ' me' : '');
+    el.id = 'hud-p' + i;
+    el.style.setProperty('--pc', PLAYER_HEX[i]);
+    el.innerHTML =
+      `<div class="hud-name">JOUEUR ${i + 1}</div>` +
+      '<div class="hud-stats"></div><div class="hud-mods"></div>' +
+      '<div class="hud-score" data-stat="score">0</div>';
+    cols[HUD_CORNER[i]].appendChild(el);
+  }
+}
+
 // ---------------------------------------------------------------- protocole
 
-function onMessage(m) {
-  const peer = app.peer;
-
+function onMessage(m, peer) {
   switch (m.t) {
-    case 'h': {                       // bienvenue (hôte -> client)
+    case 'h': {                       // bienvenue (hôte -> invité)
       app.mode = 'guest';
       app.localId = m.id;
-      app.game = new Game(m.seed);
-      app.game.scores = m.sc || [0, 0];
+      app.game = new Game(m.seed, m.n || 2);
+      app.game.scores = m.sc || app.game.scores;
       app.game.decodeGrid(m.grid);
       app.fx.clear();
+      resetNetState(app.game.count);
       app.ready = true;
-      app.accum = 0;
-      app.bombSeq = 0;
-      app.powerSeq = 0;
-      app.pendingBomb = [false, false];
-      app.pendingPower = [false, false];
+      buildHud(app.game.count, app.localId);
       showScreen(null);
       $('#hud').classList.remove('hidden');
       startGameMusic();
@@ -401,7 +566,7 @@ function onMessage(m) {
       }
       break;
 
-    case 's': {                       // instantané (hôte -> client)
+    case 's': {                       // instantané (hôte -> invité)
       if (!app.game || app.mode !== 'guest') break;
       const auth = app.game.applySnapshot(m, app.localId);
       const p = app.game.players[app.localId];
@@ -413,13 +578,16 @@ function onMessage(m) {
       break;
     }
 
-    case 'i':                         // entrées (client -> hôte)
-      if (app.mode !== 'host') break;
-      app.remote.ax = m.ax;
-      app.remote.ay = m.ay;
-      if (m.s > app.remote.seq) app.remote.seq = m.s;
-      if (m.w > app.remote.pseq) app.remote.pseq = m.w;
+    case 'i': {                       // entrées (invité -> hôte)
+      if (app.mode !== 'host' || peer.pid == null) break;
+      const r = app.remote[peer.pid];
+      if (!r) break;
+      r.ax = m.ax;
+      r.ay = m.ay;
+      if (m.s > r.seq) r.seq = m.s;
+      if (m.w > r.pseq) r.pseq = m.w;
       break;
+    }
 
     case 'p':
       peer?.sendCtl({ t: 'q', n: m.n });
@@ -461,7 +629,7 @@ function frame() {
 }
 
 // Le navigateur suspend requestAnimationFrame dès que l'onglet passe en arrière-plan.
-// Si c'était l'hôte, la partie gèlerait pour les deux joueurs : un worker prend
+// Si c'était l'hôte, la partie gèlerait pour tout le monde : un worker prend
 // alors le relais pour continuer à faire tourner la simulation (sans rendu).
 function startBackgroundTicker() {
   try {
@@ -483,16 +651,22 @@ function startBackgroundTicker() {
 function simulateAuthoritative(dt) {
   const g = app.game;
   const local = app.mode === 'local';
+  const n = g.players.length;
 
-  // Une lecture par image. Le front "bombe" est mis en attente et n'est effacé
-  // qu'une fois réellement consommé par un tick : une image plus courte qu'un
-  // tick n'en exécute aucun, et l'appui serait sinon perdu.
-  const in0 = local ? input.read(0) : input.readAny();
-  const in1 = local ? input.read(1) : null;
-  if (in0.bomb) app.pendingBomb[0] = true;
-  if (in0.power) app.pendingPower[0] = true;
-  if (local && in1.bomb) app.pendingBomb[1] = true;
-  if (local && in1.power) app.pendingPower[1] = true;
+  // Une lecture par image. Le front « bombe » est mis en attente et n'est
+  // effacé qu'une fois réellement consommé par un tick : une image plus courte
+  // qu'un tick n'en exécute aucun, et l'appui serait sinon perdu.
+  const reads = [];
+  if (local) {
+    for (let i = 0; i < n; i++) reads[i] = input.read(i);
+  } else {
+    reads[0] = input.readAny();
+  }
+  for (let i = 0; i < n; i++) {
+    if (!reads[i]) continue;
+    if (reads[i].bomb) app.pendingBomb[i] = true;
+    if (reads[i].power) app.pendingPower[i] = true;
+  }
 
   app.accum += dt;
   let ticks = 0;
@@ -500,24 +674,27 @@ function simulateAuthoritative(dt) {
     app.accum -= TICK;
     ticks++;
 
-    let p1;
-    if (local) {
-      p1 = { ax: in1.ax, ay: in1.ay, bomb: app.pendingBomb[1], power: app.pendingPower[1] };
-      app.pendingBomb[1] = false;
-      app.pendingPower[1] = false;
-    } else {
-      const fire = app.remote.seq > app.remoteAck;
-      if (fire) app.remoteAck++;
-      const zap = app.remote.pseq > app.remoteAckPower;
-      if (zap) app.remoteAckPower++;
-      p1 = { ax: app.remote.ax, ay: app.remote.ay, bomb: fire, power: zap };
+    const inputs = [];
+    for (let i = 0; i < n; i++) {
+      if (reads[i]) {
+        inputs[i] = {
+          ax: reads[i].ax, ay: reads[i].ay,
+          bomb: app.pendingBomb[i], power: app.pendingPower[i],
+        };
+        app.pendingBomb[i] = false;
+        app.pendingPower[i] = false;
+      } else {
+        // Compteurs monotones : une pose perdue sur le canal non fiable est
+        // rattrapée au message suivant, et jamais jouée deux fois.
+        const r = app.remote[i] || { ax: 0, ay: 0, seq: 0, pseq: 0 };
+        const fire = r.seq > app.remoteAck[i];
+        if (fire) app.remoteAck[i]++;
+        const zap = r.pseq > app.remoteAckPower[i];
+        if (zap) app.remoteAckPower[i]++;
+        inputs[i] = { ax: r.ax, ay: r.ay, bomb: fire, power: zap };
+      }
     }
-    g.step(TICK, [
-      { ax: in0.ax, ay: in0.ay, bomb: app.pendingBomb[0], power: app.pendingPower[0] },
-      p1,
-    ]);
-    app.pendingBomb[0] = false;
-    app.pendingPower[0] = false;
+    g.step(TICK, inputs);
   }
 
   consumeEvents();
@@ -533,10 +710,10 @@ function consumeEvents() {
   const events = g.events.splice(0, g.events.length);
   app.fx.spawnFromEvents(events);
   feedback(events);
-  if (app.mode === 'host') app.peer?.sendCtl({ t: 'e', e: events });
+  if (app.mode === 'host') hostCtl({ t: 'e', e: events });
 }
 
-/** Secousse et son, identiques des deux côtés du réseau. */
+/** Secousse et son, identiques de part et d'autre du réseau. */
 function feedback(events) {
   for (const [kind, x, , arg] of events) {
     if (kind === 'boom') {
@@ -557,29 +734,35 @@ function startNextRound() {
   app.fx.clear();
   banner(null);
   audio.restart();
-  if (app.mode === 'host') app.peer?.sendCtl({ t: 'r', seed, sc: g.scores });
+  if (app.mode === 'host') hostCtl({ t: 'r', seed, sc: g.scores });
+}
+
+/** Diffusion fiable à tous les invités. */
+function hostCtl(obj) {
+  for (const peer of app.guests) peer.sendCtl(obj);
 }
 
 function netHostSend(dt) {
-  const peer = app.peer;
-  if (!peer || !peer.connected) return;
+  if (!app.guests.length) return;
   const g = app.game;
 
   if (g.gridVersion !== app.sentGridVersion) {
     app.sentGridVersion = g.gridVersion;
-    peer.sendCtl({ t: 'g', d: g.encodeGrid() });
+    hostCtl({ t: 'g', d: g.encodeGrid() });
   }
 
   app.snapTimer += dt;
   if (app.snapTimer >= 1 / SNAPSHOT_HZ) {
     app.snapTimer = 0;
-    peer.sendState(g.snapshot());
+    // Un seul instantané, envoyé tel quel à chacun : l'état est le même pour tous.
+    const snap = g.snapshot();
+    for (const peer of app.guests) peer.sendState(snap);
   }
 
   app.pingTimer += dt;
   if (app.pingTimer >= 1) {
     app.pingTimer = 0;
-    peer.sendCtl({ t: 'p', n: performance.now() });
+    hostCtl({ t: 'p', n: performance.now() });
   }
 }
 
@@ -630,14 +813,10 @@ function sendInput(inp, reliable) {
 function updateBanner() {
   const g = app.game;
   if (!g.over) { banner(null); return; }
-  if (g.winner === 2) banner('ÉGALITÉ', '#dfe7ff');
-  else {
-    const mine = app.localId >= 0 && g.winner === app.localId;
-    const label = app.mode === 'local'
-      ? `JOUEUR ${g.winner + 1} GAGNE`
-      : (mine ? 'GAGNÉ !' : 'PERDU');
-    banner(label, g.winner === 0 ? '#35f0ff' : '#ff4fd8');
-  }
+  if (g.winner < 0) { banner('ÉGALITÉ', '#dfe7ff'); return; }
+  const color = PLAYER_HEX[g.winner] || '#dfe7ff';
+  const mine = app.localId >= 0 && g.winner === app.localId;
+  banner(mine ? 'GAGNÉ !' : `JOUEUR ${g.winner + 1} GAGNE`, color);
 }
 
 /**
@@ -659,9 +838,10 @@ function statPips(p) {
 
 function updateHud() {
   const g = app.game;
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < g.players.length; i++) {
     const el = $('#hud-p' + i);
     const p = g.players[i];
+    if (!el || !p) continue;
     const pips = statPips(p);
 
     // le DOM n'est reconstruit que quand une valeur change
@@ -686,19 +866,22 @@ function updateHud() {
         const left = Math.max(0, p.cd[m]);
         const cls = 'mod' + (def.active ? ' act' : '') + (left > 0 ? ' cooling' : '');
         const badge = left > 0 ? `<u>${Math.ceil(left)}</u>` : '';
-        return `<span class="${cls}" title="${def.label} — ${def.help}" ` +
-          `style="--mc:${def.color}">${tetrinoSvg(m)}${badge}</span>`;
+        return `<span class="${cls}" style="--mc:${def.color}">` +
+          `${tetrinoSvg(m)}<b>${def.label}</b>${badge}` +
+          `<span class="tip">${def.help}</span></span>`;
       }).join('');
     }
 
-    el.querySelector('[data-stat="score"]').textContent = g.scores[i];
+    el.querySelector('[data-stat="score"]').textContent = g.scores[i] ?? 0;
+    el.classList.toggle('gone', !!p.gone);
     el.style.opacity = p.alive ? '1' : '0.35';
   }
 
   if (app.mode !== 'local') {
     const role = app.mode === 'host' ? 'HÔTE' : 'INVITÉ';
     const you = `TU ES JOUEUR ${app.localId + 1}`;
-    $('#hud-status').textContent = `${role} · ${you} · ${Math.round(app.rtt)} MS`;
+    $('#hud-status').textContent =
+      `${role} · ${you} · ${g.players.length} JOUEURS · ${Math.round(app.rtt)} MS`;
   }
 }
 
@@ -729,20 +912,22 @@ function render() {
 
 /** Fond animé du menu : quelques disques qui respirent, rien de plus. */
 function drawIdle(g, t) {
-  for (let i = 0; i < 26; i++) {
+  const n = PAL.players.length;
+  for (let i = 0; i < 28; i++) {
     const a = t * 0.16 + i * 1.7;
     const rad = 3.2 + (i % 5) * 1.35;
     const x = COLS / 2 + Math.cos(a) * rad * 1.25;
     const y = ROWS / 2 + Math.sin(a * 0.8 + i) * rad * 0.7;
-    const col = PAL.players[i % 2];
+    const col = PAL.players[i % n];
     const pulse = 0.5 + 0.5 * Math.sin(t * 1.4 + i);
     g.disc(x, y, 0.05 + 0.05 * pulse, col, { alpha: 0.8, glow: 0.9 * pulse, falloff: 9 });
   }
+  // Un anneau par joueur, de plus en plus large et discret.
   const r = 2.4 + Math.sin(t * 0.9) * 0.25;
-  g.ring(COLS / 2, ROWS / 2, r, 0.03, PAL.players[0],
-    { alpha: 0.35, glow: 0.5, falloff: 10 });
-  g.ring(COLS / 2, ROWS / 2, r * 1.35, 0.02, PAL.players[1],
-    { alpha: 0.25, glow: 0.35, falloff: 12 });
+  for (let i = 0; i < n; i++) {
+    g.ring(COLS / 2, ROWS / 2, r * (1 + i * 0.3), 0.03 - i * 0.005, PAL.players[i],
+      { alpha: 0.35 - i * 0.06, glow: 0.5 - i * 0.08, falloff: 10 + i * 1.5 });
+  }
 }
 
 // ---------------------------------------------------------------- démarrage

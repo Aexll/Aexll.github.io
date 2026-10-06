@@ -1,5 +1,11 @@
-// input.js — clavier, deux jeux de touches, avec détection de front pour la bombe.
+// input.js — clavier, quatre jeux de touches, avec détection de front pour la bombe.
 
+/**
+ * Un jeu par joueur local. Les deux premiers n'ont pas changé : ce sont ceux
+ * que tout le monde connaît. Les deux suivants tiennent sur la même main
+ * gauche (TFGH) et sur le pavé numérique, pour que quatre joueurs puissent
+ * se partager un clavier sans se gêner.
+ */
 const SETS = [
   {
     up: ['KeyW'], down: ['KeyS'], left: ['KeyA'], right: ['KeyD'],
@@ -9,7 +15,18 @@ const SETS = [
     up: ['ArrowUp'], down: ['ArrowDown'], left: ['ArrowLeft'], right: ['ArrowRight'],
     bomb: ['Enter', 'NumpadEnter', 'ShiftRight'], power: ['ControlRight'],
   },
+  {
+    up: ['KeyI'], down: ['KeyK'], left: ['KeyJ'], right: ['KeyL'],
+    bomb: ['KeyU'], power: ['KeyO'],
+  },
+  {
+    up: ['KeyT', 'Numpad8'], down: ['KeyG', 'Numpad5'],
+    left: ['KeyF', 'Numpad4'], right: ['KeyH', 'Numpad6'],
+    bomb: ['KeyR', 'Numpad0'], power: ['KeyY', 'NumpadAdd'],
+  },
 ];
+
+export const KEY_SETS = SETS.length;
 
 const BLOCKED = new Set([
   'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter',
@@ -18,8 +35,8 @@ const BLOCKED = new Set([
 export class Input {
   constructor(target = window) {
     this.keys = new Set();
-    this.bombQueued = [false, false];
-    this.powerQueued = [false, false];
+    this.bombQueued = new Array(KEY_SETS).fill(false);
+    this.powerQueued = new Array(KEY_SETS).fill(false);
 
     target.addEventListener('keydown', (e) => {
       if (BLOCKED.has(e.code) && e.target === document.body) e.preventDefault();
@@ -53,19 +70,17 @@ export class Input {
     return { ax, ay, bomb, power };
   }
 
-  /** En ligne : les deux jeux de touches pilotent le joueur local. */
+  /** En ligne : tous les jeux de touches pilotent le joueur local. */
   readAny() {
-    const a = this._axis(SETS[0]);
-    const b = this._axis(SETS[1]);
-    const bomb = this.bombQueued[0] || this.bombQueued[1];
-    const power = this.powerQueued[0] || this.powerQueued[1];
-    this.bombQueued[0] = this.bombQueued[1] = false;
-    this.powerQueued[0] = this.powerQueued[1] = false;
-    return {
-      ax: Math.sign(a.ax + b.ax),
-      ay: Math.sign(a.ay + b.ay),
-      bomb,
-      power,
-    };
+    let ax = 0, ay = 0, bomb = false, power = false;
+    for (let i = 0; i < SETS.length; i++) {
+      const a = this._axis(SETS[i]);
+      ax += a.ax; ay += a.ay;
+      bomb = bomb || this.bombQueued[i];
+      power = power || this.powerQueued[i];
+      this.bombQueued[i] = false;
+      this.powerQueued[i] = false;
+    }
+    return { ax: Math.sign(ax), ay: Math.sign(ay), bomb, power };
   }
 }
